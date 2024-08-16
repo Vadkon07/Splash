@@ -27,7 +27,7 @@ class LinkSaver(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("YouTube Downloader")
-        self.setGeometry(100, 100, 400, 200)
+        self.setGeometry(100, 100, 400, 150)
 
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
@@ -47,7 +47,7 @@ class LinkSaver(QMainWindow):
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
 
 
-        self.add_action(self.main_menu, "Main", self.window) #doesn't work, not finished
+        self.add_action(self.main_menu, "Main", self.go_main_menu) #doesn't work, not finished
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
         self.add_action(self.settings_menu, "Preferences", self.open_preferences)
@@ -81,12 +81,11 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is v0.01. Click 'Ok' to hide this message forever")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is v0.2.0. We added: download both function, go to main menu function, optimised for low resolution screen. Click 'Ok' to hide this message forever")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
-
 
 
     def fade(self, widget):
@@ -114,7 +113,7 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
 
     def show_version(self):
-        QMessageBox.information(self, "Version", "YouTube Downloader v0.1")
+        QMessageBox.information(self, "Version", "YouTube Downloader v0.2.0")
 
     def open_github(self):
         # Define the GitHub link
@@ -145,6 +144,12 @@ class LinkSaver(QMainWindow):
         dialog = DocumentationDialog()
         dialog.exec()
 
+    def go_main_menu(self):
+        QApplication.closeAllWindows()
+
+        self.window_main = LinkSaver()
+        self.window_main.show()
+
     def exit_app(self):
         sys.exit()
 
@@ -154,7 +159,7 @@ class LinkSaver(QMainWindow):
         # Create a custom dialog
         dialog = QDialog(self)
         dialog.setWindowTitle("Help Documentation")
-        dialog.setFixedSize(600, 400)  # Adjust the size as needed
+        dialog.setFixedSize(600, 350)  # Adjust the size as needed
 
         # Create a QTextBrowser for displaying the HTML content
         text_browser = QTextBrowser(dialog)
@@ -186,7 +191,6 @@ class LinkSaver(QMainWindow):
         if link:
             self.saved_link = link
             QMessageBox.information(self, "Link Saved", f"Link saved: {link}. Now you have to wait some time...")
-            print(link)
         
             try:
                 with yt_dlp.YoutubeDL({'quiet': False}) as ydl:
@@ -215,7 +219,7 @@ class LinkSaver(QMainWindow):
         
             QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
         
-            self.show_image_in_messagebox(self.thumbnail_path)
+            #self.show_image_in_messagebox(self.thumbnail_path) we have to optimise it
                   
             self.show_buttons(link, title)
         else:
@@ -228,19 +232,25 @@ class LinkSaver(QMainWindow):
 
         self.button_layout = QHBoxLayout()
 
-        self.button1 = QPushButton("MP3 (Best)", self)
+        self.button1 = QPushButton("MP3 (Best only)", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("Both", self)
 
-        self.button_layout.addWidget(self.button1)
-        self.button_layout.addWidget(self.button2)
-        self.button_layout.addWidget(self.button3)
+        self.button1.setFixedSize(100,25)
+        self.button2.setFixedSize(100,25)
+        self.button3.setFixedSize(100,25)
+
+        self.button_layout.addWidget(self.button1, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.button_layout.addWidget(self.button2, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.button_layout.addWidget(self.button3, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.main_layout.addLayout(self.button_layout)
 
+        quality_format = None
+
         self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
         self.button2.clicked.connect(lambda: self.choose_quality(link))
-        self.button3.clicked.connect(lambda: self.choosed_both(link))
+        self.button3.clicked.connect(lambda: self.choosed_both(link, quality_format, title))
 
     def choose_quality(self, link):
         self.quality_layout = QHBoxLayout()
@@ -297,6 +307,8 @@ class LinkSaver(QMainWindow):
 
         #time.sleep(2)
 
+        #HERE I would like to add a text about downloading directly inside window of our map, but it shows "Downloading..." only when it's downloaded
+
         ydl_opts = {
             'format': 'bestaudio',
             'outtmpl': os.path.join('%(title)s.%(ext)s'),
@@ -344,8 +356,10 @@ class LinkSaver(QMainWindow):
             print(f"Error: {e}")
             QMessageBox.warning(self, "Download failed", f"Failed to download file: {e}")
 
-    def choosed_both(self, link):
-        print("TEST BOTH")
+    def choosed_both(self, link, quality_format, title):
+        self.choose_quality(link)
+        self.choosed_mp4(quality_format, link)
+        self.choosed_mp3(link, title)
 
     def print_error(self, message):
         print(f"Error message: {message}")
@@ -355,12 +369,12 @@ class DocumentationDialog(QDialog):
       def __init__(self):
         super().__init__()
         self.setWindowTitle("Documentation")
-        self.resize(640, 480)  # Set initial size
+        self.resize(640, 480)
 
         # Create a QVBoxLayout
         layout = QVBoxLayout()
 
-        # Create a QLabel with Markdown content
+        # Create a QLabel with Markdown content. We have to make it better, because for now it's just a plain text at all
         label = QLabel("""
         # Youtube Downloader
 

@@ -10,6 +10,7 @@ This GUI application allows you to download YouTube videos or audio quickly and 
 5. **Choose Quality:** Select the video quality that best suits your needs, from low resolution to 4K.
 6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
 7. **Terminal-Based Version Available:** A command-line version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
+8. **Optimised for low resolution monitors:** I know that a lot of people continue to use their ThinkPads etc. from 2004 or even older, so I decided to optimise this app for theirs displays. This app should work fine and not take a lot of space on your monitor even if he has only a 640x320 resolution.
 
 ## Prerequisites
 
@@ -52,7 +53,9 @@ When we will finish to do all these tasks - we will release version v1.0. Let's 
 - [ ] **Improve README:** Make this README more comprehensive and user-friendly.
 - [ ] **Return to Start on Completion:** After a download is finished, return the user to the initial screen to enter a new link.
 - [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.- [ ] **Descriptions and questions on every page:** Like: "Choose a format".
-- [ ] Thumbnail preview
+- [ ] **Hotkeys:** I think that we can add some simple hotkeys, maybe just numbers. Like, if you want to choose 'MP3' click '1'.
+- [ ] **Better optimisation for low-res screens:** Ideally our app should work fine even on 640x320 displays.
+- [ ] Thumbnail preview (now it just shows empty window)
 
 ## How to read version of app
 
