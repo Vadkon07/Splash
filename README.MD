@@ -12,11 +12,11 @@ This app can be very useful if you want to download some music, videos, podcasts
 
 ## What to install before running a code
 
-In **pip** install yt-dlp, and also be sure that you have installed ffmpeg on your machine.
+In **pip** install **yt-dlp**, and also be sure that you have installed **ffmpeg** on your machine.
 
 ## How to use
 
-Just run a code and paste a link to your YouTube video. Then enter **'1'** to download audio, *'2'** to download video, or **'3'** to download both.
+Just run a code and paste a link to your YouTube video. Then enter **'1'** to download audio, **'2'** to download video, or **'3'** to download both.
 
 ## To-Do
 
