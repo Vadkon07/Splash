@@ -63,16 +63,14 @@ class LinkSaver(QWidget):
 
         self.layout.addLayout(self.button_layout)
 
-        self.button1.clicked.connect(lambda :self.choosed_mp3(link)) #ERROR: Without this (link) he shows menu with choice of format, but doesn't woerk. But with (link) it works, but also skips choice of format
+        self.button1.clicked.connect(lambda: self.choosed_mp3(link)) #ERROR: Without this (link) he shows menu with choice of format, but doesn't woerk. But with (link) it works, but also skips choice of format
         self.button2.clicked.connect(lambda: self.choosed_mp4)
+        self.button3.clicked.connect(lambda: self.choosed_both)
 
         self.layout.addWidget(self.button1)
         self.layout.addWidget(self.button2)
+        self.layout.addWidget(self.button3)
         self.setLayout(self.layout)
-
-# SOON
-
-        #self.button3.clicked.connect(self.choosed_both)
 
         #self.choose_quality()
 
@@ -110,14 +108,16 @@ class LinkSaver(QWidget):
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
-
-            print(f"{title} downloaded!")
+                print(f"{title} downloaded!")
         except Exception as e:
             print_error(f"Failed to download the video: {e}")
             exit(1)
 
     def choosed_mp4(self):
-        print("TEST")
+        print("TEST MP4")
+
+    def choosed_both(self):
+        print("TEST BOTH")
 
 
 def print_error(message):
