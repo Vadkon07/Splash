@@ -3,6 +3,8 @@ import os
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout
 
+from darktheme.widget_template_pyqt6 import DarkApplication, DarkPalette
+
 print("Running app. Wait some seconds...")
 
 class LinkSaver(QWidget):
@@ -16,6 +18,7 @@ class LinkSaver(QWidget):
 
         self.line_edit = QLineEdit(self)
         self.line_edit.setPlaceholderText("Paste URL of YouTube video here")
+        self.line_edit.setStyleSheet("QLineEdit { color: white; }")
         self.layout.addWidget(self.line_edit)
 
         self.ok_button = QPushButton("OK", self)
@@ -125,6 +128,7 @@ def print_error(message):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setPalette(DarkPalette())
     window = LinkSaver()
     window.show()
     sys.exit(app.exec())
