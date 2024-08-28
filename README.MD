@@ -34,7 +34,6 @@ Before running the script, make sure you have the following installed:
 
 - [X] Add possibility to choose quality (by default it's the highest).
 - [ ] **Add Support for playlists:** Enable downloading entire YouTube playlists.
-- [ ] **Add Progress Indicator:** Display download progress for better user experience.
 - [ ] **Error Handling:** Improve error messages for common issues (e.g., invalid URLs, network errors).
 - [ ] **GUI Version:** Develop a graphical user interface for users who prefer not to use the terminal.
 
