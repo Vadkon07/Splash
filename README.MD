@@ -1,12 +1,12 @@
 # NOTE
 
-Thir repository needs a lot of help, because for now this code is broken. At first we have to solve a problem with saving of MP3, and then add MP4 and Both. Thank you for help!
+Thir repository needs a lot of help. Thank you for help!
 
 Also this Readme should be edited, because he is copied. from NON-GUI version of this app
 
-EDIT: for now I created a temporary solution for MP3 download, but it still has a lot of errors as 'title not found' etc., also it doesn't show a window where yo have to choose MP3, 4, or both. So, it works, but not fully.
+For now works only MP3 download function.
 
-# # Youtube Downloader
+#Youtube Downloader
 
 This GUI aplication allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby, because it's very comfortable and fast to download samples from YouTube which then I can use for my melodies.
 
@@ -15,10 +15,14 @@ This GUI aplication allows you to download YouTube videos or audio quickly and e
 2. **No API Needed:** Download directly without the need for any API keys or extra configuration.
 3. **Fast Downloading:** Quickly download videos or audio with minimal delay.
 4. **GUI** Run the script and be happy to use him with GUI.
-5. **Low PC Requirements:** Works very fast even on old Intel Atom from 2010 and on only 512MB of RAM. This app works probably on literally any PC in this world.
-6. **Choose Quality:** Bad internet or 4K resolution of video is too good for your 720p monitor? You can choose any quality of video which you want to download.
+5. **Choose Quality:** Bad internet or 4K resolution of video is too good for your 720p monitor? You can choose any quality of video which you want to download.
+6. **Offline Audio Extracting:** To download a video app will use internet, but to extract audio it will not use any data.
 
 ## Prerequisites
+
+## PC Requirements
+
+Work fine and very fast on any PC, but when program had to [ExtractAudio] from 2 hours long video, it took maybe ~5 minutes. Sounds not attractive, right? But just know that at all my laptop is very old and even can't normally open YouTube itself, so that's a perfect result I think.
 
 Before running the script, make sure you have the following installed:
 - **yt-dlp:** Install via pip with the command `pip install yt-dlp`. That's s command-line program to download videos from YouTube and other sites. 

@@ -63,8 +63,8 @@ class LinkSaver(QWidget):
 
         self.layout.addLayout(self.button_layout)
 
-        self.button1.clicked.connect(self.choosed_mp3(link)) #ERROR: Without this (link) he shows menu with choice of format, but doesn't woerk. But with (link) it works, but also skips choice of format
-        self.button2.clicked.connect(self.choosed_mp4)
+        self.button1.clicked.connect(lambda :self.choosed_mp3(link)) #ERROR: Without this (link) he shows menu with choice of format, but doesn't woerk. But with (link) it works, but also skips choice of format
+        self.button2.clicked.connect(lambda: self.choosed_mp4)
 
         self.layout.addWidget(self.button1)
         self.layout.addWidget(self.button2)
