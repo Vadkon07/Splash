@@ -1,6 +1,6 @@
 # Youtube Downloader
 
-This simple script allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my betmaking hobby, because it's very comfortable and fast to download samples from YouTube which then I can use for my melodies.
+This simple script allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby, because it's very comfortable and fast to download samples from YouTube which then I can use for my melodies.
 
 ## Features
 1. **Ad-free:** Enjoy a seamless experience without interruptions.
