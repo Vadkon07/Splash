@@ -5,13 +5,11 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPush
 
 from darktheme.widget_template_pyqt6 import DarkApplication, DarkPalette
 
-print("Running app. Wait some seconds...")
-
 class LinkSaver(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("YouTube Downloade")
+        self.setWindowTitle("YouTube Downloader")
         self.setGeometry(100, 100, 300, 100)
 
         self.layout = QVBoxLayout()
@@ -66,7 +64,7 @@ class LinkSaver(QWidget):
 
         self.layout.addLayout(self.button_layout)
 
-        self.button1.clicked.connect(lambda: self.choosed_mp3(link)) #ERROR: Without this (link) he shows menu with choice of format, but doesn't woerk. But with (link) it works, but also skips choice of format
+        self.button1.clicked.connect(lambda: self.choosed_mp3(link))
         self.button2.clicked.connect(lambda: self.choosed_mp4)
         self.button3.clicked.connect(lambda: self.choosed_both)
 
