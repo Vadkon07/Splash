@@ -65,7 +65,7 @@ class LinkSaver(QWidget):
         self.layout.addLayout(self.button_layout)
 
         self.button1.clicked.connect(lambda: self.choosed_mp3(link))
-        self.button2.clicked.connect(lambda: self.choosed_mp4)
+        self.button2.clicked.connect(lambda: self.choosed_mp4(link))
         self.button3.clicked.connect(lambda: self.choosed_both)
 
         self.layout.addWidget(self.button1)
@@ -114,8 +114,22 @@ class LinkSaver(QWidget):
             print_error(f"Failed to download the video: {e}")
             exit(1)
 
-    def choosed_mp4(self):
-        print("TEST MP4")
+    def choosed_mp4(self, link):
+        ydl_opts = {
+                'format': 'bestvideo',
+                # here add path to output ---
+                'outtmpl': os.path.join('%(title)s.%(ext)s'),
+                'merge_output_format': 'mp4',
+                'quiet': False,
+                }
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([link])
+                print(f"{title} downloaded!")
+        except Exception as e:
+            print_error(f"Failed to download the video: {e}")
+            exit(1)
+
 
     def choosed_both(self):
         print("TEST BOTH")
