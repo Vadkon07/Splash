@@ -9,13 +9,13 @@ class LinkSaver(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Link Saver")
+        self.setWindowTitle("YouTube Downloade")
         self.setGeometry(100, 100, 300, 100)
 
         self.layout = QVBoxLayout()
 
         self.line_edit = QLineEdit(self)
-        self.line_edit.setPlaceholderText("Paste your link here")
+        self.line_edit.setPlaceholderText("Paste URL of YouTube video here")
         self.layout.addWidget(self.line_edit)
 
         self.ok_button = QPushButton("OK", self)
@@ -48,11 +48,9 @@ class LinkSaver(QWidget):
             QMessageBox.warning(self, "No Link", "Please paste a link before clicking OK.")
 
     def show_buttons(self, link):
-        # Remove the input field and OK button
         self.line_edit.hide()
         self.ok_button.hide()
 
-        # Create a layout for the buttons
         self.button_layout = QHBoxLayout()
 
         self.button1 = QPushButton("MP3", self)
@@ -65,14 +63,15 @@ class LinkSaver(QWidget):
 
         self.layout.addLayout(self.button_layout)
 
-        self.button1.clicked.connect(self.choosed_mp3(link))
+        self.button1.clicked.connect(self.choosed_mp3(link)) #ERROR: Without this (link) he shows menu with choice of format, but doesn't woerk. But with (link) it works, but also skips choice of format
+        self.button2.clicked.connect(self.choosed_mp4)
 
         self.layout.addWidget(self.button1)
+        self.layout.addWidget(self.button2)
         self.setLayout(self.layout)
 
-        # SOON
+# SOON
 
-        #self.button2.clicked.connect(self.choosed_mp4)
         #self.button3.clicked.connect(self.choosed_both)
 
         #self.choose_quality()
@@ -116,6 +115,9 @@ class LinkSaver(QWidget):
         except Exception as e:
             print_error(f"Failed to download the video: {e}")
             exit(1)
+
+    def choosed_mp4(self):
+        print("TEST")
 
 
 def print_error(message):
