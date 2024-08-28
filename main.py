@@ -66,7 +66,7 @@ class LinkSaver(QWidget):
 
         self.button1.clicked.connect(lambda: self.choosed_mp3(link))
         self.button2.clicked.connect(lambda: self.choosed_mp4(link))
-        self.button3.clicked.connect(lambda: self.choosed_both)
+        self.button3.clicked.connect(lambda: self.choosed_both(link))
 
         self.layout.addWidget(self.button1)
         self.layout.addWidget(self.button2)

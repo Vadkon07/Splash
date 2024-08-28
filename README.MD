@@ -13,6 +13,7 @@ This GUI aplication allows you to download YouTube videos or audio quickly and e
 4. **GUI** Run the script and be happy to use him with GUI.
 5. **Choose Quality:** Bad internet or 4K resolution of video is too good for your 720p monitor? You can choose any quality of video which you want to download.
 6. **Offline Audio Extracting:** To download a video app will use internet, but to extract audio it will not use any data.
+7. **Terminal-based version:** Also we have a terminal-based version of this app, which you can find inside one of my repositories. Maybe she has for a little different functions.
 
 ## Prerequisites
 
@@ -50,8 +51,9 @@ Before running the script, make sure you have the following installed:
 - [ ] **More formats:** Instead of MP3 and MP4 in menu, we can add a Audio and Video, and inside them add a lot of lines where person can choose from formats as mp3, wav, ogg, and for Video the same.
 - [ ] **Add Both function:** For now app can download only MP3 or MP4.
 - [ ] **Add menu:** Add menu with settings, as **theme** and **exit**.
-- [ ] **Make this README better.
+- [ ] **Make this README better.**
 - [ ] **When download is finished move back to the first widget where you have to paste a link.
+- [ ] **Add texts which will notificate a user about downloading something, now it only prints his output in terminal.
 
 ## License
 
