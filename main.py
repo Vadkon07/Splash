@@ -78,7 +78,7 @@ if ask == '1':
             'preferredquality': '192',
         }],
         'quiet': True,  # Suppress yt-dlp output
-        'progress_hooks': [lambda d: print_progress("Downloading MP3...") if d['status'] == 'downloading' else None]
+        'progress_hooks': [lambda d: print_progress("|Downloading MP3...") if d['status'] == 'downloading' else None]
     }
 elif ask == '2':
     ydl_opts = {
@@ -86,7 +86,7 @@ elif ask == '2':
         'outtmpl': os.path.join(download_location, '%(title)s.%(ext)s'),
         'merge_output_format': 'mp4',
         'quiet': True,  # Suppress yt-dlp output
-        'progress_hooks': [lambda d: print_progress("Downloading MP4...") if d['status'] == 'downloading' else None]
+        'progress_hooks': [lambda d: print_progress("|Downloading MP4...") if d['status'] == 'downloading' else None]
     }
 elif ask == '3':
     ydl_opts = {
@@ -100,7 +100,7 @@ elif ask == '3':
         }],
         'keepvideo': True,  # Keep the video file after downloading
         'quiet': True,  # Suppress yt-dlp output
-        'progress_hooks': [lambda d: print_progress("Downloading both MP3 and MP4...") if d['status'] == 'downloading' else None]
+        'progress_hooks': [lambda d: print_progress("|Downloading both MP3 and MP4...") if d['status'] == 'downloading' else None]
     }
 
 # Download the selected media
