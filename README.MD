@@ -4,6 +4,8 @@ Thir repository needs a lot of help, because for now this code is broken. At fir
 
 Also this Readme should be edited, because he is copied. from NON-GUI version of this app
 
+EDIT: for now I created a temporary solution for MP3 download, but it still has a lot of errors as 'title not found' etc., also it doesn't show a window where yo have to choose MP3, 4, or both. So, it works, but not fully.
+
 # # Youtube Downloader
 
 This GUI aplication allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby, because it's very comfortable and fast to download samples from YouTube which then I can use for my melodies.

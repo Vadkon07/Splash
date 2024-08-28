@@ -97,15 +97,10 @@ class LinkSaver(QWidget):
         self.layout.addLayout(self.quality_layout)
 
     def choosed_mp3(self, link):
-        download_location
-
-        if not download_location:
-            download_location = os.getcwd()
-
         ydl_opts = {
                 'format': 'bestaudio',
                 # here add path to output ---
-                'outtmpl': os.path.join(f'(title)s.%(ext)s'),
+                'outtmpl': os.path.join('%(title)s.%(ext)s'),
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
@@ -115,7 +110,7 @@ class LinkSaver(QWidget):
                 }
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl_download([link])
+                ydl.download([link])
 
             print(f"{title} downloaded!")
         except Exception as e:
