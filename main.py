@@ -18,21 +18,25 @@ print("3. Download both")
 
 ask = input("Enter your choice: ")
 
-print("\nSelect quality (leave blank for default highest quality):")
-print("1. Low")
-print("2. Medium (up to 480p)")
-print("3. High (up to 720p)")
-print("4. Highest (default)")
-quality_choice = input("Enter quality choice: ")
+if ask == '2' or ask == '3':
+    print("\nSelect quality (leave blank for default highest quality):")
+    print("1. Low")
+    print("2. Medium (up to 480p)")
+    print("3. High (up to 720p)")
+    print("4. Highest (default)")
+    quality_choice = input("Enter quality choice: ")
 
-if quality_choice == '1':
-    quality_format = 'worst[height<=240]+worstaudio'  
-elif quality_choice == '2':
-    quality_format = 'bestvideo[height<=480]+bestaudio/best[height<=480]'  
-elif quality_choice == '3':
-    quality_format = 'bestvideo[height<=720]+bestaudio/best[height<=720]'  
+    if quality_choice == '1':
+        quality_format = 'worst[height<=240]+worstaudio'  
+    elif quality_choice == '2':
+        quality_format = 'bestvideo[height<=480]+bestaudio/best[height<=480]'  
+    elif quality_choice == '3':
+        quality_format = 'bestvideo[height<=720]+bestaudio/best[height<=720]'  
+    else:
+        quality_format = 'bestvideo+bestaudio/best'
 else:
-    quality_format = 'bestvideo+bestaudio/best'  # default to highest
+     quality_format = 'bestvideo+bestaudio/best'
+
 
 # Ask user for download location
 download_location = input("\nEnter download location (leave blank for current directory): ")
