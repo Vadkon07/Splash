@@ -1,10 +1,6 @@
 # NOTE
 
-This repository needs a lot of help. Thank you for your help!
-
-Also this Readme should be edited, because he is copied from NON-GUI version of this app
-
-For now works only MP3 download function.
+This repository needs a lot of work. Thank you for your help!
 
 # Youtube Downloader
 
@@ -49,8 +45,12 @@ Before running the script, make sure you have the following installed:
 
 - [ ] Add possibility to choose quality (by default it's the highest).
 - [ ] **Add Support for playlists:** Enable downloading entire YouTube playlists.
-- [ ] **Improve GUI:** Add dark/black modern theme.
+- [ ] **Improve GUI:** Optimise dark theme, create a button to add posibiity to change a current theme.
 - [ ] **Improve Indicator of Download:** For now it looks for a little messy, probably we have to hide output from yt-dlp and create our own output.
+- [ ] **More formats:** Instead of MP3 and MP4 in menu, we can add a Audio and Video, and inside them add a lot of lines where person can choose from formats as mp3, wav, ogg, and for Video the same.
+- [ ] **Add MP4 and Both in code:** For now app works only with MP3.
+- [ ] **Add menu:** Add menu with settings, as **theme** and **exit**.
+- [ ] **Make this README better.
 
 ## License
 
