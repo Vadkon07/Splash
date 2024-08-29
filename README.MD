@@ -52,6 +52,7 @@ When we will finish to do all these tasks - we will release version v1.0. Let's 
 - [ ] **Improve README:** Make this README more comprehensive and user-friendly.
 - [ ] **Return to Start on Completion:** After a download is finished, return the user to the initial screen to enter a new link.
 - [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.- [ ] **Descriptions and questions on every page:** Like: "Choose a format".
+- [ ] Thumbnail preview
 
 ## How to read version of app
 
