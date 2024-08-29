@@ -61,7 +61,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is 1.0. Now you have to wait some time...")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is 1.0. Click 'Ok' to hide this message forever")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
