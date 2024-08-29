@@ -57,15 +57,15 @@ class LinkSaver(QMainWindow):
         
         self.button_layout = QHBoxLayout()
 
-        """with open ('app.json', 'r') as file:
-            data = json.loads(file)
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
 
-        if json.load('{"update_installed"}: True'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is 1010101010010101. Now you have to wait some time...")
+        if data.get('update_installed'):
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is 1.0. Now you have to wait some time...")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
-             json.dump(data, file, indent=4) """
+             json.dump(data, file, indent=4)
 
     def add_action(self, menu, name, slot):
         action = QAction(name, self)
