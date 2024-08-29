@@ -3,7 +3,7 @@ import os
 import qdarkstyle
 import markdown
 import yt_dlp
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import Qt
 
@@ -12,7 +12,7 @@ class LinkSaver(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("YouTube Downloader")
-        self.setGeometry(100, 100, 300, 300)
+        self.setGeometry(100, 100, 350, 200)
 
         # Central widget and layout setup
         self.central_widget = QWidget(self)
@@ -32,6 +32,7 @@ class LinkSaver(QMainWindow):
         self.version_menu = self.custom_menu_bar.addMenu("Version")
         self.contribute_menu = self.custom_menu_bar.addMenu("Contribute")
         self.help_menu = self.custom_menu_bar.addMenu("Help")
+        self.exit_menu = self.custom_menu_bar.addMenu("Exit")
 
         # Add actions to menus
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
@@ -40,6 +41,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.version_menu, "About", self.show_version)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Documentation", self.open_documentation)
+        self.add_action(self.exit_menu, "Exit", self.exit_app)
 
         # Add URL entry field just below the menu bar
         self.line_edit = QLineEdit(self)
@@ -98,66 +100,11 @@ class LinkSaver(QMainWindow):
         dialog.exec()
 
     def open_documentation(self):
-    # Define your Markdown text
-        markdown_text = """
-        # Youtube Downloader
+        dialog = DocumentationDialog()
+        dialog.exec()
 
-        This GUI application allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby because it's very convenient and fast to download samples from YouTube, which I then use for creating melodies.
-
-        ## Features
-        1. **Ad-free:** Enjoy a seamless experience without interruptions.
-        2. **No API Needed:** Download directly without the need for any API keys or extra configuration.
-        3. **Fast Downloading:** Quickly download videos or audio with minimal delay.
-        4. **User-Friendly GUI**: Easy-to-use graphical interface for a more intuitive experience.
-        5. **Choose Quality:** Select the video quality that best suits your needs, from low resolution to 4K.
-        6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
-        7. **Terminal-Based Version Available:** A command-line version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
-
-        ## Prerequisites
-
-        Before running the script, make sure you have the following installed:
-
-        - **ffmpeg:** Ensure ffmpeg is installed on your machine for video/audio processing.
-        - **PyQt6,yt_dlp,pyqtdarktheme:** To install run `pip install -r requirements.txt`.
-
-        ## PC Requirements
-
-        The app works well on any PC. However, note that for certain operations, such as extracting audio from a two-hour-long video, it may take some time (approximately 5 minutes on an older machine). This performance is quite impressive given that my laptop is very old and struggles to open YouTube itself.
-
-        ## How to use
-
-        1. Run the script in your terminal or command prompt.
-        2. Paste the link to your YouTube video when prompted.
-        3. Choose your download option:
-        - Click '**MP3**' to download audio (MP3):
-        - Enter '**MP4**' to download video (MP4)
-            - Select a video quality preset:
-                - **Worst** for worst quality
-                - **480p** for 480p resolution
-                - **720p** for 720p resolution
-                - **Best** for the best quality
-        - Enter '**Both**' to download both audio and video
-        4. Specify the download location path where the files will be saved. Leave blank to download in current directory.
-        5. The script will process and download the file(s) according to your choices.
-
-        ## To-Do
-
-        - [ ] **Quality Selection:** Allow users to choose the video quality (currently, it defaults to the highest available quality).
-        - [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
-        - [ ] **GUI Improvements:** Optimize the dark theme and add a button to switch themes.
-        - [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly and hide the raw output from `yt-dlp`.
-        - [ ] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
-        - [ ] **Download Both Audio and Video:** Enhance the app to allow simultaneous downloading of both audio and video.
-        - [ ] **Settings Menu:** Add a settings menu for theme selection and other configurations.
-        - [ ] **Improve README:** Make this README more comprehensive and user-friendly.
-        - [ ] **Return to Start on Completion:** After a download is finished, return the user to the initial screen to enter a new link.
-        - [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.
-
-        ## License
-
-        This project is licensed under the [MIT License](./LICENSE).
-
-        """
+    def exit_app(self):
+        sys.exit()
 
         # Convert Markdown to HTML
         html_text = markdown.markdown(markdown_text)
@@ -291,9 +238,114 @@ class LinkSaver(QMainWindow):
     def print_error(self, message):
         print(f"Error message: {message}")
 
+
+class DocumentationDialog(QDialog):
+      def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Documentation")
+        self.resize(640, 480)  # Set initial size
+
+        # Create a QVBoxLayout
+        layout = QVBoxLayout()
+
+        # Create a QLabel with Markdown content
+        label = QLabel("""
+        # Youtube Downloader
+
+        This GUI application allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby because it's very convenient and fast to download samples from YouTube, which I then use for creating melodies.
+
+        ## Features
+        1. **Ad-free:** Enjoy a seamless experience without interruptions.
+        2. **No API Needed:** Download directly without the need for any API keys or extra configuration.
+        3. **Fast Downloading:** Quickly download videos or audio with minimal delay.
+        4. **User-Friendly GUI**: Easy-to-use graphical interface for a more intuitive experience.
+        5. **Choose Quality:** Select the video quality that best suits your needs, from low resolution to 4K.
+        6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
+        7. **Terminal-Based Version Available:** A command-line version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
+
+        ## Prerequisites
+
+        Before running the script, make sure you have the following installed:
+
+        - **ffmpeg:** Ensure ffmpeg is installed on your machine for video/audio processing.
+        - **PyQt6,yt_dlp,pyqtdarktheme:** To install run `pip install -r requirements.txt`.
+
+        ## PC Requirements
+
+        The app works well on any PC. However, note that for certain operations, such as extracting audio from a two-hour-long video, it may take some time (approximately 5 minutes on an older machine). This performance is quite impressive given that my laptop is very old and struggles to open YouTube itself.
+
+        ## How to use
+
+        1. Run the script in your terminal or command prompt.
+        2. Paste the link to your YouTube video when prompted.
+        3. Choose your download option:
+        - Click '**MP3**' to download audio (MP3):
+        - Enter '**MP4**' to download video (MP4)
+            - Select a video quality preset:
+                - **Worst** for worst quality
+                - **480p** for 480p resolution
+                - **720p** for 720p resolution
+                - **Best** for the best quality
+        - Enter '**Both**' to download both audio and video
+        4. Specify the download location path where the files will be saved. Leave blank to download in current directory.
+        5. The script will process and download the file(s) according to your choices.
+
+        ## To-Do
+
+        - [ ] **Quality Selection:** Allow users to choose the video quality (currently, it defaults to the highest available quality).
+        - [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
+        - [ ] **GUI Improvements:** Optimize the dark theme and add a button to switch themes.
+        - [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly and hide the raw output from `yt-dlp`.
+        - [ ] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
+        - [ ] **Download Both Audio and Video:** Enhance the app to allow simultaneous downloading of both audio and video.
+        - [ ] **Settings Menu:** Add a settings menu for theme selection and other configurations.
+        - [ ] **Improve README:** Make this README more comprehensive and user-friendly.
+        - [ ] **Return to Start on Completion:** After a download is finished, return the user to the initial screen to enter a new link.
+        - [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.
+
+        ## License
+
+        This project is licensed under the [MIT License](./LICENSE).
+
+        """)
+
+        label.setTextFormat(Qt.TextFormat.MarkdownText)
+        label.setWordWrap(True)
+
+        # Create a QScrollArea
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(label)
+
+        # Add the QScrollArea to the layout
+        layout.addWidget(scroll_area)
+
+        # Add a close button
+        button_layout = QHBoxLayout()
+        close_button = QPushButton("Close")
+        close_button.clicked.connect(self.close)
+        button_layout.addStretch()
+        button_layout.addWidget(close_button)
+        layout.addLayout(button_layout)
+
+        # Set the layout for the dialog
+        self.setLayout(layout)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6())  # Apply dark theme
+    custom_stylesheet = """
+    QWidget {
+        background-color: #1a1a1a;  /* Very dark background */
+    }
+    QPushButton {
+        background-color: #ff0000;  /* Red buttons */
+        color: white;  /* Text color */
+    }
+    QPushButton:hover {
+        background-color: #cc0000;  /* Darker red on hover */
+    }
+   """
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet)
     window = LinkSaver()
     window.show()
     sys.exit(app.exec())
