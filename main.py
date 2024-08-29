@@ -2,8 +2,8 @@ import yt_dlp
 import os
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout
-
-from darktheme.widget_template_pyqt6 import DarkApplication, DarkPalette
+from PyQt6.QtGui import QPalette, QColor
+from pyqtdarktheme import DarkApplication, DarkPalette  # Import from pyqtdarktheme
 
 class LinkSaver(QWidget):
     def __init__(self):
