@@ -36,9 +36,9 @@ Before running the script, make sure you have the following installed:
 
 - [X] Add possibility to choose quality (by default it's the highest).
 - [ ] **Add Support for playlists:** Enable downloading entire YouTube playlists.
-- [ ] **Error Handling:** Improve error messages for common issues (e.g., invalid URLs, network errors).
+- [X] **Error Handling:** Improve error messages for common issues (e.g., invalid URLs, network errors).
 - [ ] **GUI Version:** Develop a graphical user interface for users who prefer not to use the terminal.
-- [ ] **Improve Indicator of Download:** For now it looks for a little messy, probably we have to hide output from yt-dlp and create our own output.
+- [X] **Improve Indicator of Download:** For now it looks for a little messy, probably we have to hide output from yt-dlp and create our own output.
 
 ## License
 

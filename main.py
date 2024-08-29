@@ -1,15 +1,30 @@
-print("Running app. Wait some seconds...")
-
 import yt_dlp
 import os
+import sys
 
+print("Running app. Wait some seconds...")
+
+# Function to print error messages
+def print_error(message):
+    print(f"Error: {message}")
+
+# Function to print progress messages
+def print_progress(message):
+    print(f"{message}", end="\r")  # Overwrite the line
+
+# Get URL from user
 url = input("Enter YouTube video URL: ")
 
-ydl_opts = {}
-
-with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-    info_dict = ydl.extract_info(url, download=False)
-    title = info_dict.get('title', None)
+# Extract video info
+try:
+    with yt_dlp.YoutubeDL({'quiet': True}) as ydl:
+        info_dict = ydl.extract_info(url, download=False)
+        title = info_dict.get('title', None)
+        if not title:
+            raise ValueError("Unable to retrieve video title.")
+except Exception as e:
+    print_error(f"Failed to retrieve video information: {e}")
+    exit(1)
 
 print(f"\nVideo found: {title}")
 print("1. Download MP3")
@@ -18,7 +33,8 @@ print("3. Download both")
 
 ask = input("Enter your choice: ")
 
-if ask == '2' or ask == '3':
+# Determine quality format based on user's choice
+if ask in ['2', '3']:
     print("\nSelect quality (leave blank for default highest quality):")
     print("1. Low")
     print("2. Medium (up to 480p)")
@@ -35,19 +51,23 @@ if ask == '2' or ask == '3':
     else:
         quality_format = 'bestvideo+bestaudio/best'
 else:
-     quality_format = 'bestvideo+bestaudio/best'
-
+    quality_format = 'bestvideo+bestaudio/best'
 
 # Ask user for download location
 download_location = input("\nEnter download location (leave blank for current directory): ")
 
 if not download_location:
-    download_location = os.getcwd()  
+    download_location = os.getcwd()
 else:
     # Ensure the directory exists
-    if not os.path.exists(download_location):
-        os.makedirs(download_location)
+    try:
+        if not os.path.exists(download_location):
+            os.makedirs(download_location)
+    except Exception as e:
+        print_error(f"Failed to create directory: {e}")
+        exit(1)
 
+# Set download options based on user's choice
 if ask == '1':
     ydl_opts = {
         'format': 'bestaudio',
@@ -56,17 +76,21 @@ if ask == '1':
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
-        }]
+        }],
+        'quiet': True,  # Suppress yt-dlp output
+        'progress_hooks': [lambda d: print_progress("|Downloading MP3...") if d['status'] == 'downloading' else None]
     }
 elif ask == '2':
     ydl_opts = {
-        'format': quality_format,  
+        'format': quality_format,
         'outtmpl': os.path.join(download_location, '%(title)s.%(ext)s'),
-        'merge_output_format': 'mp4' 
+        'merge_output_format': 'mp4',
+        'quiet': True,  # Suppress yt-dlp output
+        'progress_hooks': [lambda d: print_progress("|Downloading MP4...") if d['status'] == 'downloading' else None]
     }
 elif ask == '3':
     ydl_opts = {
-        'format': quality_format,  
+        'format': quality_format,
         'outtmpl': os.path.join(download_location, '%(title)s.%(ext)s'),
         'merge_output_format': 'mp4',
         'postprocessors': [{
@@ -74,16 +98,23 @@ elif ask == '3':
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        'keepvideo': True  # Keep the video file after downloading
+        'keepvideo': True,  # Keep the video file after downloading
+        'quiet': True,  # Suppress yt-dlp output
+        'progress_hooks': [lambda d: print_progress("|Downloading both MP3 and MP4...") if d['status'] == 'downloading' else None]
     }
 
 # Download the selected media
-with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-    ydl.download([url])
+try:
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
     
-if ask == '3':
-    for file in os.listdir(download_location):
-        if file.endswith('.webm'):
-            os.remove(os.path.join(download_location, file))
-
-print(f"{title} downloaded to {download_location}!")
+    # Clean up extra video files if downloading both audio and video
+    if ask == '3':
+        for file in os.listdir(download_location):
+            if file.endswith('.webm'):
+                os.remove(os.path.join(download_location, file))
+    
+    print(f"{title} downloaded to {download_location}!")
+except Exception as e:
+    print_error(f"Failed to download the video: {e}")
+    exit(1)
