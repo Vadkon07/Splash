@@ -14,19 +14,15 @@ class LinkSaver(QMainWindow):
         self.setWindowTitle("YouTube Downloader")
         self.setGeometry(100, 100, 350, 200)
 
-        # Central widget and layout setup
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
 
-        # Main layout for central widget
         self.main_layout = QVBoxLayout(self.central_widget)
         self.main_layout.setSpacing(0)
 
-        # Create a custom menu bar
         self.custom_menu_bar = QMenuBar(self)
         self.setMenuBar(self.custom_menu_bar)
 
-        # Add menus
         self.window_menu = self.custom_menu_bar.addMenu("Window")
         self.settings_menu = self.custom_menu_bar.addMenu("Settings")
         self.version_menu = self.custom_menu_bar.addMenu("Version")
@@ -34,27 +30,30 @@ class LinkSaver(QMainWindow):
         self.help_menu = self.custom_menu_bar.addMenu("Help")
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
 
-        # Add actions to menus
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
         self.add_action(self.settings_menu, "Preferences", self.open_preferences)
         self.add_action(self.version_menu, "About", self.show_version)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Documentation", self.open_documentation)
-        self.add_action(self.exit_menu, "Exit", self.exit_app)
+        self.add_action(self.exit_menu, "Exit (Are you sure?)", self.exit_app)
 
-        # Add URL entry field just below the menu bar
+        self.widget = QLabel("YouTube Downloader")
+        font = self.widget.font()
+        font.setPointSize(18)
+        self.widget.setFont(font)
+        self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 
+        self.main_layout.addWidget(self.widget)
+
         self.line_edit = QLineEdit(self)
         self.line_edit.setPlaceholderText("Paste URL of YouTube video here")
         self.line_edit.setStyleSheet("QLineEdit { color: white; }")
         self.main_layout.addWidget(self.line_edit)
 
-        # Add OK button below the URL entry field
         self.ok_button = QPushButton("OK", self)
         self.ok_button.clicked.connect(self.save_link)
         self.main_layout.addWidget(self.ok_button)
-
-        # Placeholder for other UI elements
+        
         self.button_layout = QHBoxLayout()
 
     def add_action(self, menu, name, slot):
@@ -134,7 +133,7 @@ class LinkSaver(QMainWindow):
         dialog.setLayout(layout)
         dialog.exec()
 
-    def save_link(self):
+    def save_link(self, title):
         link = self.line_edit.text()
 
         if link:
@@ -154,11 +153,12 @@ class LinkSaver(QMainWindow):
 
             print(f"\nVideo found: {title}")
 
-            self.show_buttons(link)
+            self.show_buttons(link, title)
         else:
             QMessageBox.warning(self, "No Link", "Please paste a link before clicking OK.")
 
-    def show_buttons(self, link):
+    def show_buttons(self, link, title):
+        self.widget.hide()
         self.line_edit.hide()
         self.ok_button.hide()
 
@@ -174,7 +174,7 @@ class LinkSaver(QMainWindow):
 
         self.main_layout.addLayout(self.button_layout)
 
-        self.button1.clicked.connect(lambda: self.choosed_mp3(link))
+        self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
         self.button2.clicked.connect(lambda: self.choosed_mp4(link))
         self.button3.clicked.connect(lambda: self.choosed_both(link))
 
@@ -200,7 +200,7 @@ class LinkSaver(QMainWindow):
 
         self.main_layout.addLayout(self.quality_layout)
 
-    def choosed_mp3(self, link):
+    def choosed_mp3(self, link, title):
         ydl_opts = {
             'format': 'bestaudio',
             'outtmpl': os.path.join('%(title)s.%(ext)s'),
@@ -214,7 +214,10 @@ class LinkSaver(QMainWindow):
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
-                print(f"{link} downloaded!")
+                print(f"{title} downloaded!")
+
+                QMessageBox.information(self, "File downloaded", f"File {title} downloaded in MP3 format!")
+
         except Exception as e:
             self.print_error(f"Failed to download the video: {e}")
 
