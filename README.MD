@@ -51,6 +51,18 @@ The app works well on any PC. However, note that for certain operations, such as
 - [ ] **Return to Start on Completion:** After a download is finished, return the user to the initial screen to enter a new link.
 - [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.
 
+## How to read version of app
+
+**In version 1.9.0.1 (example):**
+
+    1: Major revision (new UI, lots of new features, conceptual change, etc.)
+
+    9: Minor revision (maybe a change to a search box, 1 feature added, collection of bug fixes)
+
+    0: Bug fix release
+
+    1: Build number (if used)—that's why you see the .NET framework using something like 2.0.4.2709
+
 ## License
 
 This project is licensed under the [MIT License](./LICENSE).

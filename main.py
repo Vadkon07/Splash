@@ -61,7 +61,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is 1.0. Click 'Ok' to hide this message forever")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is v0.01. Click 'Ok' to hide this message forever")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -82,7 +82,7 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
 
     def show_version(self):
-        QMessageBox.information(self, "Version", "YouTube Downloader v1.0")
+        QMessageBox.information(self, "Version", "YouTube Downloader v0.1")
 
     def open_github(self):
         # Define the GitHub link
