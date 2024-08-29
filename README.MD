@@ -40,6 +40,8 @@ The app works well on any PC. However, note that for certain operations, such as
 
 ## To-Do
 
+When we will finish to do all these tasks - we will release version v1.0. Let's Go!
+
 - [ ] **Quality Selection:** Allow users to choose the video quality (currently, it defaults to the highest available quality).
 - [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
 - [ ] **GUI Improvements:** Optimize the dark theme and add a button to switch themes.
@@ -49,7 +51,7 @@ The app works well on any PC. However, note that for certain operations, such as
 - [ ] **Settings Menu:** Add a settings menu for theme selection and other configurations.
 - [ ] **Improve README:** Make this README more comprehensive and user-friendly.
 - [ ] **Return to Start on Completion:** After a download is finished, return the user to the initial screen to enter a new link.
-- [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.
+- [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.- [ ] **Descriptions and questions on every page:** Like: "Choose a format".
 
 ## How to read version of app
 
