@@ -1,0 +1,4 @@
+PyQt6==6.7.1
+PyQt6_sip==13.8.0
+pyqtdarktheme==2.1.0
+yt_dlp==2024.8.6
