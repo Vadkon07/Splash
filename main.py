@@ -186,23 +186,29 @@ class LinkSaver(QMainWindow):
         self.main_layout.addLayout(self.button_layout)
 
         self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
-        self.button2.clicked.connect(lambda: self.choosed_mp4(link))
+        self.button2.clicked.connect(lambda: self.choose_quality(link))
         self.button3.clicked.connect(lambda: self.choosed_both(link))
 
         self.main_layout.addWidget(self.button1)
         self.main_layout.addWidget(self.button2)
         self.main_layout.addWidget(self.button3)
 
-    def choose_quality(self):
+    def choose_quality(self, link):
         self.quality_layout = QHBoxLayout()
+
         self.button1.hide()
         self.button2.hide()
         self.button3.hide()
 
-        self.button1 = QPushButton("Lowest", self)
+        self.button1 = QPushButton("Worst", self)
         self.button2 = QPushButton("480p", self)
         self.button3 = QPushButton("720p", self)
-        self.button4 = QPushButton("Highest", self)
+        self.button4 = QPushButton("Best", self)
+
+        self.button1.clicked.connect(lambda: self.choosed_worst(link))
+        self.button2.clicked.connect(lambda: self.choosed_480(link))
+        self.button3.clicked.connect(lambda: self.choosed_720(link))
+        self.button4.clicked.connect(lambda: self.choosed_best(link))
 
         self.quality_layout.addWidget(self.button1)
         self.quality_layout.addWidget(self.button2)
@@ -211,6 +217,22 @@ class LinkSaver(QMainWindow):
 
         self.main_layout.addLayout(self.quality_layout)
 
+    def choosed_worst(self, quality_format, link):
+        quality_format = 'worst[height<=240]+worstaudio'
+        self.choosed_mp4(quality_format, link)
+
+    def choosed_480(self, link):
+        quality_format = 'bestvideo[height<=480]+bestaudio'
+        self.choosed_mp4(quality_format, link)
+
+    def choosed_720(self, link):
+        quality_format = 'bestvideo[height<=720]+bestaudio'
+        self.choosed_mp4(quality_format, link)
+
+    def choosed_best(self, quality_format, link):
+        quality_format = 'bestvideo+bestaudio'
+        self.choosed_mp4(quality_format, link)
+        
     def choosed_mp3(self, link, title):
         ydl_opts = {
             'format': 'bestaudio',
@@ -232,19 +254,20 @@ class LinkSaver(QMainWindow):
         except Exception as e:
             self.print_error(f"Failed to download the video: {e}")
 
-    def choosed_mp4(self, link):
+    def choosed_mp4(self, quality_format, link):
         ydl_opts = {
-            'format': 'bestvideo',
-            'outtmpl': os.path.join('%(title)s.%(ext)s'),
-            'merge_output_format': 'mp4',
-            'quiet': False,
+        'format': quality_format,
+        'outtmpl': os.path.join('%(title)s.%(ext)s'),
+        'quiet': False,
         }
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
-                print(f"{link} downloaded!")
+                print(f"Video downloaded in {quality_format} format!")
+                QMessageBox.information(self, "File downloaded", f"File downloaded in {quality_format} format!")
         except Exception as e:
-            self.print_error(f"Failed to download the video: {e}")
+            print(f"Error: {e}")
+            QMessageBox.warning(self, "Download failed", f"Failed to download file: {e}")
 
     def choosed_both(self, link):
         print("TEST BOTH")
