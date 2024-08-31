@@ -159,11 +159,9 @@ class LinkSaver(QMainWindow):
         dialog.setLayout(layout)
         dialog.exec()
 
-    def show_image_in_messagebox(self, thumbnail_path, link):
+    def show_image_in_messagebox(self, thumbnail_path):
         self.image_window = ImageWindow(thumbnail_path)
         self.image_window.show()
-
-        self.show_buttons(link, title)
 
     def save_link(self, title):
         link = self.line_edit.text()
@@ -200,7 +198,7 @@ class LinkSaver(QMainWindow):
         
             QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
         
-            self.show_image_in_messagebox(link)
+            self.show_image_in_messagebox(self.thumbnail_path)
                   
             self.show_buttons(link, title)
         else:

@@ -2,11 +2,8 @@ This branch was created to store here a version in development, which currrently
 
 Issues and tasks:
 
-1. Can't find a link when it's time to show a thumbnail
-2. Downloaded thumbnail should be deleted after the moment when it was showed (just in order to save storage)
-3. Thumbnail can't be showed, just a lot of errors
-
-I wasted on it 4 hours, so I would like to ask you all for help
+1. Downloaded thumbnail should be deleted after the moment when it was showed (just in order to save storage).
+2. ydl_opts quality settings error.
 
 
 # Youtube Downloader
