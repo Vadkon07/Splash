@@ -1,10 +1,12 @@
-This branch was created to store here a version in development, which currrently doesn't work/
+This branch was created to store here a version in development, which currrently doesn't work:
 
 Issues and tasks:
 
-1. Can't find link, when it's time to show a thumbnail
-2. Logo should be deleted after the moment when she showed (to save storage)
-3. Thumbnail can't be showed
+1. Can't find a link when it's time to show a thumbnail
+2. Downloaded thumbnail should be deleted after the moment when it was showed (just in order to save storage)
+3. Thumbnail can't be showed, just a lot of errors
+
+I wasted on it 4 hours, so I would like to ask you all for help
 
 
 # Youtube Downloader
