@@ -4,19 +4,20 @@ import subprocess
 import qdarkstyle
 import markdown
 import yt_dlp
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea
+import time
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea, QGraphicsOpacityEffect
 from PyQt6.QtGui import QAction, QImage, QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import QPropertyAnimation, Qt
 import json
 
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
         super().__init__()
-        self.setWindowTitle("Image Viewer")
+        self.setWindowTitle("Thumbnail Viewer")
         layout = QVBoxLayout()
         self.label = QLabel()
-        pixmap = QPixmap('maxresdefault [maxresdefault].webp') #oe jpg, we have to solve it
+        pixmap = QPixmap('maxresdefault [maxresdefault].webp') #or jpg, we have to solve it
         self.label.setPixmap(pixmap)
         layout.addWidget(self.label)
         self.setLayout(layout)
@@ -26,7 +27,7 @@ class LinkSaver(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("YouTube Downloader")
-        self.setGeometry(100, 100, 350, 200)
+        self.setGeometry(100, 100, 400, 200)
 
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
@@ -37,6 +38,7 @@ class LinkSaver(QMainWindow):
         self.custom_menu_bar = QMenuBar(self)
         self.setMenuBar(self.custom_menu_bar)
 
+        self.main_menu = self.custom_menu_bar.addMenu("Main")
         self.window_menu = self.custom_menu_bar.addMenu("Window")
         self.settings_menu = self.custom_menu_bar.addMenu("Settings")
         self.version_menu = self.custom_menu_bar.addMenu("Version")
@@ -44,6 +46,8 @@ class LinkSaver(QMainWindow):
         self.help_menu = self.custom_menu_bar.addMenu("Help")
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
 
+
+        self.add_action(self.main_menu, "Main", self.window) #doesn't work, not finished
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
         self.add_action(self.settings_menu, "Preferences", self.open_preferences)
@@ -53,6 +57,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.exit_menu, "Exit (Are you sure?)", self.exit_app)
 
         self.widget = QLabel("YouTube Downloader")
+        self.fade(self.widget)
         font = self.widget.font()
         font.setPointSize(18)
         self.widget.setFont(font)
@@ -81,6 +86,18 @@ class LinkSaver(QMainWindow):
 
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
+
+
+
+    def fade(self, widget):
+        self.effect = QGraphicsOpacityEffect()
+        widget.setGraphicsEffect(self.effect)
+
+        self.animation = QPropertyAnimation(self.effect, b"opacity")
+        self.animation.setDuration(2000)
+        self.animation.setStartValue(0)
+        self.animation.setEndValue(1)
+        self.animation.start()
 
     def add_action(self, menu, name, slot):
         action = QAction(name, self)
@@ -191,7 +208,7 @@ class LinkSaver(QMainWindow):
                         self.thumbnail_path = f"{title}.{ext}"
                         print(f"Thumbnail downloaded to: {self.thumbnail_path}") 
 
-                        ydl.download([link])
+                        #ydl.download([link])
             except Exception as e:
                 self.print_error(f"Failed to retrieve video information: {e}")
                 return
@@ -270,6 +287,16 @@ class LinkSaver(QMainWindow):
         self.choosed_mp4(quality_format, link)
 
     def choosed_mp3(self, link, title):
+
+        #self.notif = QLabel("Downloading mp3...")
+        #font = self.notif.font()
+        #font.setPointSize(18)
+        #self.notif.setFont(font)
+        #self.notif.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 
+        #self.main_layout.addWidget(self.notif)
+
+        #time.sleep(2)
+
         ydl_opts = {
             'format': 'bestaudio',
             'outtmpl': os.path.join('%(title)s.%(ext)s'),
@@ -280,12 +307,20 @@ class LinkSaver(QMainWindow):
             }],
             'quiet': False,
         }
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([link])
-                print(f"{title} downloaded!")
 
-                QMessageBox.information(self, "File downloaded", f"File {title} downloaded in MP3 format!")
+                ydl.download([link])
+                
+                self.widget = QLabel(f"Downloaded {title} in MP3 format!")
+                font = self.widget.font()
+                font.setPointSize(12)
+                self.widget.setFont(font)
+                self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 
+                self.main_layout.addWidget(self.widget)
 
         except Exception as e:
             self.print_error(f"Failed to download the video: {e}")
