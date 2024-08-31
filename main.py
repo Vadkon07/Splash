@@ -16,7 +16,7 @@ class ImageWindow(QWidget):
         self.setWindowTitle("Image Viewer")
         layout = QVBoxLayout()
         self.label = QLabel()
-        pixmap = QPixmap('maxresdefault [maxresdefault].jpg')
+        pixmap = QPixmap('maxresdefault [maxresdefault].webp') #oe jpg, we have to solve it
         self.label.setPixmap(pixmap)
         layout.addWidget(self.label)
         self.setLayout(layout)
@@ -159,11 +159,9 @@ class LinkSaver(QMainWindow):
         dialog.setLayout(layout)
         dialog.exec()
 
-    def show_image_in_messagebox(self, thumbnail_path, link):
+    def show_image_in_messagebox(self, thumbnail_path):
         self.image_window = ImageWindow(thumbnail_path)
         self.image_window.show()
-
-        self.show_buttons(link, title)
 
     def save_link(self, title):
         link = self.line_edit.text()
@@ -187,9 +185,9 @@ class LinkSaver(QMainWindow):
 
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl_thumb:
                         info_dict_thumb = ydl_thumb.extract_info(link, download=True)
-                        link  = info_dict_thumb.get('thumbnail')
+                        thumbnail_url = info_dict_thumb.get('thumbnail')
                         title = info_dict_thumb.get('title')
-                        ext = link.split('.')[-1]
+                        ext = thumbnail_url.split('.')[-1]
                         self.thumbnail_path = f"{title}.{ext}"
                         print(f"Thumbnail downloaded to: {self.thumbnail_path}") 
 
@@ -200,7 +198,7 @@ class LinkSaver(QMainWindow):
         
             QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
         
-            self.show_image_in_messagebox(link)
+            self.show_image_in_messagebox(self.thumbnail_path)
                   
             self.show_buttons(link, title)
         else:
