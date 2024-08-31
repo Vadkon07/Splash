@@ -1,12 +1,25 @@
 import sys
 import os
+import subprocess
 import qdarkstyle
 import markdown
 import yt_dlp
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QImage, QPixmap
 from PyQt6.QtCore import Qt
 import json
+
+
+class ImageWindow(QWidget):
+    def __init__(self, image_path):
+        super().__init__()
+        self.setWindowTitle("Image Viewer")
+        layout = QVBoxLayout()
+        self.label = QLabel()
+        pixmap = QPixmap('maxresdefault [maxresdefault].jpg')
+        self.label.setPixmap(pixmap)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
 
 class LinkSaver(QMainWindow):
     def __init__(self):
@@ -55,6 +68,7 @@ class LinkSaver(QMainWindow):
         self.ok_button.setFixedSize(200, 25)
         self.ok_button.clicked.connect(self.save_link)
         self.main_layout.addWidget(self.ok_button, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.thumbnail_file = None
         
         self.button_layout = QHBoxLayout()
 
@@ -145,26 +159,49 @@ class LinkSaver(QMainWindow):
         dialog.setLayout(layout)
         dialog.exec()
 
+    def show_image_in_messagebox(self, thumbnail_path, link):
+        self.image_window = ImageWindow(thumbnail_path)
+        self.image_window.show()
+
+        self.show_buttons(link, title)
+
     def save_link(self, title):
         link = self.line_edit.text()
-
+    
         if link:
             self.saved_link = link
             QMessageBox.information(self, "Link Saved", f"Link saved: {link}. Now you have to wait some time...")
             print(link)
-
+        
             try:
                 with yt_dlp.YoutubeDL({'quiet': False}) as ydl:
                     info_dict = ydl.extract_info(link, download=False)
                     title = info_dict.get('title', None)
-                    if not title:
-                        raise ValueError("Unable to retrieve video title.")
+                
+                # Download thumbnail
+                    ydl_opts = {
+                        'skip_download': True,
+                        'write_thumbnail': True,
+                        'outtmpl': '%(title)s.%(ext)s',
+                    }
+
+                    with yt_dlp.YoutubeDL(ydl_opts) as ydl_thumb:
+                        info_dict_thumb = ydl_thumb.extract_info(link, download=True)
+                        link  = info_dict_thumb.get('thumbnail')
+                        title = info_dict_thumb.get('title')
+                        ext = link.split('.')[-1]
+                        self.thumbnail_path = f"{title}.{ext}"
+                        print(f"Thumbnail downloaded to: {self.thumbnail_path}") 
+
+                        ydl.download([link])
             except Exception as e:
                 self.print_error(f"Failed to retrieve video information: {e}")
                 return
-
+        
             QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
-
+        
+            self.show_image_in_messagebox(link)
+                  
             self.show_buttons(link, title)
         else:
             QMessageBox.warning(self, "No Link", "Please paste a link before clicking OK.")
