@@ -175,7 +175,7 @@ class LinkSaver(QMainWindow):
 
         self.button_layout = QHBoxLayout()
 
-        self.button1 = QPushButton("MP3", self)
+        self.button1 = QPushButton("MP3 (Best)", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("Both", self)
 
@@ -188,10 +188,6 @@ class LinkSaver(QMainWindow):
         self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
         self.button2.clicked.connect(lambda: self.choose_quality(link))
         self.button3.clicked.connect(lambda: self.choosed_both(link))
-
-        self.main_layout.addWidget(self.button1)
-        self.main_layout.addWidget(self.button2)
-        self.main_layout.addWidget(self.button3)
 
     def choose_quality(self, link):
         self.quality_layout = QHBoxLayout()
@@ -217,8 +213,8 @@ class LinkSaver(QMainWindow):
 
         self.main_layout.addLayout(self.quality_layout)
 
-    def choosed_worst(self, quality_format, link):
-        quality_format = 'worst[height<=240]+worstaudio'
+    def choosed_worst(self, link):
+        quality_format = 'worstvideo+worstaudio'
         self.choosed_mp4(quality_format, link)
 
     def choosed_480(self, link):
@@ -229,7 +225,7 @@ class LinkSaver(QMainWindow):
         quality_format = 'bestvideo[height<=720]+bestaudio'
         self.choosed_mp4(quality_format, link)
 
-    def choosed_best(self, quality_format, link):
+    def choosed_best(self, link):
         quality_format = 'bestvideo+bestaudio'
         self.choosed_mp4(quality_format, link)
         
@@ -258,6 +254,10 @@ class LinkSaver(QMainWindow):
         ydl_opts = {
         'format': quality_format,
         'outtmpl': os.path.join('%(title)s.%(ext)s'),
+        'postprocessors': [{
+            'key': 'FFmpegVideoConvertor',
+            'preferedformat': 'mp4',
+            }],
         'quiet': False,
         }
         try:
