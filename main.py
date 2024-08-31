@@ -52,8 +52,9 @@ class LinkSaver(QMainWindow):
         self.main_layout.addWidget(self.line_edit)
 
         self.ok_button = QPushButton("OK", self)
+        self.ok_button.setFixedSize(200, 25)
         self.ok_button.clicked.connect(self.save_link)
-        self.main_layout.addWidget(self.ok_button)
+        self.main_layout.addWidget(self.ok_button, alignment=Qt.AlignmentFlag.AlignCenter)
         
         self.button_layout = QHBoxLayout()
 
@@ -162,7 +163,7 @@ class LinkSaver(QMainWindow):
                 self.print_error(f"Failed to retrieve video information: {e}")
                 return
 
-            print(f"\nVideo found: {title}")
+            QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
 
             self.show_buttons(link, title)
         else:
@@ -214,21 +215,25 @@ class LinkSaver(QMainWindow):
         self.main_layout.addLayout(self.quality_layout)
 
     def choosed_worst(self, link):
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'worstvideo+worstaudio'
         self.choosed_mp4(quality_format, link)
 
     def choosed_480(self, link):
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'bestvideo[height<=480]+bestaudio'
         self.choosed_mp4(quality_format, link)
 
     def choosed_720(self, link):
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'bestvideo[height<=720]+bestaudio'
         self.choosed_mp4(quality_format, link)
 
     def choosed_best(self, link):
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'bestvideo+bestaudio'
         self.choosed_mp4(quality_format, link)
-        
+
     def choosed_mp3(self, link, title):
         ydl_opts = {
             'format': 'bestaudio',
