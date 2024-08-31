@@ -1,12 +1,3 @@
-This branch was created to store here a version in development, which currrently doesn't work/
-
-Issues and tasks:
-
-1. Can't find link, when it's time to show a thumbnail
-2. Logo should be deleted after the moment when she showed (to save storage)
-3. Thumbnail can't be showed
-
-
 # Youtube Downloader
 
 This GUI application allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby because it's very convenient and fast to download samples from YouTube, which I then use for creating melodies.
