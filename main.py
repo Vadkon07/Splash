@@ -17,7 +17,7 @@ class ImageWindow(QWidget):
         self.setWindowTitle("Thumbnail Viewer")
         layout = QVBoxLayout()
         self.label = QLabel()
-        pixmap = QPixmap('maxresdefault [maxresdefault].webp') #or jpg, we have to solve it
+        pixmap = QPixmap('thumbnail.webp')
         self.label.setPixmap(pixmap)
         layout.addWidget(self.label)
         self.setLayout(layout)
@@ -81,7 +81,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is v0.2.0. We added: download both function, go to main menu function, optimised for low resolution screen. Click 'Ok' to hide this message forever")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is v0.2.1. We added: download webm, show thumbnail of video, optimised code to make it faster. Click 'Ok' to hide this message forever")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -113,7 +113,7 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
 
     def show_version(self):
-        QMessageBox.information(self, "Version", "YouTube Downloader v0.2.0")
+        QMessageBox.information(self, "Version", "YouTube Downloader v0.2.1")
 
     def open_github(self):
         # Define the GitHub link
@@ -200,8 +200,8 @@ class LinkSaver(QMainWindow):
                 # Download thumbnail
                     ydl_opts = {
                         'skip_download': True,
-                        'write_thumbnail': True,
-                        'outtmpl': '%(title)s.%(ext)s',
+                        'writethumbnail': True,
+                        'outtmpl': 'thumbnail.%(ext)s',
                     }
 
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl_thumb:
@@ -209,17 +209,16 @@ class LinkSaver(QMainWindow):
                         thumbnail_url = info_dict_thumb.get('thumbnail')
                         title = info_dict_thumb.get('title')
                         ext = thumbnail_url.split('.')[-1]
-                        self.thumbnail_path = f"{title}.{ext}"
+                        self.thumbnail_path = f"./thumbnail.{ext}"
                         print(f"Thumbnail downloaded to: {self.thumbnail_path}") 
 
-                        #ydl.download([link])
             except Exception as e:
                 self.print_error(f"Failed to retrieve video information: {e}")
                 return
         
             QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
         
-            #self.show_image_in_messagebox(self.thumbnail_path) we have to optimise it
+            self.show_image_in_messagebox(self.thumbnail_path)
                   
             self.show_buttons(link, title)
         else:
@@ -234,15 +233,18 @@ class LinkSaver(QMainWindow):
 
         self.button1 = QPushButton("MP3 (Best only)", self)
         self.button2 = QPushButton("MP4", self)
-        self.button3 = QPushButton("Both", self)
+        self.button3 = QPushButton("Both MP3 + MP4", self)
+        self.button4 = QPushButton("Webm", self)
 
         self.button1.setFixedSize(100,25)
         self.button2.setFixedSize(100,25)
         self.button3.setFixedSize(100,25)
+        self.button4.setFixedSize(100,25)
 
         self.button_layout.addWidget(self.button1, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button2, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button3, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.button_layout.addWidget(self.button4, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.main_layout.addLayout(self.button_layout)
 
@@ -251,6 +253,7 @@ class LinkSaver(QMainWindow):
         self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
         self.button2.clicked.connect(lambda: self.choose_quality(link))
         self.button3.clicked.connect(lambda: self.choosed_both(link, quality_format, title))
+        self.button4.clicked.connect(lambda: self.choosed_webm(link))
 
     def choose_quality(self, link):
         self.quality_layout = QHBoxLayout()
@@ -360,6 +363,32 @@ class LinkSaver(QMainWindow):
         self.choose_quality(link)
         self.choosed_mp4(quality_format, link)
         self.choosed_mp3(link, title)
+
+    def choosed_webm(self, link):
+        ydl_opts = {
+        'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best[ext=webm]/best',
+        'outtmpl': os.path.join('%(title)s.%(ext)s'),
+        'postprocessors': [{
+            'key': 'FFmpegVideoConvertor',
+            'preferedformat': 'webm',
+            }],
+        'quiet': False,
+        }
+
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+
+
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([link])
+                print(f"Video downloaded in best quality!")
+                QMessageBox.information(self, "File downloaded", f"File downloaded in best quality!")
+        except Exception as e:
+            print(f"Error: {e}")
+            QMessageBox.warning(self, "Download failed", f"Failed to download file: {e}")
+
+
 
     def print_error(self, message):
         print(f"Error message: {message}")

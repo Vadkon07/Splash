@@ -43,7 +43,6 @@ The app works well on any PC. However, note that for certain operations, such as
 
 When we will finish to do all these tasks - we will release version v1.0. Let's Go!
 
-- [ ] **Quality Selection:** Allow users to choose the video quality (currently, it defaults to the highest available quality).
 - [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
 - [ ] **GUI Improvements:** Optimize the dark theme and add a button to switch themes.
 - [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly and hide the raw output from `yt-dlp`.
@@ -51,11 +50,11 @@ When we will finish to do all these tasks - we will release version v1.0. Let's 
 - [ ] **Download Both Audio and Video:** Enhance the app to allow simultaneous downloading of both audio and video.
 - [ ] **Settings Menu:** Add a settings menu for theme selection and other configurations.
 - [ ] **Improve README:** Make this README more comprehensive and user-friendly.
-- [ ] **Return to Start on Completion:** After a download is finished, return the user to the initial screen to enter a new link.
 - [ ] **User Notifications:** Add clear notifications for users about ongoing downloads, rather than displaying raw terminal output.- [ ] **Descriptions and questions on every page:** Like: "Choose a format".
 - [ ] **Hotkeys:** I think that we can add some simple hotkeys, maybe just numbers. Like, if you want to choose 'MP3' click '1'.
 - [ ] **Better optimisation for low-res screens:** Ideally our app should work fine even on 640x320 displays.
-- [ ] Thumbnail preview (now it just shows empty window)
+- [ ] Thumbnail preview (now it just shows empty window).
+- [ ] **Use ffmpeg as less as it's possible, and ideally in one day remove him from our app:** If your PC has a decent CPU + GPU it will be fine, but on my Acer Aspire 5250 to convert 1-minute MP4 video into WEBM takes more than 10 minutes.
 
 ## How to read version of app
 
