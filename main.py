@@ -9,6 +9,9 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPush
 from PyQt6.QtGui import QAction, QImage, QPixmap
 from PyQt6.QtCore import QPropertyAnimation, Qt
 import json
+import dev #for developers only
+
+app_version = "v0.3.0"
 
 
 class ImageWindow(QWidget):
@@ -26,7 +29,7 @@ class LinkSaver(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("YouTube Downloader")
+        self.setWindowTitle("VideoXYZ")
         self.setGeometry(100, 100, 400, 150)
 
         self.central_widget = QWidget(self)
@@ -45,6 +48,7 @@ class LinkSaver(QMainWindow):
         self.contribute_menu = self.custom_menu_bar.addMenu("Contribute")
         self.help_menu = self.custom_menu_bar.addMenu("Help")
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
+        #self.dev_menu = self.custom_menu_bar.addMenu("DEV") #UNCOMMENT TO SHOW DEVELOPER MENU
 
 
         self.add_action(self.main_menu, "Main", self.go_main_menu) #doesn't work, not finished
@@ -55,8 +59,9 @@ class LinkSaver(QMainWindow):
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Documentation", self.open_documentation)
         self.add_action(self.exit_menu, "Exit (Are you sure?)", self.exit_app)
+        #self.add_action(self.dev_menu, "DEV",  dev.d_menu) #UNCOMMENT TO SHOW DEVELOPER MENU
 
-        self.widget = QLabel("YouTube Downloader")
+        self.widget = QLabel("VideoXYZ")
         self.fade(self.widget)
         font = self.widget.font()
         font.setPointSize(18)
@@ -81,7 +86,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is v0.2.1. We added: download webm, show thumbnail of video, optimised code to make it faster. Click 'Ok' to hide this message forever")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: developer menu, changed name of app, big optimisation of code")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -113,7 +118,7 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
 
     def show_version(self):
-        QMessageBox.information(self, "Version", "YouTube Downloader v0.2.1")
+        QMessageBox.information(self, "Version", "VideoXYZ {app_version}")
 
     def open_github(self):
         # Define the GitHub link
@@ -405,7 +410,7 @@ class DocumentationDialog(QDialog):
 
         # Create a QLabel with Markdown content. We have to make it better, because for now it's just a plain text at all
         label = QLabel("""
-        # Youtube Downloader
+        # VideoXYZ
 
         This GUI application allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby because it's very convenient and fast to download samples from YouTube, which I then use for creating melodies.
 

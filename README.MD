@@ -1,6 +1,6 @@
-# Youtube Downloader
+# VideoXYZ
 
-This GUI application allows you to download YouTube videos or audio quickly and easily. While many websites offer similar services, they often take more time and include ads. With this app, you can download content directly from YouTube, saving both time and hassle! I personally use it for my beatmaking hobby because it's very convenient and fast to download samples from YouTube, which I then use for creating melodies.
+This GUI application allows you to download **YouTube videos** or **audio** quickly and easily. While many websites offer similar services, they often take more time and include ads. With **VideoXYZ**, you can download content directly from **YouTube**, saving both time and hassle! I personally use it for my beatmaking hobby because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies.
 
 ## Features
 1. **Ad-free:** Enjoy a seamless experience without interruptions.
