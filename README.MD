@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="VideoXYZ.png" alt="App Logo">
+  <img src="VideoXYZ_logo.png" alt="App Logo">
 </p>
 
 # VideoXYZ
