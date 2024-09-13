@@ -15,6 +15,7 @@ This GUI application allows you to download **YouTube videos** or **audio** quic
 6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
 7. **Terminal-Based Version Available:** A command-line version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
 8. **Optimised for low resolution monitors:** I know that a lot of people continue to use their ThinkPads etc. from 2004 or even older, so I decided to optimise this app for theirs displays. This app should work fine and not take a lot of space on your monitor even if he has only a 640x320 resolution.
+9. **Black and white themes:** Also in the future we will add different custom themes as lime, pink, and purple!
 
 ## Prerequisites
 

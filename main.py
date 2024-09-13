@@ -9,10 +9,10 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPush
 from PyQt6.QtGui import QAction, QImage, QPixmap
 from PyQt6.QtCore import QPropertyAnimation, Qt
 import json
+import webbrowser
 import dev #for developers only
 
-app_version = "v0.3.0"
-
+app_version = "v0.4.0"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -29,8 +29,8 @@ class LinkSaver(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("VideoXYZ")
-        self.setGeometry(100, 100, 400, 150)
+        self.setWindowTitle(f"VideoXYZ {app_version}")
+        self.setGeometry(100, 100, 405, 200)
 
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
@@ -51,27 +51,37 @@ class LinkSaver(QMainWindow):
         #self.dev_menu = self.custom_menu_bar.addMenu("DEV") #UNCOMMENT TO SHOW DEVELOPER MENU
 
 
-        self.add_action(self.main_menu, "Main", self.go_main_menu) #doesn't work, not finished
+        self.add_action(self.main_menu, "Go to the main menu", self.go_main_menu)
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
-        self.add_action(self.settings_menu, "Preferences", self.open_preferences)
-        self.add_action(self.version_menu, "About", self.show_version)
+        self.add_action(self.settings_menu, "Change theme to white", self.change_theme_white) # It will be nice to save setting in json
+        self.add_action(self.settings_menu, "Change theme to black", self.change_theme_black) # Also we have to combine it in one button
+        self.add_action(self.settings_menu, "Sound ON/OFF (SOON)", self.open_preferences)
+        self.add_action(self.version_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
+        self.add_action(self.help_menu, "Help", self.open_help)
         self.add_action(self.help_menu, "Documentation", self.open_documentation)
         self.add_action(self.exit_menu, "Exit (Are you sure?)", self.exit_app)
         #self.add_action(self.dev_menu, "DEV",  dev.d_menu) #UNCOMMENT TO SHOW DEVELOPER MENU
 
-        self.widget = QLabel("VideoXYZ")
-        self.fade(self.widget)
-        font = self.widget.font()
-        font.setPointSize(18)
-        self.widget.setFont(font)
-        self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 
+        self.widget = QLabel(f"VideoXYZ")
+        #self.fade(self.widget)
+        widget_font = self.widget.font()
+        widget_font.setPointSize(18)
+        self.widget.setFont(widget_font)
+        self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widget)
 
+        self.ver_widget = QLabel(f"{app_version}")
+        self.fade(self.ver_widget)
+        ver_font = self.ver_widget.font()
+        ver_font.setPointSize(10)
+        self.ver_widget.setFont(ver_font)
+        self.ver_widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.main_layout.addWidget(self.ver_widget)
+
         self.line_edit = QLineEdit(self)
-        self.line_edit.setPlaceholderText("Paste URL of YouTube video here")
-        self.line_edit.setStyleSheet("QLineEdit { color: white; }")
+        self.line_edit.setPlaceholderText("Paste URL of YouTube video here (https://www.youtube.com/watch...)")
         self.main_layout.addWidget(self.line_edit)
 
         self.ok_button = QPushButton("OK", self)
@@ -86,7 +96,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: developer menu, changed name of app, big optimisation of code")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: white/black theme, open GitHub issues button, big optimisation of code, for a little changed GUI")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -117,14 +127,13 @@ class LinkSaver(QMainWindow):
     def open_preferences(self):
         QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
 
-    def show_version(self):
-        QMessageBox.information(self, "Version", "VideoXYZ {app_version}")
+    def about_project(self):
+        QMessageBox.information(self, "About", "Best portable app to download your favorite media content from YouTube!")
 
     def open_github(self):
-        # Define the GitHub link
-        github_link = "https://github.com/your-repository"  # Replace with your actual GitHub link
 
-        # Create a custom dialog
+        github_link = "https://github.com/Vadkon07/VideoXYZ"
+
         dialog = QDialog(self)
         dialog.setWindowTitle("Contribute")
 
@@ -145,6 +154,9 @@ class LinkSaver(QMainWindow):
         dialog.setLayout(layout)
         dialog.exec()
 
+    def open_help(self):
+        webbrowser.open('https://github.com/Vadkon07/VideoXYZ/issues')
+
     def open_documentation(self):
         dialog = DocumentationDialog()
         dialog.exec()
@@ -154,6 +166,13 @@ class LinkSaver(QMainWindow):
 
         self.window_main = LinkSaver()
         self.window_main.show()
+
+    def change_theme_black(self):
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
+
+    def change_theme_white(self):
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
+
 
     def exit_app(self):
         sys.exit()
@@ -493,9 +512,31 @@ class DocumentationDialog(QDialog):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    custom_stylesheet = """
+    custom_stylesheet_black = """
     QWidget {
         background-color: #1a1a1a;  /* Very dark background */
+        color: white;
+    }
+    QPushButton {
+        background-color: #ff0000;  /* Red buttons */
+        color: white;  /* Text color */
+    }
+    QPushButton:hover {
+        background-color: #cc0000;  /* Darker red on hover */
+    }
+   #"""
+
+    custom_stylesheet_white = """
+    QWidget {
+        background-color: white;  /* Very white background ahaha*/
+        color: black;
+    }
+    QLineEdit {
+        background-color: white;
+        color: black;
+    }
+    QLine {
+        color: grey;
     }
     QPushButton {
         background-color: #ff0000;  /* Red buttons */
@@ -505,7 +546,8 @@ if __name__ == "__main__":
         background-color: #cc0000;  /* Darker red on hover */
     }
    """
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet)
+
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black) #You can change default theme here
     window = LinkSaver()
     window.show()
     sys.exit(app.exec())
