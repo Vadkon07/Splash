@@ -10,6 +10,7 @@ from PyQt6.QtGui import QAction, QImage, QPixmap
 from PyQt6.QtCore import QPropertyAnimation, Qt
 import json
 import webbrowser
+from pygame import mixer
 import dev #for developers only
 
 app_version = "v0.4.0"
@@ -250,6 +251,7 @@ class LinkSaver(QMainWindow):
 
     def show_buttons(self, link, title):
         self.widget.hide()
+        self.ver_widget.hide()
         self.line_edit.hide()
         self.ok_button.hide()
 
@@ -355,6 +357,7 @@ class LinkSaver(QMainWindow):
                 ydl.download([link])
                 
                 self.widget = QLabel(f"Downloaded {title} in MP3 format!")
+                mixer.music.play()
                 font = self.widget.font()
                 font.setPointSize(12)
                 self.widget.setFont(font)
@@ -378,6 +381,7 @@ class LinkSaver(QMainWindow):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
                 print(f"Video downloaded in {quality_format} format!")
+                mixer.music.play()
                 QMessageBox.information(self, "File downloaded", f"File downloaded in {quality_format} format!")
         except Exception as e:
             print(f"Error: {e}")
@@ -407,6 +411,7 @@ class LinkSaver(QMainWindow):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
                 print(f"Video downloaded in best quality!")
+                mixer.music.play()
                 QMessageBox.information(self, "File downloaded", f"File downloaded in best quality!")
         except Exception as e:
             print(f"Error: {e}")
@@ -512,6 +517,10 @@ class DocumentationDialog(QDialog):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
+    mixer.init()
+    mixer.music.load('./downloaded.mp3')
+
     custom_stylesheet_black = """
     QWidget {
         background-color: #1a1a1a;  /* Very dark background */
