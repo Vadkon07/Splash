@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.5.0"
+app_version = "v0.5.1"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -333,6 +333,7 @@ class LinkSaver(QMainWindow):
         self.button1.hide()
         self.button2.hide()
         self.button3.hide()
+        self.button4.hide()
 
         self.button1 = QPushButton("Worst", self)
         self.button2 = QPushButton("480p", self)
