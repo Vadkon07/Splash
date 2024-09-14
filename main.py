@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.4.0"
+app_version = "v0.5.0"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -29,6 +29,8 @@ class ImageWindow(QWidget):
 class LinkSaver(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.load_theme()
 
         self.setWindowTitle(f"VideoXYZ {app_version}")
         self.setGeometry(100, 100, 405, 200)
@@ -57,7 +59,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
         self.add_action(self.settings_menu, "Change theme to white", self.change_theme_white) # It will be nice to save setting in json
         self.add_action(self.settings_menu, "Change theme to black", self.change_theme_black) # Also we have to combine it in one button
-        self.add_action(self.settings_menu, "Sound ON/OFF (SOON)", self.open_preferences)
+        self.add_action(self.settings_menu, "Sound ON/OFF", self.sound_change)
         self.add_action(self.version_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Help", self.open_help)
@@ -97,12 +99,35 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: white/black theme, open GitHub issues button, big optimisation of code, for a little changed GUI")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: sound settings, theme default, opttimised GUI")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
 
+        
+    def play_downloaded_sound(self):
+        with open ('app.json', 'r') as fl:
+            sound_setting = json.load(fl)
+
+        if sound_setting.get('sound_enabled'):
+            mixer.music.play()
+        else:
+            print("Sound disabled") #maybe then we wil remove it (debug)
+
+    def sound_change(self):
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+
+        if data.get('sound_enabled'):
+            data['sound_enabled'] = False
+            QMessageBox.information(self,"Sound disabled", f"Sound disabled. You will not hear any sounds from this applicaton")
+        else:
+            data['sound_enabled'] = True
+            QMessageBox.information(self,"Sound enabled", f"Sound enabled. You will hear sounds from this applicaton")
+
+        with open('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
 
     def fade(self, widget):
         self.effect = QGraphicsOpacityEffect()
@@ -145,9 +170,8 @@ class LinkSaver(QMainWindow):
 
         # Add a close button
         close_button = QPushButton("Close", dialog)
-        close_button.clicked.connect(dialog.accept)  # Only closes the dialog
+        close_button.clicked.connect(dialog.accept)
 
-        # Layout setup
         layout = QGridLayout(dialog)
         layout.addWidget(text_browser)
         layout.addWidget(close_button)
@@ -171,9 +195,31 @@ class LinkSaver(QMainWindow):
     def change_theme_black(self):
         app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
 
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+            data['theme_default'] = "black"
+
+        with open('app.json', 'w') as file:
+             json.dump(data, file, indent=4)
+
     def change_theme_white(self):
         app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
 
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+            data['theme_default'] = "white"
+
+        with open('app.json', 'w') as file:
+             json.dump(data, file, indent=4)
+
+    def load_theme(self):
+        with open('app.json', 'r') as theme:
+            theme_choosed = json.load(theme)
+
+        if theme_choosed.get("theme_default") == "white":
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
+        else:
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
 
     def exit_app(self):
         sys.exit()
@@ -357,7 +403,7 @@ class LinkSaver(QMainWindow):
                 ydl.download([link])
                 
                 self.widget = QLabel(f"Downloaded {title} in MP3 format!")
-                mixer.music.play()
+                self.play_downloaded_sound()
                 font = self.widget.font()
                 font.setPointSize(12)
                 self.widget.setFont(font)
@@ -381,7 +427,7 @@ class LinkSaver(QMainWindow):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
                 print(f"Video downloaded in {quality_format} format!")
-                mixer.music.play()
+                self.play_downloaded_sound()
                 QMessageBox.information(self, "File downloaded", f"File downloaded in {quality_format} format!")
         except Exception as e:
             print(f"Error: {e}")
@@ -411,12 +457,11 @@ class LinkSaver(QMainWindow):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
                 print(f"Video downloaded in best quality!")
-                mixer.music.play()
+                self.play_downloaded_sound()
                 QMessageBox.information(self, "File downloaded", f"File downloaded in best quality!")
         except Exception as e:
             print(f"Error: {e}")
             QMessageBox.warning(self, "Download failed", f"Failed to download file: {e}")
-
 
 
     def print_error(self, message):
@@ -526,6 +571,17 @@ if __name__ == "__main__":
         background-color: #1a1a1a;  /* Very dark background */
         color: white;
     }
+    QMenuBar {
+        background-color: #1a1a1a;
+        color: white;
+    }
+    QMenuBar::item {
+        background-color: #1a1a1a;
+    }
+    QMenuBar::item:selected {
+        background: grey;
+        color: white;
+    }
     QPushButton {
         background-color: #ff0000;  /* Red buttons */
         color: white;  /* Text color */
@@ -539,6 +595,18 @@ if __name__ == "__main__":
     QWidget {
         background-color: white;  /* Very white background ahaha*/
         color: black;
+    }
+    QMenuBar {
+        background-color: white;
+        color: black;
+    }
+    QMenuBar::item {
+        background-color: white;
+        color: black;
+    }
+    QMenuBar::item:selected {
+        background: grey;
+        color: white;
     }
     QLineEdit {
         background-color: white;
@@ -556,7 +624,6 @@ if __name__ == "__main__":
     }
    """
 
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black) #You can change default theme here
     window = LinkSaver()
     window.show()
     sys.exit(app.exec())
