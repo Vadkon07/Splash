@@ -34,11 +34,11 @@ Before running the script, make sure you have the following installed:
 
 Here's recommended PC specifications:
 
-**OS:** Linux, Windows, MacOS
-**RAM:** 2GB
-**CPU:** Intel Pentium 4 or higher
-**GPU:** Just to download a file you don't need GPU, but to do some conversions of **10 mins 1080p** videos from one format to another it will be enough something in a kind of Intel UHD630. For **1 hour+ 4k** video processing of course you should have a powerful GPU.
-**Storage:** 500MB (app itself and her packages)
+- **OS:** Linux, Windows, MacOS
+- **RAM:** 2GB
+- **CPU:** Intel Pentium 4 or higher
+- **GPU:** Just to download a file you don't need GPU, but to do some conversions of **10 mins 1080p** videos from one format to another it will be enough something in a kind of Intel UHD630. For **1 hour+ 4k** video processing of course you should have a powerful GPU.
+- **Storage:** 500MB (app itself and her packages)
 
 ## How to use
 
