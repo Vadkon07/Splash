@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="VideoXYZ_logo.png" alt="App Logo">
+  <img src="VideoXYZ_logo.png" alt="App Logo"/>
+  <img src="https://img.shields.io/badge/LICENSE-MIT-green"/>
 </p>
 
 # VideoXYZ
@@ -51,7 +52,8 @@ Here's recommended PC specifications:
 - Enter '**Both**' to download both audio and video
 4. The script will process and download the file(s) in your **currently choosed directory** according to your choices.
 
-## To-Do
+<details>
+	<summary>To-Do</summary>
 
 When we will finish all these tasks - we will release version v1.0.
 
@@ -59,6 +61,8 @@ When we will finish all these tasks - we will release version v1.0.
 - [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly, and probably also hide raw output from terminal.
 - [ ] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
 - [ ] **Descriptions and questions on every page:** Like: "Choose a format".
+
+</details>
 
 ## How to read version of app
 

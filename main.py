@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.6."
+app_version = "v0.6.0"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
