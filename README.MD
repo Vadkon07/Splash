@@ -55,18 +55,6 @@ Here's recommended PC specifications:
 - Enter '**Both**' to download both audio and video
 4. The script will process and download the file(s) in your **currently choosed directory** according to your choices.
 
-<details>
-	<summary>## To-Do</summary>
-
-When we will finish all these tasks - we will release version v1.0.
-
-- [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
-- [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly, and probably also hide raw output from terminal.
-- [ ] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
-- [ ] **Descriptions and questions on every page:** Like: "Choose a format".
-
-</details>
-
 ## How to read version of app
 
 **In version 1.9.0.1 (example):**
@@ -82,3 +70,16 @@ When we will finish all these tasks - we will release version v1.0.
 ## License
 
 This project is licensed under the [MIT License](./LICENSE).
+
+<details>
+	<summary>To-Do</summary>
+
+When we will finish all these tasks - we will release version v1.0.
+
+- [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
+- [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly, and probably also hide raw output from terminal.
+- [ ] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
+- [ ] **Descriptions and questions on every page:** Like: "Choose a format".
+
+</details>
+
