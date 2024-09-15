@@ -1,5 +1,8 @@
 <p align="center">
   <img src="VideoXYZ_logo.png" alt="App Logo"/>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/LICENSE-MIT-green"/>
 </p>
 
@@ -53,7 +56,7 @@ Here's recommended PC specifications:
 4. The script will process and download the file(s) in your **currently choosed directory** according to your choices.
 
 <details>
-	<summary>To-Do</summary>
+	<summary>## To-Do</summary>
 
 When we will finish all these tasks - we will release version v1.0.
 
