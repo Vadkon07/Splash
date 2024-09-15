@@ -12,7 +12,7 @@ This GUI application allows you to download **YouTube videos** or **audio** quic
 
 You can download videos in any quality, from 144p and up to 4k!
 
-**You downloaded some music with VideoXYZ and want to listen to her? Try to do it in our another project [Style Music Player](https://github.com/Vadkon07/Style_Music_Player) !
+**You downloaded some music with VideoXYZ and want to listen to her? Try to do it in our another project [Style Music Player](https://github.com/Vadkon07/Style_Music_Player) ! **
 
 ## Features
 1. **Ad-free:** Enjoy a seamless experience without interruptions.
