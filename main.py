@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.6.0"
+app_version = "v0.6.1"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -597,6 +597,14 @@ if __name__ == "__main__":
     QPushButton:hover {
         background-color: #cc0000;  /* Darker red on hover */
     }
+    QMenu {
+        background-color: #1a1a1a;
+        color: white;
+    }
+    QMenu::item {
+        background-color: grey;
+        color: white;
+    }
    #"""
 
     custom_stylesheet_white = """
@@ -629,6 +637,14 @@ if __name__ == "__main__":
     }
     QPushButton:hover {
         background-color: #cc0000;  /* Darker red on hover */
+    }
+    QMenu {
+        background-color: #1a1a1a;
+        color: white;
+    }
+    QMenu::item {
+        background-color: grey;
+        color: white;
     }
    """
 
