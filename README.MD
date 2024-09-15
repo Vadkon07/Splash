@@ -8,13 +8,17 @@
 
 # VideoXYZ
 
-This GUI application allows you to download **YouTube videos** or **audio** quickly and easily. While many websites offer similar services, they often take more time and include ads. With **VideoXYZ**, you can download content directly from **YouTube**, saving both time and hassle! I personally use it for my beatmaking hobby because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies.
+This GUI application allows you to download **YouTube videos** or **audio** quickly and easily. While many websites offer similar services, they often take more time and include ads. With **VideoXYZ**, you can download content directly from **YouTube**, saving both time and hassle! I personally use it for my beatmaking hobby, because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies.
+
+You can download videos in any quality, from 144p and up to 4k!
+
+**You downloaded some music with VideoXYZ and want to listen to her? Try to do it in our another project [Style Music Player] (https://github.com/Vadkon07/Style_Music_Player)!
 
 ## Features
 1. **Ad-free:** Enjoy a seamless experience without interruptions.
-2. **No API Needed:** Download directly without the need for any API keys or extra configuration.
+2. **No API Needed:** Download directly without the need for any API keys or extra configuration. Clone and run!
 3. **Fast Downloading:** Quickly download videos or audio with minimal delay.
-4. **User-Friendly GUI**: Easy-to-use graphical interface for a more intuitive experience.
+4. **User-Friendly GUI**: Easy-to-use graphical interface for a more intuitive experience. During downloading of file you also will see a progress bar.
 5. **Choose Quality:** Select the video quality that best suits your needs, from low resolution to 4K.
 6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
 7. **Terminal-Based Version Available:** A command-line (outdated)  version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
@@ -35,7 +39,7 @@ Before running the script, make sure you have the following installed:
 Here's recommended PC specifications:
 
 - **OS:** Linux, Windows, MacOS
-- **RAM:** 2GB
+- **RAM:** 1-2GB
 - **CPU:** Intel Pentium 4 or higher
 - **GPU:** Just to download a file you don't need GPU, but to do some conversions of **10 mins 1080p** videos from one format to another it will be enough something in a kind of Intel UHD630. For **1 hour+ 4k** video processing of course you should have a powerful GPU.
 - **Storage:** 500MB (app itself and her packages)
@@ -48,10 +52,10 @@ Here's recommended PC specifications:
 - Click '**MP3**' to download audio (MP3):
 - Enter '**MP4**' to download video (MP4)
     - Select a video quality preset:
-        - **Worst** for worst quality
+        - **Worst** for worst quality (nice for old computer and slow internet)
         - **480p** for 480p resolution
         - **720p** for 720p resolution
-        - **Best** for the best quality
+        - **Best** for the best quality (usually 1080p or 4k)
 - Enter '**Both**' to download both audio and video
 4. The script will process and download the file(s) in your **currently choosed directory** according to your choices.
 
@@ -84,4 +88,4 @@ When we will finish all these tasks - we will release version v1.0.
 </details>
 
 ### Last Updated
-This README was last updated on September **15, 2024**.
+This README was last updated on **September 15, 2024**. All new things added in app afer this date are **NOT** described here.
