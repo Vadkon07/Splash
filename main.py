@@ -5,7 +5,7 @@ import qdarkstyle
 import markdown
 import yt_dlp
 import time
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea, QProgressBar, QGraphicsOpacityEffect
 from PyQt6.QtGui import QAction, QImage, QPixmap
 from PyQt6.QtCore import QPropertyAnimation, Qt
 import json
@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.5.1"
+app_version = "v0.6."
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -99,7 +99,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: sound settings, theme default, opttimised GUI")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: progress bar, opttimised GUI, optimised code")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -221,6 +221,16 @@ class LinkSaver(QMainWindow):
         else:
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
 
+
+    def progress_hook(self, d):
+        if d['status'] == 'downloading':
+            total_bytes = d.get('total_bytes') or d.get('total_bytes_estimate')
+            if total_bytes:
+                percent = d['downloaded_bytes'] / total_bytes * 100
+                self.progress_bar.setValue(int(percent))
+        elif d['status'] == 'finished':
+            self.progress_bar.setValue(100)
+
     def exit_app(self):
         sys.exit()
 
@@ -308,6 +318,10 @@ class LinkSaver(QMainWindow):
         self.button3 = QPushButton("Both MP3 + MP4", self)
         self.button4 = QPushButton("Webm", self)
 
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
         self.button1.setFixedSize(100,25)
         self.button2.setFixedSize(100,25)
         self.button3.setFixedSize(100,25)
@@ -317,6 +331,8 @@ class LinkSaver(QMainWindow):
         self.button_layout.addWidget(self.button2, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button3, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button4, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        self.main_layout.addWidget(self.progress_bar)
 
         self.main_layout.addLayout(self.button_layout)
 
@@ -373,19 +389,8 @@ class LinkSaver(QMainWindow):
         self.choosed_mp4(quality_format, link)
 
     def choosed_mp3(self, link, title):
-
-        #self.notif = QLabel("Downloading mp3...")
-        #font = self.notif.font()
-        #font.setPointSize(18)
-        #self.notif.setFont(font)
-        #self.notif.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 
-        #self.main_layout.addWidget(self.notif)
-
-        #time.sleep(2)
-
-        #HERE I would like to add a text about downloading directly inside window of our map, but it shows "Downloading..." only when it's downloaded
-
         ydl_opts = {
+            'progress_hooks': [self.progress_hook],
             'format': 'bestaudio',
             'outtmpl': os.path.join('%(title)s.%(ext)s'),
             'postprocessors': [{
@@ -416,6 +421,7 @@ class LinkSaver(QMainWindow):
 
     def choosed_mp4(self, quality_format, link):
         ydl_opts = {
+        'progress_hooks': [self.progress_hook],
         'format': quality_format,
         'outtmpl': os.path.join('%(title)s.%(ext)s'),
         'postprocessors': [{
@@ -441,6 +447,7 @@ class LinkSaver(QMainWindow):
 
     def choosed_webm(self, link):
         ydl_opts = {
+        'progress_hooks': [self.progress_hook],
         'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best[ext=webm]/best',
         'outtmpl': os.path.join('%(title)s.%(ext)s'),
         'postprocessors': [{

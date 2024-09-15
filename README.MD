@@ -13,8 +13,8 @@ This GUI application allows you to download **YouTube videos** or **audio** quic
 4. **User-Friendly GUI**: Easy-to-use graphical interface for a more intuitive experience.
 5. **Choose Quality:** Select the video quality that best suits your needs, from low resolution to 4K.
 6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
-7. **Terminal-Based Version Available:** A command-line version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
-8. **Optimised for low resolution monitors:** I know that a lot of people continue to use their ThinkPads etc. from 2004 or even older, so I decided to optimise this app for theirs displays. This app should work fine and not take a lot of space on your monitor even if he has only a 640x320 resolution.
+7. **Terminal-Based Version Available:** A command-line (outdated)  version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
+8. **Optimised for low resolution monitors:** I know that a lot of people continue to use their ThinkPads etc. from 2004 or even older, so I decided to optimise this app for theirs displays. This app should work fine and not take a lot of space on your monitor even if he has only a 640x320 display resolution.
 9. **Black and white themes:** Also in the future we will add different custom themes as lime, pink, and purple!
 10. **Sounds:** We started to add different sounds in our app. For now we have a sound which will notificate you about finished downloading of your files. Soon we also will add some settings for sounds.
 
@@ -28,7 +28,13 @@ Before running the script, make sure you have the following installed:
 
 ## PC Requirements
 
-The app works well on any PC. However, note that for certain operations, such as extracting audio from a two-hour-long video, it may take some time (approximately 5 minutes on an older machine). This performance is quite impressive given that my laptop is very old and struggles to open YouTube itself.
+Here's recommended PC specifications:
+
+**OS:** Linux, Windows, MacOS
+**RAM:** 2GB
+**CPU:** Intel Pentium 4 or higher
+**GPU:** Just to download a file you don't need GPU, but to do some conversions of **10 mins 1080p** videos from one format to another it will be enough something in a kind of Intel UHD630. For **1 hour+ 4k** video processing of course you should have a powerful GPU.
+**Storage:** 500MB (app itself and her packages)
 
 ## How to use
 
@@ -43,20 +49,16 @@ The app works well on any PC. However, note that for certain operations, such as
         - **720p** for 720p resolution
         - **Best** for the best quality
 - Enter '**Both**' to download both audio and video
-4. Specify the download location path where the files will be saved. Leave blank to download in current directory.
-5. The script will process and download the file(s) according to your choices.
+4. The script will process and download the file(s) in your **currently choosed directory** according to your choices.
 
 ## To-Do
 
-When we will finish to do all these tasks - we will release version v1.0. Let's Go!
+When we will finish all these tasks - we will release version v1.0.
 
 - [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
-- [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly and hide the raw output from `yt-dlp`.
+- [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly, and probably also hide raw output from terminal.
 - [ ] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
-- [ ] **Download Both Audio and Video:** Enhance the app to allow simultaneous downloading of both audio and video.
 - [ ] **Descriptions and questions on every page:** Like: "Choose a format".
-- [ ] **Hotkeys:** I think that we can add some simple hotkeys, maybe just numbers. Like, if you want to choose 'MP3' click '1'.
-- [ ] **Use ffmpeg as less as it's possible, and ideally in one day remove him from our app:** If your PC has a decent CPU + GPU it will be fine, but on my Acer Aspire 5250 to convert 1-minute MP4 video into WEBM takes more than 10 minutes.
 
 ## How to read version of app
 
