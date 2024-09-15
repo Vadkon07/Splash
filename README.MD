@@ -83,3 +83,5 @@ When we will finish all these tasks - we will release version v1.0.
 
 </details>
 
+### Last Updated
+This README was last updated on [Date].
