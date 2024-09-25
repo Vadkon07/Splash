@@ -80,9 +80,9 @@ This project is licensed under the [MIT License](./LICENSE).
 
 When we will finish all these tasks - we will release version v1.0.
 
-- [ ] **Playlist Support:** Enable downloading of entire YouTube playlists.
-- [ ] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly, and probably also hide raw output from terminal.
-- [ ] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
+- [*] **Playlist Support:** Enable downloading of entire YouTube playlists.
+- [*] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly, and probably also hide raw output from terminal.
+- [*] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
 - [ ] **Descriptions and questions on every page:** Like: "Choose a format".
 
 </details>

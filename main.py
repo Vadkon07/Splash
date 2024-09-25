@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.6.2"
+app_version = "v0.7.0"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -99,7 +99,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: fixed color theme, optimised GUI, improved documentation, optimised code")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: playlists suppor, optimised GUI, optimised code")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -275,7 +275,7 @@ class LinkSaver(QMainWindow):
             try:
                 with yt_dlp.YoutubeDL({'quiet': False}) as ydl:
                     info_dict = ydl.extract_info(link, download=False)
-                    title = info_dict.get('title', None)
+                    title = info_dict.get('title', 'Unknown Title')
                 
                 # Download thumbnail
                     ydl_opts = {
@@ -287,19 +287,23 @@ class LinkSaver(QMainWindow):
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl_thumb:
                         info_dict_thumb = ydl_thumb.extract_info(link, download=True)
                         thumbnail_url = info_dict_thumb.get('thumbnail')
-                        title = info_dict_thumb.get('title')
-                        ext = thumbnail_url.split('.')[-1]
-                        self.thumbnail_path = f"./thumbnail.{ext}"
-                        print(f"Thumbnail downloaded to: {self.thumbnail_path}") 
+                        title = info_dict_thumb.get('title', 'Unknown Title')
 
+                        if thumbnail_url:
+                            ext = thumbnail_url.split('.')[-1]
+                            self.thumbnail_path = f"./thumbnail.{ext}"
+                            print(f"Thumbnail downloaded to: {self.thumbnail_path}")
+                            QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
+                            self.show_image_in_messagebox(self.thumbnail_path)
+
+                        else:
+                            QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
+                            self.print_error("Failed to retrieve thumbnail URL (Note that it's normal for playlists, it's not an error)")
+                            
             except Exception as e:
                 self.print_error(f"Failed to retrieve video information: {e}")
                 return
-        
-            QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
-        
-            self.show_image_in_messagebox(self.thumbnail_path)
-                  
+                               
             self.show_buttons(link, title)
         else:
             QMessageBox.warning(self, "No Link", "Please paste a link before clicking OK.")
