@@ -1,5 +1,5 @@
 {
-    "update_installed": false,
+    "update_installed": true,
     "sound_enabled": true,
     "theme_default": "black"
 }
