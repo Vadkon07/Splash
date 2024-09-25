@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.7.1 BETA"
+app_version = "v0.7.2 BETA"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -57,7 +57,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.main_menu, "Go to the main menu", self.go_main_menu)
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
-        self.add_action(self.settings_menu, "Change theme to white", self.change_theme_white) # It will be nice to save setting in json
+        self.add_action(self.settings_menu, "Change theme to white", self.change_theme_white)
         self.add_action(self.settings_menu, "Change theme to black", self.change_theme_black) # Also we have to combine it in one button
         self.add_action(self.settings_menu, "Sound ON/OFF", self.sound_change)
         self.add_action(self.version_menu, "About", self.about_project)
@@ -99,7 +99,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: some help during downloading of a file, optimised code")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved progressbar, optimised code")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -113,7 +113,7 @@ class LinkSaver(QMainWindow):
         if sound_setting.get('sound_enabled'):
             mixer.music.play()
         else:
-            print("Sound disabled") #maybe then we wil remove it (debug)
+            print("Sound disabled")
 
     def sound_change(self):
         with open ('app.json', 'r') as file:
@@ -168,7 +168,6 @@ class LinkSaver(QMainWindow):
         text_browser.setOpenExternalLinks(True)  # Allow opening links in the browser
         text_browser.setHtml(f'<p>Visit our <a href="{github_link}">GitHub page</a> for more information.</p>')
 
-        # Add a close button
         close_button = QPushButton("Close", dialog)
         close_button.clicked.connect(dialog.accept)
 
@@ -328,10 +327,6 @@ class LinkSaver(QMainWindow):
         self.button3 = QPushButton("Both MP3 + MP4", self)
         self.button4 = QPushButton("Webm", self)
 
-        self.progress_bar = QProgressBar(self)
-        self.progress_bar.setGeometry(30, 40, 340, 30)
-        self.progress_bar.setMaximum(100)
-
         self.button1.setFixedSize(100,25)
         self.button2.setFixedSize(100,25)
         self.button3.setFixedSize(100,25)
@@ -341,8 +336,6 @@ class LinkSaver(QMainWindow):
         self.button_layout.addWidget(self.button2, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button3, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button4, alignment=Qt.AlignmentFlag.AlignCenter)
-
-        self.main_layout.addWidget(self.progress_bar)
 
         self.main_layout.addLayout(self.button_layout)
 
@@ -387,24 +380,56 @@ class LinkSaver(QMainWindow):
         self.main_layout.addLayout(self.quality_layout)
 
     def choosed_worst(self, link):
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'worstvideo+worstaudio'
         self.choosed_mp4(quality_format, link)
 
+        self.progress_bar.hide()
+
     def choosed_480(self, link):
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'bestvideo[height<=480]+bestaudio'
         self.choosed_mp4(quality_format, link)
 
+        self.progress_bar.hide()
+
     def choosed_720(self, link):
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'bestvideo[height<=720]+bestaudio'
         self.choosed_mp4(quality_format, link)
 
+        self.progress_bar.hide()
+
     def choosed_best(self, link):
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'bestvideo+bestaudio'
         self.choosed_mp4(quality_format, link)
+
+        self.progress_bar.hide()
 
     def choosed_mp3(self, link, title):
         ydl_opts = {
@@ -418,6 +443,12 @@ class LinkSaver(QMainWindow):
             }],
             'quiet': False,
         }
+
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
 
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
 
@@ -436,6 +467,8 @@ class LinkSaver(QMainWindow):
 
         except Exception as e:
             self.print_error(f"Failed to download the video: {e}")
+
+        self.progress_bar.hide()
 
     def choosed_mp4(self, quality_format, link):
         ydl_opts = {
@@ -458,6 +491,7 @@ class LinkSaver(QMainWindow):
             print(f"Error: {e}")
             QMessageBox.warning(self, "Download failed", f"Failed to download file: {e}")
 
+
     def choosed_both(self, link, quality_format, title):
         self.choose_quality(link)
         self.choosed_mp4(quality_format, link)
@@ -475,6 +509,11 @@ class LinkSaver(QMainWindow):
         'quiet': False,
         }
 
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
 
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
 
@@ -488,6 +527,10 @@ class LinkSaver(QMainWindow):
         except Exception as e:
             print(f"Error: {e}")
             QMessageBox.warning(self, "Download failed", f"Failed to download file: {e}")
+
+        self.progress_bar.hide()
+
+        self.show_buttons(link)
 
 
     def print_error(self, message):
