@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.7.0"
+app_version = "v0.7.1 BETA"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -99,7 +99,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: playlists suppor, optimised GUI, optimised code")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: some help during downloading of a file, optimised code")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -154,7 +154,7 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
 
     def about_project(self):
-        QMessageBox.information(self, "About", "Best portable app to download your favorite media content from YouTube! You can download YouTube videos in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations!")
+        QMessageBox.information(self, "About", "Best portable app to download your favorite media content from YouTube! You can download YouTube videos in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find her thumbnail in a folder where you ran our application.")
 
     def open_github(self):
 
@@ -316,6 +316,13 @@ class LinkSaver(QMainWindow):
 
         self.button_layout = QHBoxLayout()
 
+        self.widget = QLabel("Choose a format:")
+        widget_font = self.widget.font()
+        widget_font.setPointSize(12)
+        self.widget.setFont(widget_font)
+        self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.main_layout.addWidget(self.widget)
+
         self.button1 = QPushButton("MP3 (Best only)", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("Both MP3 + MP4", self)
@@ -353,6 +360,14 @@ class LinkSaver(QMainWindow):
         self.button2.hide()
         self.button3.hide()
         self.button4.hide()
+        self.widget.hide()
+
+        self.widgetQ = QLabel("Choose a quality of video:")
+        widget_font = self.widgetQ.font()
+        widget_font.setPointSize(12)
+        self.widgetQ.setFont(widget_font)
+        self.widgetQ.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.main_layout.addWidget(self.widgetQ)
 
         self.button1 = QPushButton("Worst", self)
         self.button2 = QPushButton("480p", self)
@@ -515,6 +530,13 @@ if __name__ == "__main__":
         background-color: #3C3D37;
         color: white;
     }
+    QProgressBar {
+        border: 2px solid grey;
+        text-align: center;
+    }
+    QProgressBar::chunk {
+        background-color: red;
+    }
    #"""
 
     custom_stylesheet_white = """
@@ -555,6 +577,13 @@ if __name__ == "__main__":
     QMenu::item {
         background-color: grey;
         color: white;
+    }
+    QProgressBar {
+        border: 2px solid grey;
+        text-align: center;
+    }
+    QProgressBar::chunk {
+        background-color: red;
     }
    """
 
