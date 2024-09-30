@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.7.2 BETA"
+app_version = "v0.7.3 BETA"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -57,8 +57,13 @@ class LinkSaver(QMainWindow):
         self.add_action(self.main_menu, "Go to the main menu", self.go_main_menu)
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
+
         self.add_action(self.settings_menu, "Change theme to white", self.change_theme_white)
-        self.add_action(self.settings_menu, "Change theme to black", self.change_theme_black) # Also we have to combine it in one button
+        self.add_action(self.settings_menu, "Change theme to black", self.change_theme_black)
+        self.add_action(self.settings_menu, "Change theme to lime", self.change_theme_lime)
+
+        # For themes it will be better to add button which will list all available themes and by click user will choose one of them
+
         self.add_action(self.settings_menu, "Sound ON/OFF", self.sound_change)
         self.add_action(self.version_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
@@ -99,7 +104,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved progressbar, optimised code")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added lime theme")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -210,12 +215,24 @@ class LinkSaver(QMainWindow):
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
 
+    def change_theme_lime(self):
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_lime)
+
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+            data['theme_default'] = "lime"
+
+        with open ('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
     def load_theme(self):
         with open('app.json', 'r') as theme:
             theme_choosed = json.load(theme)
 
         if theme_choosed.get("theme_default") == "white":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
+        if theme_choosed.get("theme_default") == "lime":
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_lime)
         else:
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
 
@@ -300,7 +317,7 @@ class LinkSaver(QMainWindow):
                             self.print_error("Failed to retrieve thumbnail URL (Note that it's normal for playlists, it's not an error)")
                             
             except Exception as e:
-                self.print_error(f"Failed to retrieve video information: {e}")
+                self.print_error(f"Failed to retrieve video information. Error description: {e}")
                 return
                                
             self.show_buttons(link, title)
@@ -322,7 +339,7 @@ class LinkSaver(QMainWindow):
         self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widget)
 
-        self.button1 = QPushButton("MP3 (Best only)", self)
+        self.button1 = QPushButton("MP3 (Best quality only)", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("Both MP3 + MP4", self)
         self.button4 = QPushButton("Webm", self)
@@ -629,6 +646,103 @@ if __name__ == "__main__":
         background-color: red;
     }
    """
+
+    custom_stylesheet_lime = """
+    QWidget {
+        background-color: lime;
+        color: black;
+    }
+    QMenuBar {
+        background-color: lime;
+        color: black;
+    }
+    QMenuBar::item {
+        background-color: lime;
+        color: black;
+    }
+    QMenuBar::item:selected {
+        background: lime;
+        color: black;
+    }
+    QLineEdit {
+        background-color: lime;
+        color: black;
+    }
+    QLine {
+        color: grey;
+    }
+    QPushButton {
+        background-color: #ff0000;  /* Red buttons */
+        color: white;  /* Text color */
+    }
+    QPushButton:hover {
+        background-color: #cc0000;  /* Darker red on hover */
+    }
+    QMenu {
+        background-color: #1a1a1a;
+        color: black;
+    }
+    QMenu::item {
+        background-color: lime;
+        color: black;
+    }
+    QProgressBar {
+        border: 2px solid grey;
+        text-align: center;
+    }
+    QProgressBar::chunk {
+        background-color: red;
+    }
+   """
+
+    custom_stylesheet_pink = """
+    QWidget {
+        background-color: lime;
+        color: black;
+    }
+    QMenuBar {
+        background-color: lime;
+        color: black;
+    }
+    QMenuBar::item {
+        background-color: lime;
+        color: black;
+    }
+    QMenuBar::item:selected {
+        background: lime;
+        color: black;
+    }
+    QLineEdit {
+        background-color: lime;
+        color: black;
+    }
+    QLine {
+        color: grey;
+    }
+    QPushButton {
+        background-color: #ff0000;  /* Red buttons */
+        color: white;  /* Text color */
+    }
+    QPushButton:hover {
+        background-color: #cc0000;  /* Darker red on hover */
+    }
+    QMenu {
+        background-color: #1a1a1a;
+        color: black;
+    }
+    QMenu::item {
+        background-color: lime;
+        color: black;
+    }
+    QProgressBar {
+        border: 2px solid grey;
+        text-align: center;
+    }
+    QProgressBar::chunk {
+        background-color: red;
+    }
+   """  # COMPLETE IT ! ! ! ALSO ADD BUTTON IN MENU
+
 
     window = LinkSaver()
     window.show()
