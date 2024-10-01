@@ -23,10 +23,10 @@ You can download videos in any quality, from 144p and up to 4k!
 6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
 7. **Terminal-Based Version Available:** A command-line (outdated)  version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
 8. **Optimised for low resolution monitors:** I know that a lot of people continue to use their ThinkPads etc. from 2004 or even older, so I decided to optimise this app for theirs displays. This app should work fine and not take a lot of space on your monitor even if he has only a 640x320 display resolution.
-9. **Themes:** Our app has white, black, and lime themes. Also in the future we will add different custom themes as pink and purple. You can share your own themes with us!
+9. **Themes:** Our app has white, black, lime, and pink themes. Also in the future we will add purple theme. You can share your own themes with us!
 10. **Sounds:** We have a sound which will notificate you about finished downloading of your files. Soon we also will add some settings for sounds, like custom sounds etc. Also you can enable/disable all sounds inside setting of this app.
 11. **Playlists Support:** You can download full album in one click!
-12. **Regular Updates:** This app is always up to date, so you can never care about her availability.
+12. **Regular Updates:** This app is always up to date, so you can never care about her availability. After clone of this app you will see information about changes in last update.
 
 ## Prerequisites
 
@@ -79,8 +79,7 @@ Here's **recommended** PC specifications:
 
 This project is licensed under the [MIT License](./LICENSE).
 
-<details>
-	<summary>To-Do</summary>
+## To-Do
 
 When we will finish all these tasks - we will release version v1.0.
 
@@ -89,9 +88,10 @@ When we will finish all these tasks - we will release version v1.0.
 - [x] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
 - [x] **Descriptions and questions on every page:** Like: "Choose a format".
 - [x] **Fix progressbar:** Hide progressbar when he is not used.
-- [ ] **Save files in folders:** App should save mp4 files in folder named "MP4 files", mp3 in "MP3 Files" etc.
+- [ ] **Check Updates:** It should read file from this repository and check is it has a mention of installed version or not, and if not - notificare user about available update. Plan for code: download file ver.html (or json) -> open him and read -> if doesn't contatin mention of installed version - show messagebox about available update.
+- [ ] **Save files in folders:** App should save mp4 files in folder named "MP4 files", mp3 in "MP3 Files", etc.
 - [ ] **Support developer with donation of $5**
 </details>
 
 ### Last Updated
-This README was last updated on **September 30, 2024**. All new things added in app afer this date are **NOT** described here.
+This README was last updated on **September 30, 2024** for version **v0.7.4**. All new things added in app afer this date + version are **NOT** described/mentioned here.

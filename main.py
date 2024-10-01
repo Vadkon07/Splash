@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.7.3 BETA"
+app_version = "v0.7.4 BETA"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -47,25 +47,23 @@ class LinkSaver(QMainWindow):
         self.main_menu = self.custom_menu_bar.addMenu("Main")
         self.window_menu = self.custom_menu_bar.addMenu("Window")
         self.settings_menu = self.custom_menu_bar.addMenu("Settings")
-        self.version_menu = self.custom_menu_bar.addMenu("Version")
         self.contribute_menu = self.custom_menu_bar.addMenu("Contribute")
         self.help_menu = self.custom_menu_bar.addMenu("Help")
+        self.theme_menu = self.custom_menu_bar.addMenu("Theme")
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
         #self.dev_menu = self.custom_menu_bar.addMenu("DEV") #UNCOMMENT TO SHOW DEVELOPER MENU
-
 
         self.add_action(self.main_menu, "Go to the main menu", self.go_main_menu)
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
 
-        self.add_action(self.settings_menu, "Change theme to white", self.change_theme_white)
-        self.add_action(self.settings_menu, "Change theme to black", self.change_theme_black)
-        self.add_action(self.settings_menu, "Change theme to lime", self.change_theme_lime)
-
-        # For themes it will be better to add button which will list all available themes and by click user will choose one of them
+        self.add_action(self.theme_menu, "Change theme to white", self.change_theme_white)
+        self.add_action(self.theme_menu, "Change theme to black", self.change_theme_black)
+        self.add_action(self.theme_menu, "Change theme to lime", self.change_theme_lime)
+        self.add_action(self.theme_menu, "Change theme to pink", self.change_theme_pink)
 
         self.add_action(self.settings_menu, "Sound ON/OFF", self.sound_change)
-        self.add_action(self.version_menu, "About", self.about_project)
+        self.add_action(self.help_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Help", self.open_help)
         self.add_action(self.help_menu, "Documentation", self.open_documentation)
@@ -104,7 +102,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added lime theme")
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added pink theme") # !!! UPDATE NOTIFICATION !!!
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -225,6 +223,17 @@ class LinkSaver(QMainWindow):
         with open ('app.json', 'w') as file:
             json.dump(data, file, indent=4)
 
+    def change_theme_pink(self):
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_pink)
+
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+            data['theme_default'] = "pink"
+
+        with open ('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
+
     def load_theme(self):
         with open('app.json', 'r') as theme:
             theme_choosed = json.load(theme)
@@ -233,6 +242,8 @@ class LinkSaver(QMainWindow):
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
         if theme_choosed.get("theme_default") == "lime":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_lime)
+        if theme_choosed.get("theme_default") == "pink":
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_pink)
         else:
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
 
@@ -576,11 +587,11 @@ if __name__ == "__main__":
         color: white;
     }
     QPushButton {
-        background-color: #ff0000;  /* Red buttons */
-        color: white;  /* Text color */
+        background-color: #ff0000;
+        color: white;
     }
     QPushButton:hover {
-        background-color: #cc0000;  /* Darker red on hover */
+        background-color: #cc0000;
     }
     QMenu {
         background-color: #3C3D37;
@@ -601,7 +612,7 @@ if __name__ == "__main__":
 
     custom_stylesheet_white = """
     QWidget {
-        background-color: white;  /* Very white background ahaha*/
+        background-color: white;
         color: black;
     }
     QMenuBar {
@@ -624,11 +635,11 @@ if __name__ == "__main__":
         color: grey;
     }
     QPushButton {
-        background-color: #ff0000;  /* Red buttons */
-        color: white;  /* Text color */
+        background-color: #ff0000;
+        color: white;
     }
     QPushButton:hover {
-        background-color: #cc0000;  /* Darker red on hover */
+        background-color: #cc0000;
     }
     QMenu {
         background-color: #1a1a1a;
@@ -697,23 +708,23 @@ if __name__ == "__main__":
 
     custom_stylesheet_pink = """
     QWidget {
-        background-color: lime;
+        background-color: pink;
         color: black;
     }
     QMenuBar {
-        background-color: lime;
+        background-color: pink;
         color: black;
     }
     QMenuBar::item {
-        background-color: lime;
+        background-color: pink;
         color: black;
     }
     QMenuBar::item:selected {
-        background: lime;
+        background: pink;
         color: black;
     }
     QLineEdit {
-        background-color: lime;
+        background-color: pink;
         color: black;
     }
     QLine {
@@ -731,7 +742,7 @@ if __name__ == "__main__":
         color: black;
     }
     QMenu::item {
-        background-color: lime;
+        background-color: pink;
         color: black;
     }
     QProgressBar {
@@ -741,8 +752,7 @@ if __name__ == "__main__":
     QProgressBar::chunk {
         background-color: red;
     }
-   """  # COMPLETE IT ! ! ! ALSO ADD BUTTON IN MENU
-
+   """
 
     window = LinkSaver()
     window.show()
