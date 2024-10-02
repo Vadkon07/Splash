@@ -11,9 +11,14 @@ from PyQt6.QtCore import QPropertyAnimation, Qt
 import json
 import webbrowser
 from pygame import mixer
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+import requests
+import xml.etree.ElementTree as ET
 import dev #for developers only
 
-app_version = "v0.8.0 BETA"
+app_version = "v0.8.0"
+update_description = "New GUI, New Feature, Optimised Performance, etc" # Will be added very soon
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -29,6 +34,8 @@ class ImageWindow(QWidget):
 class LinkSaver(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.check_updates()
 
         self.load_theme()
 
@@ -142,6 +149,24 @@ class LinkSaver(QMainWindow):
         self.animation.setStartValue(0)
         self.animation.setEndValue(1)
         self.animation.start()
+
+    def check_updates(self):
+        url_fetch = 'https://raw.githubusercontent.com/Vadkon07/VideoXYZ/refs/heads/master/ver.html'
+        word_fetch = app_version
+        #if word_fetch not found, ent
+
+        lines_with_word = self.fetch_lines_with_word(url_fetch, word_fetch)
+
+        for line in lines_with_word:
+            highlighted_line = line.replace(word_fetch, f"\033[1;31m{word_fetch}\033[0m")
+            print(highlighted_line)
+
+    def fetch_lines_with_word(self, url_fetch, word_fetch):
+        response = requests.get(url_fetch)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        lines = soup.prettify().split('\n')
+        filtered_lines = [line for line in lines if word_fetch in line]
+        return filtered_lines
 
     def add_action(self, menu, name, slot):
         action = QAction(name, self)
