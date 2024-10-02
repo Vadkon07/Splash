@@ -159,7 +159,11 @@ class LinkSaver(QMainWindow):
 
         for line in lines_with_word:
             highlighted_line = line.replace(word_fetch, f"\033[1;31m{word_fetch}\033[0m")
+
             print(highlighted_line)
+
+            if highlighted_line == app_version:
+                new_update_notif()
 
     def fetch_lines_with_word(self, url_fetch, word_fetch):
         response = requests.get(url_fetch)
@@ -167,6 +171,9 @@ class LinkSaver(QMainWindow):
         lines = soup.prettify().split('\n')
         filtered_lines = [line for line in lines if word_fetch in line]
         return filtered_lines
+
+    def new_update_notif(self):
+        print("New Update Found!")
 
     def add_action(self, menu, name, slot):
         action = QAction(name, self)
