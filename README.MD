@@ -27,6 +27,7 @@ You can download videos in any quality, from 144p and up to 4k!
 10. **Sounds:** We have a sound which will notificate you about finished downloading of your files. Soon we also will add some settings for sounds, like custom sounds etc. Also you can enable/disable all sounds inside setting of this app.
 11. **Playlists Support:** You can download full album in one click!
 12. **Regular Updates:** This app is always up to date, so you can never care about her availability. After clone of this app you will see information about changes in last update.
+13. **Notifications:** We will send to you a notification if it will be available a newer version of this app.
 
 ## Prerequisites
 
@@ -88,10 +89,10 @@ When we will finish all these tasks - we will release version v1.0.
 - [x] **More Formats:** Expand the format options beyond MP3 and MP4 to include formats like WAV, OGG, and more.
 - [x] **Descriptions and questions on every page:** Like: "Choose a format".
 - [x] **Fix progressbar:** Hide progressbar when he is not used.
-- [ ] **Check Updates:** It should read file from this repository and check is it has a mention of installed version or not, and if not - notificare user about available update. Plan for code: download file ver.html (or json) -> open him and read -> if doesn't contatin mention of installed version - show messagebox about available update.
+- [x] **Check Updates:** It should read file from this repository and check is it has a mention of installed version or not, and if not - notificare user about available update. Plan for code: download file ver.html (or json) -> open him and read -> if doesn't contatin mention of installed version - show messagebox about available update.
 - [ ] **Save files in folders:** App should save mp4 files in folder named "MP4 files", mp3 in "MP3 Files", etc.
 - [ ] **Support developer with donation of $5**
 </details>
 
 ### Last Updated
-This README was last updated on **October 2, 2024** for version **v0.8.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+This README was last updated on **October 2, 2024** for version **v0.8.1**. All new things added in app afer this date + version are **NOT** described/mentioned here.

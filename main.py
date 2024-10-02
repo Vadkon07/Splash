@@ -17,7 +17,7 @@ import requests
 import xml.etree.ElementTree as ET
 import dev #for developers only
 
-app_version = "v0.8.0"
+app_version = "v0.8.1"
 update_description = "New GUI, New Feature, Optimised Performance, etc" # Will be added very soon
 
 class ImageWindow(QWidget):
@@ -34,8 +34,6 @@ class ImageWindow(QWidget):
 class LinkSaver(QMainWindow):
     def __init__(self):
         super().__init__()
-
-        self.check_updates()
 
         self.load_theme()
 
@@ -110,11 +108,13 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added purple theme") # !!! UPDATE NOTIFICATION !!!
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added notifications about new available updates") # !!! UPDATE NOTIFICATION !!!
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
+
+        self.check_updates()
 
         
     def play_downloaded_sound(self):
@@ -152,18 +152,12 @@ class LinkSaver(QMainWindow):
 
     def check_updates(self):
         url_fetch = 'https://raw.githubusercontent.com/Vadkon07/VideoXYZ/refs/heads/master/ver.html'
-        word_fetch = app_version
-        #if word_fetch not found, ent
+        current_version = app_version
 
-        lines_with_word = self.fetch_lines_with_word(url_fetch, word_fetch)
+        lines_with_word = self.fetch_lines_with_word(url_fetch, current_version)
 
-        for line in lines_with_word:
-            highlighted_line = line.replace(word_fetch, f"\033[1;31m{word_fetch}\033[0m")
-
-            print(highlighted_line)
-
-            if highlighted_line == app_version:
-                new_update_notif()
+        if not lines_with_word:
+            self.new_update_notif()
 
     def fetch_lines_with_word(self, url_fetch, word_fetch):
         response = requests.get(url_fetch)
@@ -173,7 +167,7 @@ class LinkSaver(QMainWindow):
         return filtered_lines
 
     def new_update_notif(self):
-        print("New Update Found!")
+        QMessageBox.information(self, "New Update Found", f"New update was found! Visit our GitHub repository to update this app to the latest version.")
 
     def add_action(self, menu, name, slot):
         action = QAction(name, self)
