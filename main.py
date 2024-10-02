@@ -13,7 +13,7 @@ import webbrowser
 from pygame import mixer
 import dev #for developers only
 
-app_version = "v0.7.4 BETA"
+app_version = "v0.8.0 BETA"
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -61,6 +61,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.theme_menu, "Change theme to black", self.change_theme_black)
         self.add_action(self.theme_menu, "Change theme to lime", self.change_theme_lime)
         self.add_action(self.theme_menu, "Change theme to pink", self.change_theme_pink)
+        self.add_action(self.theme_menu, "Change theme to purple", self.change_theme_purple)
 
         self.add_action(self.settings_menu, "Sound ON/OFF", self.sound_change)
         self.add_action(self.help_menu, "About", self.about_project)
@@ -102,7 +103,7 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added pink theme") # !!! UPDATE NOTIFICATION !!!
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added purple theme") # !!! UPDATE NOTIFICATION !!!
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
@@ -233,6 +234,15 @@ class LinkSaver(QMainWindow):
         with open ('app.json', 'w') as file:
             json.dump(data, file, indent=4)
 
+    def change_theme_purple(self):
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_purple)
+
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+            data['theme_default'] = "purple"
+
+        with open ('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
 
     def load_theme(self):
         with open('app.json', 'r') as theme:
@@ -244,6 +254,8 @@ class LinkSaver(QMainWindow):
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_lime)
         if theme_choosed.get("theme_default") == "pink":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_pink)
+        if theme_choosed.get("theme_default") == "purple":
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_purple)
         else:
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
 
@@ -672,8 +684,8 @@ if __name__ == "__main__":
         color: black;
     }
     QMenuBar::item:selected {
-        background: lime;
-        color: black;
+        background: grey;
+        color: white;
     }
     QLineEdit {
         background-color: lime;
@@ -742,7 +754,7 @@ if __name__ == "__main__":
         color: black;
     }
     QMenu::item {
-        background-color: pink;
+        background-color: grey;
         color: black;
     }
     QProgressBar {
@@ -753,6 +765,56 @@ if __name__ == "__main__":
         background-color: red;
     }
    """
+
+    custom_stylesheet_purple = """
+    QWidget {
+        background-color: purple;
+        color: white;
+    }
+    QMenuBar {
+        background-color: purple;
+        color: white;
+    }
+    QMenuBar::item {
+        background-color: purple;
+        color: white;
+    }
+    QMenuBar::item:selected {
+        background: grey;
+        color: white;
+    }
+    QLineEdit {
+        background-color: purple;
+        color: white;
+    }
+    QLine {
+        color: grey;
+    }
+    QPushButton {
+        background-color: #ff0000;
+        color: white;
+    }
+    QPushButton:hover {
+        background-color: #cc0000;
+    }
+    QMenu {
+        background-color: #1a1a1a;
+        color: white;
+    }
+    QMenu::item {
+        background-color: grey;
+        color: white;
+    }
+    QProgressBar {
+        border: 2px solid grey;
+        text-align: center;
+    }
+    QProgressBar::chunk {
+        background-color: red;
+    }
+   """
+
+
 
     window = LinkSaver()
     window.show()

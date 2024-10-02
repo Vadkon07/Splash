@@ -23,7 +23,7 @@ You can download videos in any quality, from 144p and up to 4k!
 6. **Offline Audio Extraction:** The app downloads videos using the internet but extracts audio offline, saving bandwidth.
 7. **Terminal-Based Version Available:** A command-line (outdated)  version of the app is also available in [one of my repositories](https://github.com/Vadkon07/YouTube_Downloader), offering slightly different functionalities.
 8. **Optimised for low resolution monitors:** I know that a lot of people continue to use their ThinkPads etc. from 2004 or even older, so I decided to optimise this app for theirs displays. This app should work fine and not take a lot of space on your monitor even if he has only a 640x320 display resolution.
-9. **Themes:** Our app has white, black, lime, and pink themes. Also in the future we will add purple theme. You can share your own themes with us!
+9. **Themes:** Our app has white, black, lime, purple, and pink themes. You can share your own themes with us!
 10. **Sounds:** We have a sound which will notificate you about finished downloading of your files. Soon we also will add some settings for sounds, like custom sounds etc. Also you can enable/disable all sounds inside setting of this app.
 11. **Playlists Support:** You can download full album in one click!
 12. **Regular Updates:** This app is always up to date, so you can never care about her availability. After clone of this app you will see information about changes in last update.
@@ -94,4 +94,4 @@ When we will finish all these tasks - we will release version v1.0.
 </details>
 
 ### Last Updated
-This README was last updated on **September 30, 2024** for version **v0.7.4**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+This README was last updated on **October 2, 2024** for version **v0.8.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
