@@ -17,7 +17,7 @@ import requests
 import xml.etree.ElementTree as ET
 import dev #for developers only
 
-app_version = "v0.8.1"
+app_version = "v0.9.0"
 update_description = "New GUI, New Feature, Optimised Performance, etc" # Will be added very soon
 
 class ImageWindow(QWidget):
@@ -167,12 +167,41 @@ class LinkSaver(QMainWindow):
         return filtered_lines
 
     def new_update_notif(self):
-        QMessageBox.information(self, "New Update Found", f"New update was found! Visit our GitHub repository to update this app to the latest version.")
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Update Found")
+
+        # Create a QTextBrowser for displaying the HTML content
+        text_browser = QTextBrowser(dialog)
+        text_browser.setOpenExternalLinks(True)
+        text_browser.setHtml(f'<p>New update was found! Do you want to update this app (git should be installed)? Or you can do it manually by visiting our <a href="https://github.com/Vadkon07/VideoXYZ">GitHub page</a></p>')
+
+        update_button = QPushButton("Update", dialog)
+        update_button.clicked.connect(self.update_from_git)
+
+        close_button = QPushButton("Close", dialog)
+        close_button.clicked.connect(dialog.accept)
+
+        layout = QGridLayout(dialog)
+        layout.addWidget(text_browser)
+        layout.addWidget(update_button)
+        layout.addWidget(close_button)
+
+        dialog.setLayout(layout)
+        dialog.exec()
 
     def add_action(self, menu, name, slot):
         action = QAction(name, self)
         action.triggered.connect(slot)
         menu.addAction(action)
+
+    def update_from_git(self):
+        try:
+            repo_url = "https://github.com/Vadkon07/VideoXYZ"
+
+            subprocess.run(["git", "clone", repo_url], check=True)
+            QMessageBox.information(self, "Update Installed", "Repository cloned successfully! You can find her in a folder where you runned this code.")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred: {e}. Is git installed?")
 
     def minimize_window(self):
         self.showMinimized()
@@ -187,7 +216,6 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "About", "Best portable app to download your favorite media content from YouTube! You can download YouTube videos in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find her thumbnail in a folder where you ran our application.")
 
     def open_github(self):
-
         github_link = "https://github.com/Vadkon07/VideoXYZ"
 
         dialog = QDialog(self)
@@ -366,7 +394,7 @@ class LinkSaver(QMainWindow):
                             self.print_error("Failed to retrieve thumbnail URL (Note that it's normal for playlists, it's not an error)")
                             
             except Exception as e:
-                self.print_error(f"Failed to retrieve video information. Error description: {e}")
+                self.print_error(f"Failed to retrieve video information. Error description: {e}. Check your intetnet connection and be sure that you entered a valid link.")
                 return
                                
             self.show_buttons(link, title)
