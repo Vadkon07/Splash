@@ -17,8 +17,8 @@ import requests
 import xml.etree.ElementTree as ET
 import dev #for developers only
 
-app_version = "v0.9.0"
-update_description = "New GUI, New Feature, Optimised Performance, etc" # Will be added very soon
+app_version = "v0.9.1"
+update_description = "Bug Fix, Optimised Performance, etc" # Edit after adding any changes
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
@@ -108,15 +108,14 @@ class LinkSaver(QMainWindow):
             data = json.load(file)
 
         if data.get('update_installed'):
-            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: improved GUI, optimised code, added notifications about new available updates") # !!! UPDATE NOTIFICATION !!!
+            QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: {update_description}.")
             data['update_installed'] = False
 
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
 
         self.check_updates()
-
-        
+ 
     def play_downloaded_sound(self):
         with open ('app.json', 'r') as fl:
             sound_setting = json.load(fl)
@@ -416,7 +415,7 @@ class LinkSaver(QMainWindow):
         self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widget)
 
-        self.button1 = QPushButton("MP3 (Best quality only)", self)
+        self.button1 = QPushButton("MP3 (Best only)", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("Both MP3 + MP4", self)
         self.button4 = QPushButton("Webm", self)
