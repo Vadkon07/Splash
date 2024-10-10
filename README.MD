@@ -1,18 +1,18 @@
 <p align="center">
-  <img src="VideoXYZ_logo.png" alt="App Logo"/>
+  <img src="Splash_Logo.png" alt="App Logo"/>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/LICENSE-MIT-green"/>
 </p>
 
-# VideoXYZ
+# Splash
 
-This GUI application allows you to download **YouTube videos** or **audio** quickly and easily. While many websites offer similar services, they often take more time and include ads. With **VideoXYZ**, you can download content directly from **YouTube**, saving both time and hassle! I personally use it for my beatmaking hobby, because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies.
+This GUI application allows you to download **YouTube videos** or **audio** quickly and easily. While many websites offer similar services, they often take more time and include ads. With **Splash**, you can download content directly from **YouTube**, saving both time and hassle! I personally use it for my beatmaking hobby, because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies.
 
 You can download videos in any quality, from 144p and up to 4k!
 
-**You downloaded some music with VideoXYZ and want to listen to her? Try to do it in our another project [Style Music Player](https://github.com/Vadkon07/Style_Music_Player)!**
+**You downloaded some music with Splash and want to listen to her? Try to do it in our another project [Style Music Player](https://github.com/Vadkon07/Style_Music_Player)!**
 
 ## Features
 1. **Ad-free:** Enjoy a seamless experience without interruptions.
@@ -44,7 +44,7 @@ Here's **recommended** PC specifications:
 - **OS:** Linux, Windows, MacOS
 - **RAM:** 1GB+
 - **CPU:** Intel Pentium 4 or higher
-- **GPU:** Just to download a file you don't need GPU, but to do some conversions of **10 minute 1080p** video from one format to another it will be enough something in a kind of Intel UHD630. For **1 hour+ 4k** video processing of course it's better to have a powerful external GPU.
+- **GPU:** Just to download audio you don't need GPU, but to do some conversions of **10 minute 1080p** video from one format to another it will be enough something in a kind of Intel UHD630. For **1 hour+ 4k** video processing of course it's better to have a powerful external GPU.
 - **Storage:** 500MB (app itself and her packages)
 
 ## How to use
@@ -82,7 +82,7 @@ This project is licensed under the [MIT License](./LICENSE).
 
 ## To-Do
 
-When we will finish all these tasks - we will release version v1.0.
+When we will finish all these tasks - we will release version 1.0.
 
 - [x] **Playlist Support:** Enable downloading of entire YouTube playlists.
 - [x] **Better Download Indicator:** Improve the download progress indicator to be more user-friendly, and probably also hide raw output from terminal.
@@ -90,8 +90,26 @@ When we will finish all these tasks - we will release version v1.0.
 - [x] **Descriptions and questions on every page:** Like: "Choose a format".
 - [x] **Fix progressbar:** Hide progressbar when he is not used.
 - [x] **Check Updates:** It should read file from this repository and check is it has a mention of installed version or not, and if not - notificare user about available update. Plan for code: download file ver.html (or json) -> open him and read -> if doesn't contatin mention of installed version - show messagebox about available update. NOTE: I made it even better, so for now it can even download updates automatically!
-- [ ] **Support developer with donation of $5:** It will motivate me even more!
+- [x] **Sort Downloaded Files by Folders:** Save MP3 audio in folder named 'MP3', MP4 videos in folder named 'MP4', etc.
+- [x] **Rename project!**
+
 </details>
 
+## To-Do for version 2.0
+
+- [ ] **Make compatible with other popular social media:** Instagram, Twitter, etc. Add possibility just to download posts or audio from them. Make this app universal!
+- [ ] **Change requirements.txt:** It doesn't include all packages which should be installed. We have to solve it!
+- [ ] **Make code more readable:** It will be better to reorganise defs and add/remove spaces in code.
+- [ ] **Get a bigger group of developers:** At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection.
+- [ ] **Hide custom menu:** Menu bar takes some place, and to get more free space in our app it will be nice to add an arrow which will hide/show this menu.
+- [ ] **Add resources monitor:** I have a nice project named **EasyBench**, which was created to benchmark your computer. I think that I can copy from his code some things as CPU, RAM, GPU resource monitors and integrate them inside VideoXYZ. It will show usage of computer's rresources while using VideoXYZ in terminal or another window, to make it easier for user to understand how busy his computer is. Also I will add possibility to turn it ON or OFF in DEV menu.
+- [ ] **Better Thumbnail Window:** For now it just open thumbnail in a new window, but what if instead it will show small thumbnail near "Choose a format"?
+- [ ] **Support me:** I will be very grateful even for a very small donation, becaue I would like to save money faster to be able to buy a decent laptop and continue to develope this app on him. On my old laptop I can't do any kind of video convertion, because on him it takes 1 hour for 1 minute video.
+- [ ] **Sound ON/OFF:** Replace it with 'Enable Sound' and 'Disable Sound'. It should read this setting from json and set a needed text.
+
+## About Release
+
+Finally we are ready to introduce v1.0.0 to you! It was a pretty long way, but we did it. Thanks to everyone who helped me with development of this app!
+
 ### Last Updated
-This README was last updated on **October 5, 2024** for version **v0.9.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+This README was last updated on **October 9, 2024** for version **v1.0.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.

@@ -15,15 +15,17 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import requests
 import xml.etree.ElementTree as ET
-import dev #for developers only
+import dev
 
-app_version = "v0.9.1"
-update_description = "Bug Fix, Optimised Performance, etc" # Edit after adding any changes
+app_version = "1.0.0"
+update_description = "First version released! Changed project's name + colors, Bug Fix, Optimisation of Code, Improved DEV menu, Changes in GUI, Save files in their own folders, Improved README, etc" # Always edit after adding any changes
+dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
 
 class ImageWindow(QWidget):
     def __init__(self, image_path):
         super().__init__()
         self.setWindowTitle("Thumbnail Viewer")
+        # Here add setFixedSize for window
         layout = QVBoxLayout()
         self.label = QLabel()
         pixmap = QPixmap('thumbnail.webp')
@@ -37,7 +39,7 @@ class LinkSaver(QMainWindow):
 
         self.load_theme()
 
-        self.setWindowTitle(f"VideoXYZ {app_version}")
+        self.setWindowTitle(f"Splash {app_version}")
         self.setGeometry(100, 100, 405, 200)
 
         self.central_widget = QWidget(self)
@@ -56,7 +58,8 @@ class LinkSaver(QMainWindow):
         self.help_menu = self.custom_menu_bar.addMenu("Help")
         self.theme_menu = self.custom_menu_bar.addMenu("Theme")
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
-        #self.dev_menu = self.custom_menu_bar.addMenu("DEV") #UNCOMMENT TO SHOW DEVELOPER MENU
+        
+        if dev_mode == 1: self.dev_menu = self.custom_menu_bar.addMenu("DEV")
 
         self.add_action(self.main_menu, "Go to the main menu", self.go_main_menu)
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
@@ -74,23 +77,16 @@ class LinkSaver(QMainWindow):
         self.add_action(self.help_menu, "Help", self.open_help)
         self.add_action(self.help_menu, "Documentation", self.open_documentation)
         self.add_action(self.exit_menu, "Exit (Are you sure?)", self.exit_app)
-        #self.add_action(self.dev_menu, "DEV",  dev.d_menu) #UNCOMMENT TO SHOW DEVELOPER MENU
 
-        self.widget = QLabel(f"VideoXYZ")
-        #self.fade(self.widget)
+        if dev_mode == 1: self.add_action(self.dev_menu, "DEV",  dev.d_menu)
+
+        self.widget = QLabel(f"Splash")
+        self.fade(self.widget)
         widget_font = self.widget.font()
-        widget_font.setPointSize(18)
+        widget_font.setPointSize(16)
         self.widget.setFont(widget_font)
         self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widget)
-
-        self.ver_widget = QLabel(f"{app_version}")
-        self.fade(self.ver_widget)
-        ver_font = self.ver_widget.font()
-        ver_font.setPointSize(10)
-        self.ver_widget.setFont(ver_font)
-        self.ver_widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-        self.main_layout.addWidget(self.ver_widget)
 
         self.line_edit = QLineEdit(self)
         self.line_edit.setPlaceholderText("Paste URL of YouTube video here (https://www.youtube.com/watch...)")
@@ -195,12 +191,12 @@ class LinkSaver(QMainWindow):
 
     def update_from_git(self):
         try:
-            repo_url = "https://github.com/Vadkon07/VideoXYZ"
+            repo_url = "https://github.com/Vadkon07/Splash"
 
             subprocess.run(["git", "clone", repo_url], check=True)
-            QMessageBox.information(self, "Update Installed", "Repository cloned successfully! You can find her in a folder where you runned this code.")
+            QMessageBox.information(self, "Update Installed", "Repository cloned successfully! You can find her in a folder where you runned this code. You can move her to another place.")
         except subprocess.CalledProcessError as e:
-            print(f"An error occurred: {e}. Is git installed?")
+            print(f"An error occurred: {e}. At first check is git installed on your computer or not. If yes, probably you have some issues with internet connection.")
 
     def minimize_window(self):
         self.showMinimized()
@@ -215,7 +211,7 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "About", "Best portable app to download your favorite media content from YouTube! You can download YouTube videos in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find her thumbnail in a folder where you ran our application.")
 
     def open_github(self):
-        github_link = "https://github.com/Vadkon07/VideoXYZ"
+        github_link = "https://github.com/Vadkon07/Splash"
 
         dialog = QDialog(self)
         dialog.setWindowTitle("Contribute")
@@ -236,10 +232,10 @@ class LinkSaver(QMainWindow):
         dialog.exec()
 
     def open_help(self):
-        webbrowser.open('https://github.com/Vadkon07/VideoXYZ/issues')
+        webbrowser.open('https://github.com/Vadkon07/Splash/issues')
 
     def open_documentation(self):
-        webbrowser.open('https://github.com/Vadkon07/VideoXYZ/blob/master/README.MD')
+        webbrowser.open('https://github.com/Vadkon07/Splash/blob/master/README.MD')
 
     def go_main_menu(self):
         QApplication.closeAllWindows()
@@ -301,8 +297,8 @@ class LinkSaver(QMainWindow):
         with open('app.json', 'r') as theme:
             theme_choosed = json.load(theme)
 
-        if theme_choosed.get("theme_default") == "white":
-            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
+        if theme_choosed.get("theme_default") == "black":
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
         if theme_choosed.get("theme_default") == "lime":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_lime)
         if theme_choosed.get("theme_default") == "pink":
@@ -310,7 +306,7 @@ class LinkSaver(QMainWindow):
         if theme_choosed.get("theme_default") == "purple":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_purple)
         else:
-            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
 
 
     def progress_hook(self, d):
@@ -402,23 +398,22 @@ class LinkSaver(QMainWindow):
 
     def show_buttons(self, link, title):
         self.widget.hide()
-        self.ver_widget.hide()
         self.line_edit.hide()
         self.ok_button.hide()
 
         self.button_layout = QHBoxLayout()
 
-        self.widget = QLabel("Choose a format:")
+        self.widgetF = QLabel("Choose a format:")
         widget_font = self.widget.font()
         widget_font.setPointSize(12)
-        self.widget.setFont(widget_font)
-        self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-        self.main_layout.addWidget(self.widget)
+        self.widgetF.setFont(widget_font)
+        self.widgetF.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.main_layout.addWidget(self.widgetF)
 
         self.button1 = QPushButton("MP3 (Best only)", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("Both MP3 + MP4", self)
-        self.button4 = QPushButton("Webm", self)
+        self.button4 = QPushButton("WEBM", self)
 
         self.button1.setFixedSize(100,25)
         self.button2.setFixedSize(100,25)
@@ -446,7 +441,7 @@ class LinkSaver(QMainWindow):
         self.button2.hide()
         self.button3.hide()
         self.button4.hide()
-        self.widget.hide()
+        self.widgetF.hide()
 
         self.widgetQ = QLabel("Choose a quality of video:")
         widget_font = self.widgetQ.font()
@@ -528,7 +523,7 @@ class LinkSaver(QMainWindow):
         ydl_opts = {
             'progress_hooks': [self.progress_hook],
             'format': 'bestaudio',
-            'outtmpl': os.path.join('%(title)s.%(ext)s'),
+            'outtmpl': os.path.join('MP3', '%(title)s.%(ext)s'),
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
@@ -567,7 +562,7 @@ class LinkSaver(QMainWindow):
         ydl_opts = {
         'progress_hooks': [self.progress_hook],
         'format': quality_format,
-        'outtmpl': os.path.join('%(title)s.%(ext)s'),
+        'outtmpl': os.path.join('MP4', '%(title)s.%(ext)s'),
         'postprocessors': [{
             'key': 'FFmpegVideoConvertor',
             'preferedformat': 'mp4',
@@ -594,7 +589,7 @@ class LinkSaver(QMainWindow):
         ydl_opts = {
         'progress_hooks': [self.progress_hook],
         'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best[ext=webm]/best',
-        'outtmpl': os.path.join('%(title)s.%(ext)s'),
+        'outtmpl': os.path.join('WEBM', '%(title)s.%(ext)s'),
         'postprocessors': [{
             'key': 'FFmpegVideoConvertor',
             'preferedformat': 'webm',
@@ -652,8 +647,8 @@ if __name__ == "__main__":
         color: white;
     }
     QPushButton {
-        background-color: #ff0000;
-        color: white;
+        background-color: #97fff5;
+        color: black;
     }
     QPushButton:hover {
         background-color: #cc0000;
@@ -673,7 +668,7 @@ if __name__ == "__main__":
     QProgressBar::chunk {
         background-color: red;
     }
-   #"""
+   """
 
     custom_stylesheet_white = """
     QWidget {
@@ -700,8 +695,8 @@ if __name__ == "__main__":
         color: grey;
     }
     QPushButton {
-        background-color: #ff0000;
-        color: white;
+        background-color: #97fff5;
+        color: black;
     }
     QPushButton:hover {
         background-color: #cc0000;
@@ -748,8 +743,8 @@ if __name__ == "__main__":
         color: grey;
     }
     QPushButton {
-        background-color: #ff0000;  /* Red buttons */
-        color: white;  /* Text color */
+        background-color: #97fff5;
+        color: black;
     }
     QPushButton:hover {
         background-color: #cc0000;  /* Darker red on hover */
@@ -769,7 +764,7 @@ if __name__ == "__main__":
     QProgressBar::chunk {
         background-color: red;
     }
-   """
+    """
 
     custom_stylesheet_pink = """
     QWidget {
@@ -796,8 +791,8 @@ if __name__ == "__main__":
         color: grey;
     }
     QPushButton {
-        background-color: #ff0000;  /* Red buttons */
-        color: white;  /* Text color */
+        background-color: #97fff5;
+        color: black;
     }
     QPushButton:hover {
         background-color: #cc0000;  /* Darker red on hover */
@@ -817,7 +812,7 @@ if __name__ == "__main__":
     QProgressBar::chunk {
         background-color: red;
     }
-   """
+    """
 
     custom_stylesheet_purple = """
     QWidget {
@@ -844,8 +839,8 @@ if __name__ == "__main__":
         color: grey;
     }
     QPushButton {
-        background-color: #ff0000;
-        color: white;
+        background-color: #97fff5;
+        color: black;
     }
     QPushButton:hover {
         background-color: #cc0000;
@@ -865,9 +860,7 @@ if __name__ == "__main__":
     QProgressBar::chunk {
         background-color: red;
     }
-   """
-
-
+    """
 
     window = LinkSaver()
     window.show()
