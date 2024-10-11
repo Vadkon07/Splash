@@ -17,27 +17,18 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.0.0"
-update_description = "First version released! Changed project's name + colors, Bug Fix, Optimisation of Code, Improved DEV menu, Changes in GUI, Save files in their own folders, Improved README, etc" # Always edit after adding any changes
+app_version = "1.1.0"
+update_description = "Bug Fix, Optimisation of Code, Changes in GUI, Save files in their own folders, Improved README, Support of a lot of different social media websites (not fully), etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
-
-class ImageWindow(QWidget):
-    def __init__(self, image_path):
-        super().__init__()
-        self.setWindowTitle("Thumbnail Viewer")
-        # Here add setFixedSize for window
-        layout = QVBoxLayout()
-        self.label = QLabel()
-        pixmap = QPixmap('thumbnail.webp')
-        self.label.setPixmap(pixmap)
-        layout.addWidget(self.label)
-        self.setLayout(layout)
+sound_status = None
 
 class LinkSaver(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.load_theme()
+        
+        self.sound_check(sound_status)
 
         self.setWindowTitle(f"Splash {app_version}")
         self.setGeometry(100, 100, 405, 200)
@@ -61,6 +52,10 @@ class LinkSaver(QMainWindow):
         
         if dev_mode == 1: self.dev_menu = self.custom_menu_bar.addMenu("DEV")
 
+        font = self.custom_menu_bar.font()
+        font.setPointSize(8)
+        self.custom_menu_bar.setFont(font)
+
         self.add_action(self.main_menu, "Go to the main menu", self.go_main_menu)
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
@@ -71,7 +66,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.theme_menu, "Change theme to pink", self.change_theme_pink)
         self.add_action(self.theme_menu, "Change theme to purple", self.change_theme_purple)
 
-        self.add_action(self.settings_menu, "Sound ON/OFF", self.sound_change)
+        self.add_action(self.settings_menu, f"{sound_status} Sound", self.sound_change)
         self.add_action(self.help_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Help", self.open_help)
@@ -80,16 +75,19 @@ class LinkSaver(QMainWindow):
 
         if dev_mode == 1: self.add_action(self.dev_menu, "DEV",  dev.d_menu)
 
-        self.widget = QLabel(f"Splash")
+        self.widget = QLabel()
+        pixmap = QPixmap("Splash_Logo_S.png")
+        scaled_pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.widget.setPixmap(scaled_pixmap)
+        self.widget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.main_layout.addWidget(self.widget)
+
         self.fade(self.widget)
-        widget_font = self.widget.font()
-        widget_font.setPointSize(16)
-        self.widget.setFont(widget_font)
         self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widget)
 
         self.line_edit = QLineEdit(self)
-        self.line_edit.setPlaceholderText("Paste URL of YouTube video here (https://www.youtube.com/watch...)")
+        self.line_edit.setPlaceholderText("Paste URL of video/audio/image (https://www.website.com/...)")
         self.main_layout.addWidget(self.line_edit)
 
         self.ok_button = QPushButton("OK", self)
@@ -127,10 +125,28 @@ class LinkSaver(QMainWindow):
 
         if data.get('sound_enabled'):
             data['sound_enabled'] = False
+            data['sound_setting'] = "Enable"
             QMessageBox.information(self,"Sound disabled", f"Sound disabled. You will not hear any sounds from this applicaton")
+            sound_status = "Enable"
         else:
             data['sound_enabled'] = True
+            data['sound_setting'] = "Disable"
             QMessageBox.information(self,"Sound enabled", f"Sound enabled. You will hear sounds from this applicaton")
+            sound_status = "Disable"
+
+        with open('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
+    def sound_check(self, sound_status):
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+
+        if data.get('sound_setting') == "Disabled":
+            data['sound_setting'] = "Enable"
+            sound_status = "Enable"
+        else:
+            data['sound_setting'] = "Disable"
+            sound_status = "Disable"
 
         with open('app.json', 'w') as file:
             json.dump(data, file, indent=4)
@@ -168,7 +184,7 @@ class LinkSaver(QMainWindow):
         # Create a QTextBrowser for displaying the HTML content
         text_browser = QTextBrowser(dialog)
         text_browser.setOpenExternalLinks(True)
-        text_browser.setHtml(f'<p>New update was found! Do you want to update this app (git should be installed)? Or you can do it manually by visiting our <a href="https://github.com/Vadkon07/VideoXYZ">GitHub page</a></p>')
+        text_browser.setHtml(f'<p>New update was found! Do you want to update this app (git should be installed)? Or you can do it manually by visiting our <a href="https://github.com/Vadkon07/Splash">GitHub page</a></p>')
 
         update_button = QPushButton("Update", dialog)
         update_button.clicked.connect(self.update_from_git)
@@ -208,7 +224,7 @@ class LinkSaver(QMainWindow):
         QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
 
     def about_project(self):
-        QMessageBox.information(self, "About", "Best portable app to download your favorite media content from YouTube! You can download YouTube videos in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find her thumbnail in a folder where you ran our application.")
+        QMessageBox.information(self, "About", "Best portable app to download your favorite media content from literally any popular social media! You can download content (from YouTube, X, Soundcloud etc) in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find her thumbnail in a folder where you ran our application.")
 
     def open_github(self):
         github_link = "https://github.com/Vadkon07/Splash"
@@ -381,15 +397,13 @@ class LinkSaver(QMainWindow):
                             ext = thumbnail_url.split('.')[-1]
                             self.thumbnail_path = f"./thumbnail.{ext}"
                             print(f"Thumbnail downloaded to: {self.thumbnail_path}")
-                            QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
-                            self.show_image_in_messagebox(self.thumbnail_path)
-
+                            QMessageBox.information(self, "Content found", f"\nContent which we found: {title}")
                         else:
-                            QMessageBox.information(self, "Video found", f"\nVideo found: {title}")
+                            QMessageBox.information(self, "Content found", f"\nContent which we found: {title}")
                             self.print_error("Failed to retrieve thumbnail URL (Note that it's normal for playlists, it's not an error)")
                             
             except Exception as e:
-                self.print_error(f"Failed to retrieve video information. Error description: {e}. Check your intetnet connection and be sure that you entered a valid link.")
+                self.print_error(f"Failed to retrieve information. Error description: {e}. Check your intetnet connection and be sure that you entered a valid link.")
                 return
                                
             self.show_buttons(link, title)
@@ -402,6 +416,15 @@ class LinkSaver(QMainWindow):
         self.ok_button.hide()
 
         self.button_layout = QHBoxLayout()
+
+        self.label = QLabel()
+        pixmap = QPixmap('thumbnail.webp')
+
+        pixmap = pixmap.scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)
+        self.label.setPixmap(pixmap)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.main_layout.addWidget(self.label)
+        self.setLayout(self.main_layout)
 
         self.widgetF = QLabel("Choose a format:")
         widget_font = self.widget.font()
