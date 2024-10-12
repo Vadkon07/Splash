@@ -28,6 +28,7 @@ You can download videos in any quality, from 144p and up to 4k!
 11. **Playlists Support (YouTube):** You can download a full album of your favorite artist in one click!
 12. **Regular Updates:** This app is always up to date, so you can never care about her availability. After clone of this app you will see information about changes in last update.
 13. **Notifications:** We will send to you a notification if it will be available a newer version of this app.
+14. **Resources Monitor:** You can always know how busy your PC is. By this monitor you can read how many percent of your RAM or CPU power are filled, and by it you can understand what caused slow conversion or download. Engine of this app I copied from another my project [EasyBench](https://github.com/Vadkon07/EasyBench).
 
 ## Prerequisites
 
@@ -36,6 +37,7 @@ Before running the script, make sure you have the following installed:
 - **ffmpeg:** Ensure ffmpeg is installed on your machine for video/audio processing.
 - **PyQt6, yt_dlp, pyqtdarktheme:** To install run `pip install -r requirements.txt`.
 - **Pygame:** We use him for sounds.
+- **Psutil:** Necessary for Resources Monitor.
 
 ## PC Requirements
 
@@ -91,9 +93,5 @@ This project is licensed under the [MIT License](./LICENSE).
 - [x] **Better Thumbnail Window:** For now it just open thumbnail in a new window, but what if instead it will show small thumbnail near "Choose a format"?
 - [x] **Sound ON/OFF:** Replace it with 'Enable Sound' and 'Disable Sound'. It should read this setting from json and set a needed text. Like, it's already added, but doens't work.
 
-## About Release
-
-Finally we are ready to introduce v1.0.0 to you! It was a pretty long way, but we did it. Thanks to everyone who helped me with development of this app!
-
 ### Last Updated
-This README was last updated on **October 11, 2024** for version **v1.1.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+This README was last updated on **October 13, 2024** for version **v1.2.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
