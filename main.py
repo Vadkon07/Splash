@@ -7,7 +7,7 @@ import yt_dlp
 import time
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea, QProgressBar, QGraphicsOpacityEffect
 from PyQt6.QtGui import QAction, QImage, QPixmap
-from PyQt6.QtCore import QPropertyAnimation, Qt
+from PyQt6.QtCore import QPropertyAnimation, Qt, QTimer
 import json
 import webbrowser
 from pygame import mixer
@@ -17,17 +17,17 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.1.1"
-update_description = "Bug Fix (not finished), Optimisation of Code, etc" # Always edit after adding any changes
+app_version = "1.2.0"
+update_description = "Improved sound button, Optimisation of Code, Added Resources Monitor (dev), etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
 
-class LinkSaver(QMainWindow):
+class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.load_theme()
 
-        self.sound_status = "None"
+        self.sound_action = None
 
         with open ('app.json', 'r') as file:
             data = json.load(file)
@@ -76,7 +76,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.theme_menu, "Change theme to pink", self.change_theme_pink)
         self.add_action(self.theme_menu, "Change theme to purple", self.change_theme_purple)
 
-        self.add_action(self.settings_menu, f"{self.sound_status} Sound", self.sound_change)
+        self.sound_action = self.add_action(self.settings_menu, f"{self.sound_status} Sound", self.sound_change)
         self.add_action(self.help_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Help", self.open_help)
@@ -120,6 +120,10 @@ class LinkSaver(QMainWindow):
 
         self.check_updates()
 
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.check_sound_status)
+        self.timer.start(1000)
+
     def sound_check(self):
         with open ('app.json', 'r') as file:
             data = json.load(file)
@@ -134,8 +138,23 @@ class LinkSaver(QMainWindow):
         with open('app.json', 'w') as file:
             json.dump(data, file, indent=4)
 
-        print(self.sound_status)
- 
+    def update_sound_action_text(self):
+        if self.sound_action:
+            self.sound_action.setText(f"{self.sound_status} Sound")
+        else:
+            print("sound_action is None!")
+
+    def check_sound_status(self):
+        with open('app.json', 'r') as file:
+            data = json.load(file)
+
+        if data.get('sound_enabled') == False:
+            self.sound_status = "Enable"
+        else:
+            self.sound_status = "Disable"
+
+        self.update_sound_action_text()
+
     def play_downloaded_sound(self):
         with open ('app.json', 'r') as fl:
             sound_setting = json.load(fl)
@@ -218,6 +237,7 @@ class LinkSaver(QMainWindow):
         action = QAction(name, self)
         action.triggered.connect(slot)
         menu.addAction(action)
+        return action
 
     def update_from_git(self):
         try:
@@ -664,7 +684,7 @@ if __name__ == "__main__":
 
     custom_stylesheet_black = """
     QWidget {
-        background-color: #1a1a1a;  /* Very dark background */
+        background-color: #1a1a1a;
         color: white;
     }
     QMenuBar {
@@ -779,7 +799,7 @@ if __name__ == "__main__":
         color: black;
     }
     QPushButton:hover {
-        background-color: #cc0000;  /* Darker red on hover */
+        background-color: #cc0000;
     }
     QMenu {
         background-color: #1a1a1a;
@@ -827,7 +847,7 @@ if __name__ == "__main__":
         color: black;
     }
     QPushButton:hover {
-        background-color: #cc0000;  /* Darker red on hover */
+        background-color: #cc0000;
     }
     QMenu {
         background-color: #1a1a1a;
@@ -894,6 +914,6 @@ if __name__ == "__main__":
     }
     """
 
-    window = LinkSaver()
+    window = MainMenu()
     window.show()
     sys.exit(app.exec())
