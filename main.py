@@ -17,18 +17,28 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.1.0"
-update_description = "Bug Fix, Optimisation of Code, Changes in GUI, Save files in their own folders, Improved README, Support of a lot of different social media websites (not fully), etc" # Always edit after adding any changes
+app_version = "1.1.1"
+update_description = "Bug Fix (not finished), Optimisation of Code, etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
-sound_status = None
 
 class LinkSaver(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.load_theme()
-        
-        self.sound_check(sound_status)
+
+        self.sound_status = "None"
+
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+
+        if data.get('sound_enabled') == False:
+            self.sound_status = "Enable"
+        if data.get('sound_enabled') == True:
+            self.sound_status = "Disable"
+
+        with open('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
 
         self.setWindowTitle(f"Splash {app_version}")
         self.setGeometry(100, 100, 405, 200)
@@ -66,7 +76,7 @@ class LinkSaver(QMainWindow):
         self.add_action(self.theme_menu, "Change theme to pink", self.change_theme_pink)
         self.add_action(self.theme_menu, "Change theme to purple", self.change_theme_purple)
 
-        self.add_action(self.settings_menu, f"{sound_status} Sound", self.sound_change)
+        self.add_action(self.settings_menu, f"{self.sound_status} Sound", self.sound_change)
         self.add_action(self.help_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Help", self.open_help)
@@ -109,6 +119,22 @@ class LinkSaver(QMainWindow):
              json.dump(data, file, indent=4)
 
         self.check_updates()
+
+    def sound_check(self):
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+
+        if data.get('sound_setting') == "Disable":
+            data['sound_setting'] = "Enable"
+            self.sound_status = "Enable"
+        if data.get('sound_setting') == "Enable":
+            data['sound_setting'] = "Disable"
+            self.sound_status = "Disable"
+
+        with open('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
+        print(self.sound_status)
  
     def play_downloaded_sound(self):
         with open ('app.json', 'r') as fl:
@@ -119,7 +145,7 @@ class LinkSaver(QMainWindow):
         else:
             print("Sound disabled")
 
-    def sound_change(self):
+    def sound_change(self, sound_status):
         with open ('app.json', 'r') as file:
             data = json.load(file)
 
@@ -127,36 +153,24 @@ class LinkSaver(QMainWindow):
             data['sound_enabled'] = False
             data['sound_setting'] = "Enable"
             QMessageBox.information(self,"Sound disabled", f"Sound disabled. You will not hear any sounds from this applicaton")
-            sound_status = "Enable"
+            self.sound_status = "Enable"
         else:
             data['sound_enabled'] = True
             data['sound_setting'] = "Disable"
             QMessageBox.information(self,"Sound enabled", f"Sound enabled. You will hear sounds from this applicaton")
-            sound_status = "Disable"
+            self.sound_status = "Disable"
 
         with open('app.json', 'w') as file:
             json.dump(data, file, indent=4)
 
-    def sound_check(self, sound_status):
-        with open ('app.json', 'r') as file:
-            data = json.load(file)
-
-        if data.get('sound_setting') == "Disabled":
-            data['sound_setting'] = "Enable"
-            sound_status = "Enable"
-        else:
-            data['sound_setting'] = "Disable"
-            sound_status = "Disable"
-
-        with open('app.json', 'w') as file:
-            json.dump(data, file, indent=4)
+        print(self.sound_status)
 
     def fade(self, widget):
         self.effect = QGraphicsOpacityEffect()
         widget.setGraphicsEffect(self.effect)
 
         self.animation = QPropertyAnimation(self.effect, b"opacity")
-        self.animation.setDuration(2000)
+        self.animation.setDuration(3000)
         self.animation.setStartValue(0)
         self.animation.setEndValue(1)
         self.animation.start()
@@ -324,7 +338,6 @@ class LinkSaver(QMainWindow):
         else:
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
 
-
     def progress_hook(self, d):
         if d['status'] == 'downloading':
             total_bytes = d.get('total_bytes') or d.get('total_bytes_estimate')
@@ -364,10 +377,6 @@ class LinkSaver(QMainWindow):
 
         dialog.setLayout(layout)
         dialog.exec()
-
-    def show_image_in_messagebox(self, thumbnail_path):
-        self.image_window = ImageWindow(thumbnail_path)
-        self.image_window.show()
 
     def save_link(self, title):
         link = self.line_edit.text()
