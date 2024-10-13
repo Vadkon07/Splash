@@ -85,7 +85,7 @@ This project is licensed under the [MIT License](./LICENSE).
 ## To-Do for version 2.0
 
 - [x] **Make compatible with other popular social media:** Instagram, Twitter, etc. Add possibility just to download posts or audio from them. Make this app universal!
-- [ ] **Change requirements.txt:** It doesn't include all packages which should be installed. We have to solve it!
+- [x] **Change requirements.txt:** It doesn't include all packages which should be installed. We have to solve it!
 - [x] **Make code more readable:** It will be better to reorganise defs and add/remove spaces in code.
 - [ ] **Get a bigger group of developers:** At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection.
 - [x] **Hide custom menu:** Menu bar takes some place, and to get more free space in our app it will be nice to add an arrow which will hide/show this menu. UPDATED: Hm, it's better just to make it for a little smaller.
