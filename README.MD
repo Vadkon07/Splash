@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Splash_Logo.png" alt="App Logo"/>
+  <img src="Splash_Logo_S.png" alt="App Logo"/>
 </p>
 
 <p align="center">
