@@ -17,15 +17,16 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.2.0"
-update_description = "Improved sound button, Optimisation of Code, Added Resources Monitor (dev), etc" # Always edit after adding any changes
+app_version = "1.3.0"
+update_description = "Added sound themes, Optimisation of Code, Bug Fix, etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
 
 class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.load_theme()
+        self.load_theme() # Load saved theme from app.json
+        self.load_sound() # Load saved sound theme from app.json
 
         self.sound_action = None
 
@@ -60,7 +61,7 @@ class MainMenu(QMainWindow):
         self.theme_menu = self.custom_menu_bar.addMenu("Theme")
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
         
-        if dev_mode == 1: self.dev_menu = self.custom_menu_bar.addMenu("DEV")
+        if dev_mode == 1: self.dev_menu = self.custom_menu_bar.addMenu("DEV") # This menu will be visible only if you turn on a dev mode. You can do it in the beggining of this code
 
         font = self.custom_menu_bar.font()
         font.setPointSize(8)
@@ -77,6 +78,9 @@ class MainMenu(QMainWindow):
         self.add_action(self.theme_menu, "Change theme to purple", self.change_theme_purple)
 
         self.sound_action = self.add_action(self.settings_menu, f"{self.sound_status} Sound", self.sound_change)
+        self.add_action(self.settings_menu, "Change sound theme to Purity", self.set_sound_purity) #FIX
+        self.add_action(self.settings_menu, "Change sound theme to Sytrus", self.set_sound_sytrus) #FIX
+
         self.add_action(self.help_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
         self.add_action(self.help_menu, "Help", self.open_help)
@@ -111,7 +115,7 @@ class MainMenu(QMainWindow):
         with open ('app.json', 'r') as file:
             data = json.load(file)
 
-        if data.get('update_installed'):
+        if data.get('update_installed'): # Notificate user about installed updated. Shows once!
             QMessageBox.information(self, "New Update!", f"New Update installed! Current version is {app_version}. We added: {update_description}.")
             data['update_installed'] = False
 
@@ -123,6 +127,30 @@ class MainMenu(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.check_sound_status)
         self.timer.start(1000)
+
+    def set_sound_purity(self):
+        QMessageBox.information(self, "Sound Theme Changed", "Sound theme is changed to Purity")
+
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+            data['downloaded_sound'] = "./downloaded_purity.mp3"
+
+        with open('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
+        self.load_sound()
+
+    def set_sound_sytrus(self):
+        QMessageBox.information(self, "Sound Theme Changed", "Sound theme is changed to Sytrus")
+
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+            data['downloaded_sound'] = "./downloaded_sytrus.mp3"
+
+        with open('app.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
+        self.load_sound()
 
     def sound_check(self):
         with open ('app.json', 'r') as file:
@@ -155,7 +183,7 @@ class MainMenu(QMainWindow):
 
         self.update_sound_action_text()
 
-    def play_downloaded_sound(self):
+    def play_downloaded_sound(self): # Play sound of downloaded file
         with open ('app.json', 'r') as fl:
             sound_setting = json.load(fl)
 
@@ -164,7 +192,22 @@ class MainMenu(QMainWindow):
         else:
             print("Sound disabled")
 
-    def sound_change(self, sound_status):
+    def load_sound(self): # Load sound theme
+        mixer.init()
+        with open('app.json', 'r') as file:
+            data = json.load(file)
+
+        sound_file = data.get('downloaded_sound')
+        if sound_file:
+            try:
+                mixer.music.load(sound_file) #(sound_file)
+                print(f"Using 'downloaded' notification sound: {sound_file}")
+            except Exception as e:
+                print(f"Error loading sound: {e}")
+        else:
+            print("Sound not found, error. Please, try to solve this problem and set a sound, because it can cause errors and the app will be closed!")
+
+    def sound_change(self, sound_status): # Change sound setting (turn on-off)
         with open ('app.json', 'r') as file:
             data = json.load(file)
 
@@ -184,7 +227,7 @@ class MainMenu(QMainWindow):
 
         print(self.sound_status)
 
-    def fade(self, widget):
+    def fade(self, widget): # Small animation
         self.effect = QGraphicsOpacityEffect()
         widget.setGraphicsEffect(self.effect)
 
@@ -210,7 +253,7 @@ class MainMenu(QMainWindow):
         filtered_lines = [line for line in lines if word_fetch in line]
         return filtered_lines
 
-    def new_update_notif(self):
+    def new_update_notif(self): # If update is found, this window will be shown to user
         dialog = QDialog(self)
         dialog.setWindowTitle("Update Found")
 
@@ -233,13 +276,13 @@ class MainMenu(QMainWindow):
         dialog.setLayout(layout)
         dialog.exec()
 
-    def add_action(self, menu, name, slot):
+    def add_action(self, menu, name, slot): # It will make creation of QAction easier and faster
         action = QAction(name, self)
         action.triggered.connect(slot)
         menu.addAction(action)
         return action
 
-    def update_from_git(self):
+    def update_from_git(self): # Clone repository from GitHub. This code can be optimised with argv to make it more flexible and universal
         try:
             repo_url = "https://github.com/Vadkon07/Splash"
 
@@ -254,13 +297,10 @@ class MainMenu(QMainWindow):
     def maximize_window(self):
         self.showMaximized()
 
-    def open_preferences(self):
-        QMessageBox.information(self, "Preferences", "Preferences dialog (not implemented).")
-
     def about_project(self):
         QMessageBox.information(self, "About", "Best portable app to download your favorite media content from literally any popular social media! You can download content (from YouTube, X, Soundcloud etc) in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find her thumbnail in a folder where you ran our application.")
 
-    def open_github(self):
+    def open_github(self): # Open our GitHub repository in browser
         github_link = "https://github.com/Vadkon07/Splash"
 
         dialog = QDialog(self)
@@ -287,7 +327,7 @@ class MainMenu(QMainWindow):
     def open_documentation(self):
         webbrowser.open('https://github.com/Vadkon07/Splash/blob/master/README.MD')
 
-    def go_main_menu(self):
+    def go_main_menu(self): # Go back to the main menu. It will literally restart app, so it's useful if something goes wrong
         QApplication.closeAllWindows()
 
         self.window_main = LinkSaver()
@@ -369,34 +409,6 @@ class MainMenu(QMainWindow):
 
     def exit_app(self):
         sys.exit()
-
-        # Convert Markdown to HTML
-        html_text = markdown.markdown(markdown_text)
-
-        # Create a custom dialog
-        dialog = QDialog(self)
-        dialog.setWindowTitle("Help Documentation")
-        dialog.setFixedSize(600, 350)  # Adjust the size as needed
-
-        # Create a QTextBrowser for displaying the HTML content
-        text_browser = QTextBrowser(dialog)
-        text_browser.setHtml(html_text)
-        text_browser.setOpenExternalLinks(True)  # Allow opening links in the browser
-
-        # Add a close button
-        close_button = QPushButton("Close", dialog)
-        close_button.clicked.connect(dialog.accept)  # Close the dialog
-
-        # Layout setup
-        layout = QVBoxLayout(dialog)
-        layout.addWidget(text_browser)
-        layout.addWidget(close_button, alignment=Qt.AlignmentFlag.AlignCenter)  # Center the button horizontally
-
-        layout.setContentsMargins(10, 10, 10, 10)  # Add some margin to the layout for aesthetics
-        layout.setSpacing(10)  # Add some spacing between the text and button
-
-        dialog.setLayout(layout)
-        dialog.exec()
 
     def save_link(self, title):
         link = self.line_edit.text()
@@ -678,9 +690,6 @@ class MainMenu(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-
-    mixer.init()
-    mixer.music.load('./downloaded.mp3')
 
     custom_stylesheet_black = """
     QWidget {
