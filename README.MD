@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/LICENSE-MIT-green"/>
 </p>
 
-# Splash
+# ***Splash***
 
 This GUI application allows you to download **images**, **videos** or **audio** from a lot of social media or any website at all quickly and easily. While many websites offer similar services, they often take more time and include ads. With **Splash**, you can download content directly from litearlly any popular social media, saving both time and hassle! I (Vadim Kondratov, nice to meet you!) personally use it for my beatmaking hobby, because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies.
 
