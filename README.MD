@@ -31,6 +31,9 @@ You can download videos in any quality, from 144p and up to 4k!
 14. **Resources Monitor:** You can always know how busy your PC is. By this monitor you can read how many percent of your RAM or CPU power are filled, and by it you can understand what caused slow conversion or download. Engine of this app I copied from another my project [EasyBench](https://github.com/Vadkon07/EasyBench).
 15. **Compatible with old computers:** It should work fine even if you have a very old computer. I own a very old laptop with AMD E-300 processor, so I always care about people which are in the same situaiton with me.
 
+> [!WARNING]
+> I develop this app only on my Linux laptop, so I can't give to you any warranties that it will work the same on Windows. Maybe it can have some weird things in GUI, so if you will notice any bugs, please - send me an email with screenshot(s).
+
 ## Prerequisites
 
 Before running the script, make sure you have the following installed:
@@ -49,6 +52,9 @@ Here's **recommended** PC specifications:
 - **CPU:** Intel Pentium 4 or higher
 - **GPU:** Just to download audio you don't need GPU, but to do some conversions of **10 minute 1080p** video from one format to another it will be enough something in a kind of Intel UHD630. For **1 hour+ 4k** video processing of course it's better to have a powerful external GPU.
 - **Storage:** 500MB (app itself and her packages)
+
+> [!IMPORTANT]
+> You can download whatever you need even on a Pentium 3, but keep in your mind that it will take much more time than on a pretty cheap Intel Core i3 2-3'th Gen,
 
 ## How to use
 
@@ -81,19 +87,21 @@ Here's **recommended** PC specifications:
 
 ## License
 
-This project is licensed under the [MIT License](./LICENSE).
+> This project is licensed under the [MIT License](./LICENSE).
 
 ## To-Do to release version 2.0
 
 - [x] **Make compatible with other popular social media:** Instagram, Twitter, etc. Add possibility just to download posts or audio from them. Make this app universal!
 - [x] **Change requirements.txt:** It doesn't include all packages which should be installed. We have to solve it!
 - [x] **Make code more readable:** It will be better to reorganise defs and add/remove spaces in code.
-- [ ] **Get a bigger group of developers:** At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection.
 - [x] **Hide custom menu:** Menu bar takes some place, and to get more free space in our app it will be nice to add an arrow which will hide/show this menu. UPDATED: Hm, it's better just to make it for a little smaller.
 - [x] **Add resources monitor:** I have a nice project named **EasyBench**, which was created to benchmark your computer. I think that I can copy from his code some things as CPU, RAM, GPU resource monitors and integrate them inside VideoXYZ. It will show usage of computer's resources while using VideoXYZ in terminal or another window, to make it easier for user to understand how busy his computer is. Also I will add possibility to turn it ON or OFF in DEV menu. NOTE: Now it has only RAM and CPU monitor, but we also have to add one monitor for GPU. Also it doens't work in background, and it also should be solver.
 - [x] **Better Thumbnail Window:** For now it just open thumbnail in a new window, but what if instead it will show small thumbnail near "Choose a format"?
 - [x] **Sound ON/OFF:** Replace it with 'Enable Sound' and 'Disable Sound'. It should read this setting from json and set a needed text. Like, it's already added, but doens't work.
-- [ ] **More sounds + setting for them:** It will be nice to add something in a kind of themes for sounds, and also make it possible to change them.
+- [x] **More sounds + settings for them:** It will be nice to add something in a kind of themes for sounds, and also make it possible to change them.
+
+> [!NOTE]
+> At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-This README was last updated on **October 16, 2024** for version **v1.2.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **October 16, 2024** for version **v1.3.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
