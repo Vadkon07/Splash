@@ -17,8 +17,8 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.3.0"
-update_description = "Added sound themes, Optimisation of Code, Bug Fix, etc" # Always edit after adding any changes
+app_version = "1.4.0"
+update_description = "Added Search History + cleaning of her, Added Multiple Downloads, Better README, Optimisation of Code, Bug Fix, etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
 
 class MainMenu(QMainWindow):
@@ -68,6 +68,8 @@ class MainMenu(QMainWindow):
         self.custom_menu_bar.setFont(font)
 
         self.add_action(self.main_menu, "Go to the main menu", self.go_main_menu)
+        self.add_action(self.main_menu, "Run new window (multiple downloads)", self.new_main_menu)
+
         self.add_action(self.window_menu, "Minimize", self.minimize_window)
         self.add_action(self.window_menu, "Maximize", self.maximize_window)
 
@@ -78,8 +80,10 @@ class MainMenu(QMainWindow):
         self.add_action(self.theme_menu, "Change theme to purple", self.change_theme_purple)
 
         self.sound_action = self.add_action(self.settings_menu, f"{self.sound_status} Sound", self.sound_change)
-        self.add_action(self.settings_menu, "Change sound theme to Purity", self.set_sound_purity) #FIX
-        self.add_action(self.settings_menu, "Change sound theme to Sytrus", self.set_sound_sytrus) #FIX
+        self.add_action(self.settings_menu, "Change sound theme to Purity", self.set_sound_purity)
+        self.add_action(self.settings_menu, "Change sound theme to Sytrus", self.set_sound_sytrus)
+        self.add_action(self.settings_menu, "Show Search History", self.show_history)
+        self.add_action(self.settings_menu, "Clean History", self.clean_history)
 
         self.add_action(self.help_menu, "About", self.about_project)
         self.add_action(self.contribute_menu, "GitHub", self.open_github)
@@ -122,11 +126,11 @@ class MainMenu(QMainWindow):
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
 
-        self.check_updates()
-
         self.timer = QTimer()
         self.timer.timeout.connect(self.check_sound_status)
         self.timer.start(1000)
+
+        self.check_updates()
 
     def set_sound_purity(self):
         QMessageBox.information(self, "Sound Theme Changed", "Sound theme is changed to Purity")
@@ -327,10 +331,14 @@ class MainMenu(QMainWindow):
     def open_documentation(self):
         webbrowser.open('https://github.com/Vadkon07/Splash/blob/master/README.MD')
 
+    def new_main_menu(self):
+        self.window_main = MainMenu()
+        self.window_main.show()
+
     def go_main_menu(self): # Go back to the main menu. It will literally restart app, so it's useful if something goes wrong
         QApplication.closeAllWindows()
 
-        self.window_main = LinkSaver()
+        self.window_main = MainMenu()
         self.window_main.show()
 
     def change_theme_black(self):
@@ -416,7 +424,7 @@ class MainMenu(QMainWindow):
         if link:
             self.saved_link = link
             QMessageBox.information(self, "Link Saved", f"Link saved: {link}. Now you have to wait some time...")
-        
+
             try:
                 with yt_dlp.YoutubeDL({'quiet': False}) as ydl:
                     info_dict = ydl.extract_info(link, download=False)
@@ -442,7 +450,15 @@ class MainMenu(QMainWindow):
                         else:
                             QMessageBox.information(self, "Content found", f"\nContent which we found: {title}")
                             self.print_error("Failed to retrieve thumbnail URL (Note that it's normal for playlists, it's not an error)")
-                            
+                        with open ('history.json', 'r') as file:
+                            data = json.load(file)
+                        
+                        next_key = f"history_{len(data)}"
+                        data[next_key] = title
+
+                        with open('history.json', 'w') as file:
+                            json.dump(data, file, indent=4)
+
             except Exception as e:
                 self.print_error(f"Failed to retrieve information. Error description: {e}. Check your intetnet connection and be sure that you entered a valid link.")
                 return
@@ -475,16 +491,20 @@ class MainMenu(QMainWindow):
         self.main_layout.addWidget(self.widgetF)
 
         self.button1 = QPushButton("MP3 (Best only)", self)
+        self.button1_1 = QPushButton("WAV", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("Both MP3 + MP4", self)
         self.button4 = QPushButton("WEBM", self)
 
         self.button1.setFixedSize(100,25)
+        self.button1_1.setFixedSize(100,25)
+
         self.button2.setFixedSize(100,25)
         self.button3.setFixedSize(100,25)
         self.button4.setFixedSize(100,25)
 
         self.button_layout.addWidget(self.button1, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.button_layout.addWidget(self.button1_1, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button2, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button3, alignment=Qt.AlignmentFlag.AlignCenter)
         self.button_layout.addWidget(self.button4, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -494,6 +514,7 @@ class MainMenu(QMainWindow):
         quality_format = None
 
         self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
+        self.button1_1.clicked.connect(lambda: self.choosed_wav(link, title))
         self.button2.clicked.connect(lambda: self.choose_quality(link))
         self.button3.clicked.connect(lambda: self.choosed_both(link, quality_format, title))
         self.button4.clicked.connect(lambda: self.choosed_webm(link))
@@ -502,6 +523,7 @@ class MainMenu(QMainWindow):
         self.quality_layout = QHBoxLayout()
 
         self.button1.hide()
+        self.button1_1.hide()
         self.button2.hide()
         self.button3.hide()
         self.button4.hide()
@@ -622,6 +644,45 @@ class MainMenu(QMainWindow):
 
         self.progress_bar.hide()
 
+    def choosed_wav(self, link, title):
+        ydl_opts = {
+            'progress_hooks': [self.progress_hook],
+            'format': 'bestaudio',
+            'outtmpl': os.path.join('WAV', '%(title)s.%(ext)s'),
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'WAV',
+            }],
+            'quiet': False,
+        }
+
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+
+                ydl.download([link])
+                
+                self.widget = QLabel(f"Downloaded {title} in MP3 format!")
+                self.play_downloaded_sound()
+                font = self.widget.font()
+                font.setPointSize(12)
+                self.widget.setFont(font)
+                self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 
+                self.main_layout.addWidget(self.widget)
+
+        except Exception as e:
+            self.print_error(f"Failed to download the video: {e}")
+
+        self.progress_bar.hide()
+
+
     def choosed_mp4(self, quality_format, link):
         ydl_opts = {
         'progress_hooks': [self.progress_hook],
@@ -684,9 +745,26 @@ class MainMenu(QMainWindow):
 
         self.show_buttons(link)
 
-
     def print_error(self, message):
         print(f"Error message: {message}")
+
+    def show_history(self):
+        try:
+            with open('history.json', 'r') as file:
+                history = json.load(file)
+
+            formatted_history = "\n".join([f"{key}: {value}" for key, value in history.items()])
+            QMessageBox.information(self, "History", f"History:\n{formatted_history}")
+
+        except Exception as e:
+            QMessageBox.information(self, "Error", f"Failed to load history: {e}")
+
+    def clean_history(self):
+        with open('history.json', 'w') as file:
+            json.dump({}, file, indent=4)
+
+        QMessageBox.information(self, "History Cleaning", "History cleaned!")
+        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

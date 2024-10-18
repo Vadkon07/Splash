@@ -14,6 +14,12 @@ You can download videos in any quality, from 144p and up to 4k!
 
 **You downloaded some music with Splash and want to listen to her? Try to do it in our another project [Style Music Player](https://github.com/Vadkon07/Style_Music_Player)!**
 
+## **Why I should install Splash instead of just using online downloaders?**
+
+In ***Splash*** you will always have the best quality of downloaded files, while literally every second online converter do something in a kind of compression or just doesn't show to you the best quality download option, and it will reduce quality of file. Splash doesn't do it, so he will give to you the highest available quality always. Also in Splash you have a lot of different settings, which will significanlty improve your experience with app.
+
+This app download a file from internet and then works a lot on his conversion. So it's not just a downloader, it's also a converter.
+
 ## Features
 1. **Ad-free:** Enjoy a seamless experience without interruptions.
 2. **No API Needed:** Download directly without the need for any API keys or extra configuration. Clone and run!
@@ -30,18 +36,37 @@ You can download videos in any quality, from 144p and up to 4k!
 13. **Notifications:** We will send to you a notification if it will be available a newer version of this app. If you decided to download a 5-hour 4K video of dancing cats from YouTube, it can take pretty a lot of time. And in order to make you free from waiting and checking your screen every 3 seconds I added in this app a notification sound, which will notificate you about completed downloading in the end. Don't forget to turn on a sound on your computer and inside app's settings!
 14. **Resources Monitor:** You can always know how busy your PC is. By this monitor you can read how many percent of your RAM or CPU power are filled, and by it you can understand what caused slow conversion or download. Engine of this app I copied from another my project [EasyBench](https://github.com/Vadkon07/EasyBench).
 15. **Compatible with old computers:** It should work fine even if you have a very old computer. I own a very old laptop with AMD E-300 processor, so I always care about people which are in the same situaiton with me.
+16. **Search History (BETA):** After each search app saves your video/audio which she found inside her database, and then in **Settings** menu you can check and clean (soon) history.
+17. **Multiple Downloads:** In **Main** you can run also another window (or even thousands of them), and by it you can download a lot of files in one time. It's useful if you want to download two or more different files in one moment, but probably it will use your CPU more and also split your internet on two tasks.
 
 > [!WARNING]
 > I develop this app only on my Linux laptop, so I can't give to you any warranties that it will work the same on Windows. Maybe it can have some weird things in GUI, so if you will notice any bugs, please - send me an email with screenshot(s).
 
 ## Prerequisites
 
-Before running the script, make sure you have the following installed:
+Before running the app, make sure you have the following installed:
 
 - **ffmpeg:** Ensure ffmpeg is installed on your machine for video/audio processing.
-- **PyQt6, yt_dlp, pyqtdarktheme:** To install run `pip install -r requirements.txt`.
+- **PyQt6, yt_dlp, pyqtdarktheme:** The most important things here! GUI and engine.
 - **Pygame:** We use him for sounds.
 - **Psutil:** Necessary for Resources Monitor.
+
+## How to install ***Splash***
+
+1. Clone this repository:
+
+> git clone https://github.com/Vadkon07/Splash
+
+2. Open directory with installed repository and install requirements:
+
+> pip install -r requirements.txt
+
+> [!NOTE]
+> Once I was trying to install this app on Windows, but I got some errors which told me to install **Visual C++ 14**, so you will also have to do it if you are a Windows user.
+
+3. Run app:
+
+> python main.py
 
 ## PC Requirements
 
@@ -99,9 +124,27 @@ Here's **recommended** PC specifications:
 - [x] **Better Thumbnail Window:** For now it just open thumbnail in a new window, but what if instead it will show small thumbnail near "Choose a format"?
 - [x] **Sound ON/OFF:** Replace it with 'Enable Sound' and 'Disable Sound'. It should read this setting from json and set a needed text. Like, it's already added, but doens't work.
 - [x] **More sounds + settings for them:** It will be nice to add something in a kind of themes for sounds, and also make it possible to change them.
+- [ ] **Make repository more organised:** Sort files in public, src, etc.
+
+## FAQ
+
+**Q:** How much time it will take to install this app?
+**A:** You just clone repository and then run 'pip install -r requirements.txt', and then everything depends from your internet connection. For me it took less than 5 minutes on my pretty old laptop.
+
+**Q:** Is there any kind of tracking of me when I use this app?
+**A:** No, we just don't need it.
+
+**Q:** Is this app is free to use?
+**A:** Yes, this app is fully free and you will never need to pay to use her.
+
+**Q:** How can I help developers of this app?
+**A:** You have a lot of different ways to do it. At first the best help for us it's just to help us with development (bug fixes, new ideas, etc), but also you can help our developers with donations (open profile of a very active developer of this app and find a donation link)
+
+**Q:** What if I got some errors while using the app and can't solve it?
+**A:** Open new issue and our community will try to help you. At all at first try just to reinstall this app.
 
 > [!NOTE]
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **October 16, 2024** for version **v1.3.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **October 18, 2024** for version **v1.4.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
