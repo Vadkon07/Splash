@@ -6,7 +6,6 @@ pygame
 beautifulsoup4
 requests
 lxml
-multiprocessing
 psutil
 GPUtil
 pyamdgpuinfo

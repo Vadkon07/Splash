@@ -12,7 +12,7 @@ This GUI application allows you to download **images**, **videos** or **audio** 
 
 You can download videos in any quality, from 144p and up to 4k!
 
-**You downloaded some music with Splash and want to listen to her? Try to do it in our another project [Style Music Player](https://github.com/Vadkon07/Style_Music_Player)!**
+**You downloaded some music with** ***Splash*** **and want to listen to her? Try to do it in our another project named [Style Music Player](https://github.com/Vadkon07/Style_Music_Player)!**
 
 ## **Why I should install Splash instead of just using online downloaders?**
 
@@ -79,7 +79,7 @@ Here's **recommended** PC specifications:
 - **Storage:** 500MB (app itself and her packages)
 
 > [!IMPORTANT]
-> You can download whatever you need even on a Pentium 3, but keep in your mind that it will take much more time than on a pretty cheap Intel Core i3 2-3'th Gen,
+> You can download whatever you need even on a Pentium 3, but keep in your mind that it will take much more time than on a pretty cheap Intel Core i3 2-3'th Gen.
 
 ## How to use
 
@@ -87,6 +87,7 @@ Here's **recommended** PC specifications:
 2. Paste the link to your YouTube video when prompted.
 3. Choose your download option:
 - Click '**MP3**' to download audio (MP3):
+- Click '**WAV**' to download audio (WAV):
 - Click '**MP4**' to download video (MP4)
     - Select a video quality preset:
         - **Worst** for worst quality (nice for old computer and slow internet)
@@ -94,7 +95,7 @@ Here's **recommended** PC specifications:
         - **720p** for 720p resolution
         - **Best** for the best quality (usually 1080p or 4k)
 - Click '**Both**' to download both audio and video
-- Click '**webm**' to download a video in webm format
+- Click '**webm**' to download a video/audio in webm format
 
 4. The script will process and download the file(s) in your **(!) currently choosed directory** according to your choices.
 
@@ -125,6 +126,7 @@ Here's **recommended** PC specifications:
 - [x] **Sound ON/OFF:** Replace it with 'Enable Sound' and 'Disable Sound'. It should read this setting from json and set a needed text. Like, it's already added, but doens't work.
 - [x] **More sounds + settings for them:** It will be nice to add something in a kind of themes for sounds, and also make it possible to change them.
 - [ ] **Make repository more organised:** Sort files in public, src, etc.
+- [ ] **More formats:** as AAC etc.
 
 ## FAQ
 
@@ -147,4 +149,4 @@ Here's **recommended** PC specifications:
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **October 18, 2024** for version **v1.4.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **October 20, 2024** for version **v1.4.1**. All new things added in app afer this date + version are **NOT** described/mentioned here.

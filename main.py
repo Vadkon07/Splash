@@ -17,8 +17,8 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.4.0"
-update_description = "Added Search History + cleaning of her, Added Multiple Downloads, Better README, Optimisation of Code, Bug Fix, etc" # Always edit after adding any changes
+app_version = "1.4.1"
+update_description = "Better README, Optimisation of Code, Improved GUI, Bug Fix, etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
 
 class MainMenu(QMainWindow):
@@ -42,7 +42,7 @@ class MainMenu(QMainWindow):
             json.dump(data, file, indent=4)
 
         self.setWindowTitle(f"Splash {app_version}")
-        self.setGeometry(100, 100, 405, 200)
+        self.setGeometry(100, 100, 600, 300)
 
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
@@ -490,10 +490,10 @@ class MainMenu(QMainWindow):
         self.widgetF.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widgetF)
 
-        self.button1 = QPushButton("MP3 (Best only)", self)
+        self.button1 = QPushButton("MP3", self)
         self.button1_1 = QPushButton("WAV", self)
         self.button2 = QPushButton("MP4", self)
-        self.button3 = QPushButton("Both MP3 + MP4", self)
+        self.button3 = QPushButton("MP3 + MP4", self)
         self.button4 = QPushButton("WEBM", self)
 
         self.button1.setFixedSize(100,25)
