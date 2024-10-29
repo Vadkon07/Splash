@@ -17,9 +17,9 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.4.1"
-update_description = "Better README, Optimisation of Code, Improved GUI, Bug Fix, etc" # Always edit after adding any changes
-dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set 0!
+app_version = "1.5.0"
+update_description = "Better README, Optimisation of Code, Improved Updates System, Bug Fix, etc" # Always edit after adding any changes
+dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set back to 0!
 
 class MainMenu(QMainWindow):
     def __init__(self):
@@ -246,9 +246,10 @@ class MainMenu(QMainWindow):
         current_version = app_version
 
         lines_with_word = self.fetch_lines_with_word(url_fetch, current_version)
+        new_version = self.fetch_new_version(url_fetch)
 
         if not lines_with_word:
-            self.new_update_notif()
+            self.new_update_notif(new_version)
 
     def fetch_lines_with_word(self, url_fetch, word_fetch):
         response = requests.get(url_fetch)
@@ -257,14 +258,20 @@ class MainMenu(QMainWindow):
         filtered_lines = [line for line in lines if word_fetch in line]
         return filtered_lines
 
-    def new_update_notif(self): # If update is found, this window will be shown to user
+    def fetch_new_version(self, url_fetch):
+        response = requests.get(url_fetch)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        print("New version found: ", soup)
+        return soup
+
+    def new_update_notif(self, new_version): # If update is found, this window will be shown to user
         dialog = QDialog(self)
         dialog.setWindowTitle("Update Found")
 
         # Create a QTextBrowser for displaying the HTML content
         text_browser = QTextBrowser(dialog)
         text_browser.setOpenExternalLinks(True)
-        text_browser.setHtml(f'<p>New update was found! Do you want to update this app (git should be installed)? Or you can do it manually by visiting our <a href="https://github.com/Vadkon07/Splash">GitHub page</a></p>')
+        text_browser.setHtml(f'<p>New update was found! Do you want to update this app (git should be installed) from version {app_version} to {new_version}? Or you can do it manually by visiting our <a href="https://github.com/Vadkon07/Splash">GitHub page</a></p>')
 
         update_button = QPushButton("Update", dialog)
         update_button.clicked.connect(self.update_from_git)
@@ -633,7 +640,14 @@ class MainMenu(QMainWindow):
                 
                 self.widget = QLabel(f"Downloaded {title} in MP3 format!")
                 self.play_downloaded_sound()
-                font = self.widget.font()
+    window = MainMenu()
+             ^^^^^^^^^^
+  File "/home/user/Coding_Projects/Splash/main.py", line 133, in __init__
+    self.check_updates()
+  File "/home/user/Coding_Projects/Splash/main.py", line 252, in check_updates
+    self.new_update_notif(new_version)
+TypeError: MainMenu.new_update_notif() takes 1 positional argument but 2 were given
+user@user-pc:~/Coding_Projects/Splash$ vim main.py C                font = self.widget.font()
                 font.setPointSize(12)
                 self.widget.setFont(font)
                 self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 

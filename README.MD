@@ -149,4 +149,4 @@ Here's **recommended** PC specifications:
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **October 20, 2024** for version **v1.4.1**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **October 29, 2024** for version **v1.5.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
