@@ -38,6 +38,7 @@ This app download a file from internet and then works a lot on his conversion. S
 15. **Compatible with old computers:** It should work fine even if you have a very old computer. I own a very old laptop with AMD E-300 processor, so I always care about people which are in the same situaiton with me.
 16. **Search History (BETA):** After each search app saves your video/audio which she found inside her database, and then in **Settings** menu you can check and clean (soon) history.
 17. **Multiple Downloads:** In **Main** you can run also another window (or even thousands of them), and by it you can download a lot of files in one time. It's useful if you want to download two or more different files in one moment, but probably it will use your CPU more and also split your internet on two tasks.
+18. **A lot of formats:** For each type of file (video, audio) we added possibility to choose one of the most popular formats. It can be useful if you, for example like to listen to music in your car, but she can't play .wav and .mp3 it's the only one format which seh can play. Here our app will help.
 
 > [!WARNING]
 > I develop this app only on my Linux laptop, so I can't give to you any warranties that it will work the same on Windows. Maybe it can have some weird things in GUI, so if you will notice any bugs, please - send me an email with screenshot(s).
@@ -149,4 +150,4 @@ Here's **recommended** PC specifications:
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **October 29, 2024** for version **v1.5.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **November 4, 2024** for version **v1.5.1**. All new things added in app afer this date + version are **NOT** described/mentioned here.
