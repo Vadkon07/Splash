@@ -17,8 +17,8 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.5.0"
-update_description = "Better README, Optimisation of Code, Improved Updates System, Bug Fix, etc" # Always edit after adding any changes
+app_version = "1.5.1"
+update_description = "Bug Fix, etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set back to 0!
 
 class MainMenu(QMainWindow):
@@ -640,14 +640,7 @@ class MainMenu(QMainWindow):
                 
                 self.widget = QLabel(f"Downloaded {title} in MP3 format!")
                 self.play_downloaded_sound()
-    window = MainMenu()
-             ^^^^^^^^^^
-  File "/home/user/Coding_Projects/Splash/main.py", line 133, in __init__
-    self.check_updates()
-  File "/home/user/Coding_Projects/Splash/main.py", line 252, in check_updates
-    self.new_update_notif(new_version)
-TypeError: MainMenu.new_update_notif() takes 1 positional argument but 2 were given
-user@user-pc:~/Coding_Projects/Splash$ vim main.py C                font = self.widget.font()
+                font = self.widget.font()
                 font.setPointSize(12)
                 self.widget.setFont(font)
                 self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter) 
