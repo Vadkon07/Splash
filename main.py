@@ -17,8 +17,8 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.6.0"
-update_description = "User friendly DEV menu, Bug Fix, Added Icon, AAC option, etc" # Always edit after adding any changes
+app_version = "1.6.1"
+update_description = "Fixed 'exit' button" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set back to 0!
 
 class MainMenu(QMainWindow):
@@ -432,7 +432,7 @@ class MainMenu(QMainWindow):
             self.progress_bar.setValue(100)
 
     def exit_app(self):
-        sys.exit()
+        exit()
 
     def save_link(self, title):
         link = self.line_edit.text()

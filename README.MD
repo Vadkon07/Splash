@@ -127,7 +127,7 @@ Here's **recommended** PC specifications:
 - [x] **Sound ON/OFF:** Replace it with 'Enable Sound' and 'Disable Sound'. It should read this setting from json and set a needed text. Like, it's already added, but doens't work.
 - [x] **More sounds + settings for them:** It will be nice to add something in a kind of themes for sounds, and also make it possible to change them.
 - [x] **More formats:** as AAC etc.
-- [ ] **Fix exit button in menu:** App can be closed by a button of your OS GUI, but this button which is inside our app likes to log out me from Ubuntu.
+- [x] **Fix exit button in menu:** App can be closed by a button of your OS GUI, but this button which is inside our app likes to log out me from Ubuntu.
 - [ ] **Custom formats:** Add a line to enter a format (like "mp4" etc) and app will look for this format and download a file in this format.
 
 ## FAQ
@@ -151,4 +151,4 @@ Here's **recommended** PC specifications:
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **November 11, 2024** for version **v1.6.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **November 11, 2024** for version **v1.6.1**. All new things added in app afer this date + version are **NOT** described/mentioned here.
