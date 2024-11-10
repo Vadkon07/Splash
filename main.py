@@ -6,7 +6,7 @@ import markdown
 import yt_dlp
 import time
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea, QProgressBar, QGraphicsOpacityEffect
-from PyQt6.QtGui import QAction, QImage, QPixmap
+from PyQt6.QtGui import QAction, QImage, QPixmap, QIcon
 from PyQt6.QtCore import QPropertyAnimation, Qt, QTimer
 import json
 import webbrowser
@@ -17,13 +17,15 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.5.1"
-update_description = "Bug Fix, etc" # Always edit after adding any changes
+app_version = "1.6.0"
+update_description = "User friendly DEV menu, Bug Fix, Added Icon, AAC option, etc" # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set back to 0!
 
 class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.setWindowIcon(QIcon('Splash_Icon.png'))
 
         self.load_theme() # Load saved theme from app.json
         self.load_sound() # Load saved sound theme from app.json
@@ -61,7 +63,8 @@ class MainMenu(QMainWindow):
         self.theme_menu = self.custom_menu_bar.addMenu("Theme")
         self.exit_menu = self.custom_menu_bar.addMenu("Exit")
         
-        if dev_mode == 1: self.dev_menu = self.custom_menu_bar.addMenu("DEV") # This menu will be visible only if you turn on a dev mode. You can do it in the beggining of this code
+        if dev_mode == 1:
+            self.dev_menu = self.custom_menu_bar.addMenu("DEV") # This menu will be visible only if you turn on a dev mode. You can do it in the beggining of this code
 
         font = self.custom_menu_bar.font()
         font.setPointSize(8)
@@ -91,7 +94,9 @@ class MainMenu(QMainWindow):
         self.add_action(self.help_menu, "Documentation", self.open_documentation)
         self.add_action(self.exit_menu, "Exit (Are you sure?)", self.exit_app)
 
-        if dev_mode == 1: self.add_action(self.dev_menu, "DEV",  dev.d_menu)
+        if dev_mode == 1:
+            self.add_action(self.dev_menu, "Reset Notifications", dev.reset_update_notif) 
+            self.add_action(self.dev_menu, "Resources Monitor", self.run_resources_monitor)
 
         self.widget = QLabel()
         pixmap = QPixmap("Splash_Logo_S.png")
@@ -131,6 +136,10 @@ class MainMenu(QMainWindow):
         self.timer.start(1000)
 
         self.check_updates()
+
+    def run_resources_monitor(self):
+        QMessageBox.information(self, "Resources Monitor", "Resources monitor was started in your command line interface. Please, run this app from CLI, otherwise you will not see resources monitor.")
+        dev.resources_monitor()
 
     def set_sound_purity(self):
         QMessageBox.information(self, "Sound Theme Changed", "Sound theme is changed to Purity")
@@ -479,7 +488,8 @@ class MainMenu(QMainWindow):
         self.line_edit.hide()
         self.ok_button.hide()
 
-        self.button_layout = QHBoxLayout()
+        self.audio_buttons_layout = QHBoxLayout()
+        self.video_buttons_layout = QHBoxLayout()
 
         self.label = QLabel()
         pixmap = QPixmap('thumbnail.webp')
@@ -499,29 +509,33 @@ class MainMenu(QMainWindow):
 
         self.button1 = QPushButton("MP3", self)
         self.button1_1 = QPushButton("WAV", self)
+        self.button1_2 = QPushButton("AAC (m4a)", self)
         self.button2 = QPushButton("MP4", self)
         self.button3 = QPushButton("MP3 + MP4", self)
         self.button4 = QPushButton("WEBM", self)
 
         self.button1.setFixedSize(100,25)
         self.button1_1.setFixedSize(100,25)
-
+        self.button1_2.setFixedSize(100,25)
         self.button2.setFixedSize(100,25)
         self.button3.setFixedSize(100,25)
         self.button4.setFixedSize(100,25)
 
-        self.button_layout.addWidget(self.button1, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.button_layout.addWidget(self.button1_1, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.button_layout.addWidget(self.button2, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.button_layout.addWidget(self.button3, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.button_layout.addWidget(self.button4, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.audio_buttons_layout.addWidget(self.button1, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.audio_buttons_layout.addWidget(self.button1_1, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.audio_buttons_layout.addWidget(self.button1_2, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.video_buttons_layout.addWidget(self.button2, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.video_buttons_layout.addWidget(self.button3, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.video_buttons_layout.addWidget(self.button4, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        self.main_layout.addLayout(self.button_layout)
+        self.main_layout.addLayout(self.audio_buttons_layout)
+        self.main_layout.addLayout(self.video_buttons_layout)
 
         quality_format = None
 
         self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
         self.button1_1.clicked.connect(lambda: self.choosed_wav(link, title))
+        self.button1_2.clicked.connect(lambda: self.choosed_aac(link, title))
         self.button2.clicked.connect(lambda: self.choose_quality(link))
         self.button3.clicked.connect(lambda: self.choosed_both(link, quality_format, title))
         self.button4.clicked.connect(lambda: self.choosed_webm(link))
@@ -689,6 +703,44 @@ class MainMenu(QMainWindow):
 
         self.progress_bar.hide()
 
+    def choosed_aac(self, link, title):
+        ydl_opts = {
+            'progress_hooks': [self.progress_hook],
+            'format': 'bestaudio',
+            'outtmpl': os.path.join('AAC', '%(title)s.%(ext)s'),
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'aac',
+                'preferredquality': '192',
+            }],
+            'quiet': False,
+        }
+
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+
+                ydl.download([link])
+
+                self.widget = QLabel(f"Downloaded {title} in AAC format!")
+                self.play_downloaded_sound()
+                font = self.widget.font()
+                font.setPointSize(12)
+                self.widget.setFont(font)
+                self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+                self.main_layout.addWidget(self.widget)
+
+        except Exception as e:
+            self.print_error(f"Failed to download the video: {e}")
+
+        self.progress_bar.hide()
 
     def choosed_mp4(self, quality_format, link):
         ydl_opts = {
@@ -775,6 +827,7 @@ class MainMenu(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon('Splash_Icon.png'))
 
     custom_stylesheet_black = """
     QWidget {

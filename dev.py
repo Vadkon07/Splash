@@ -5,18 +5,6 @@ import sys
 import time
 import multiprocessing
 
-def d_menu():
-    print("1. Reset update notification")
-    print("2. Resources Monitor")
-    var = input("Input your choice: ")
-
-    if var == '1':
-        reset_update_notif()
-        print("Settings were updated. In the next time when you will run this app, it will show update notification again.")
-
-    if var == '2':
-        resources_monitor()
-
 def reset_update_notif():
     with open ('app.json', 'r') as file:
         data = json.load(file)
@@ -24,6 +12,8 @@ def reset_update_notif():
 
     with open ('app.json', 'w') as file:
         json.dump(data, file, indent=4)
+
+    print("Settings were updated. In the next time when you will run this app, it will show update notification again.")
 
 def resources_monitor():
     print("Welcome to the Resources Monitor! Choose one of these tools:\n")
