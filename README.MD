@@ -8,7 +8,7 @@
 
 # ***Splash***
 
-This GUI application allows you to download **images**, **videos** or **audio** from a lot of social media or any website at all quickly and easily. While many websites offer similar services, they often take more time and include ads. With **Splash**, you can download content directly from litearlly any popular social media, saving both time and hassle! I (Vadim Kondratov, nice to meet you!) personally use it for my beatmaking hobby, because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies.
+This GUI application allows you to download **images**, **videos** or **audio** from a lot of social media or any website at all quickly and easily. While many websites offer similar services, they often take more time and include ads. With **Splash**, you can download content directly from litearlly any popular social media, saving both time and hassle! I personally use it for my beatmaking hobby, because it's very convenient and fast to download samples from **YouTube**, which I then use for creating melodies. The main feature of Splash that it's always up-to-date and with him you can download content in any format which you know, no limits!
 
 You can download videos in any quality, from 144p and up to 4k!
 
@@ -38,7 +38,7 @@ This app download a file from internet and then works a lot on his conversion. S
 15. **Compatible with old computers:** It should work fine even if you have a very old computer. I own a very old laptop with AMD E-300 processor, so I always care about people which are in the same situaiton with me.
 16. **Search History (BETA):** After each search app saves your video/audio which she found inside her database, and then in **Settings** menu you can check and clean (soon) history.
 17. **Multiple Downloads:** In **Main** you can run also another window (or even thousands of them), and by it you can download a lot of files in one time. It's useful if you want to download two or more different files in one moment, but probably it will use your CPU more and also split your internet on two tasks.
-18. **A lot of formats:** For each type of file (video, audio) we added possibility to choose one of the most popular formats. It can be useful if you, for example like to listen to music in your car, but she can't play .wav and .mp3 it's the only one format which seh can play. Here our app will help.
+18. **A lot of formats:** For each type of file (video, audio) we added possibility to choose one of the most popular formats. It can be useful if you, for example like to listen to music in your car, but she can't play .wav and .mp3 it's the only one format which seh can play. Here our app will help. Also in version 1.7.0 we added a feature which allows you to download a content in any format!
 
 > [!WARNING]
 > I develop this app only on my Linux laptop, so I can't give to you any warranties that it will work the same on Windows. Maybe it can have some weird things in GUI, so if you will notice any bugs, please - send me an email with screenshot(s).
@@ -85,8 +85,9 @@ Here's **recommended** PC specifications:
 ## How to use
 
 1. Run the script in your terminal or command prompt.
-2. Paste the link to your YouTube video when prompted.
+2. Paste the link to your content when prompted.
 3. Choose your download option:
+- Enter in line your prefer format and then click on a button 'Search'. App will try to find a format which you entered in line and download your file in this format.
 - Click '**MP3**' to download audio (MP3):
 - Click '**WAV**' to download audio (WAV):
 - Click '**MP4**' to download video (MP4)
@@ -98,7 +99,7 @@ Here's **recommended** PC specifications:
 - Click '**Both**' to download both audio and video
 - Click '**webm**' to download a video/audio in webm format
 
-4. The script will process and download the file(s) in your **(!) currently choosed directory** according to your choices.
+4. The script will process and download the file(s) in folders in one directory with your app according to your choices.
 
 ## How to read version of this app
 
@@ -112,10 +113,6 @@ Here's **recommended** PC specifications:
 
     1: Build number (if used)—that's why you see the .NET framework using something like 2.0.4.2709
 
-## License
-
-> This project is licensed under the [MIT License](./LICENSE).
-
 ## To-Do to release version 2.0
 
 - [x] **Make compatible with other popular social media:** Instagram, Twitter, etc. Add possibility just to download posts or audio from them. Make this app universal!
@@ -128,7 +125,9 @@ Here's **recommended** PC specifications:
 - [x] **More sounds + settings for them:** It will be nice to add something in a kind of themes for sounds, and also make it possible to change them.
 - [x] **More formats:** as AAC etc.
 - [x] **Fix exit button in menu:** App can be closed by a button of your OS GUI, but this button which is inside our app likes to log out me from Ubuntu.
-- [ ] **Custom formats:** Add a line to enter a format (like "mp4" etc) and app will look for this format and download a file in this format.
+- [x] **Custom formats:** Add a line to enter a format (like "mp4" etc) and app will look for this format and download a file in this format.
+- [ ] **Optimise code and fix all the bugs:** I know that it prints history like "'history_0': title", so it will be nice to fix it all. Also it will be nice ot make code more readable and optimised.
+- [ ] **Improve README:** Just add some screenshots of app.
 
 ## FAQ
 
@@ -142,13 +141,17 @@ Here's **recommended** PC specifications:
 **A:** Yes, this app is fully free and you will never need to pay to use her.
 
 **Q:** How can I help developers of this app?
-**A:** You have a lot of different ways to do it. At first the best help for us it's just to help us with development (bug fixes, new ideas, etc), but also you can help our developers with donations (open profile of a very active developer of this app and find a donation link)
+**A:** You have a lot of different ways to do it. At first the best help for us it's just to help us with development (bug fixes, new ideas, etc), but also you can help our developers with donations (open profile of a very active developer of this app and find a donation link.)
 
 **Q:** What if I got some errors while using the app and can't solve it?
-**A:** Open new issue and our community will try to help you. At all at first try just to reinstall this app.
+**A:** Open new issue and our community will try to help you. At all at first try just to reinstall this app. Also at first try to use Google or any another search engine and paste in search error which you got. Usually it will help you to solve your problem faster.
 
 > [!NOTE]
-> At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection. So, I'm always ready to start to work on this app together with you!
+> At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection and don't have a computer. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **November 11, 2024** for version **v1.6.1**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **November 13, 2024** for version **v1.7.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+
+## License
+
+> This project is licensed under the [MIT License](./LICENSE).

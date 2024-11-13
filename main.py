@@ -17,8 +17,8 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.6.1"
-update_description = "Fixed 'exit' button" # Always edit after adding any changes
+app_version = "1.7.0"
+update_description = "Better debug, Added internet connection checker and notifications, Fixed bugs, Custom format search, etc." # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set back to 0!
 
 class MainMenu(QMainWindow):
@@ -251,14 +251,19 @@ class MainMenu(QMainWindow):
         self.animation.start()
 
     def check_updates(self):
-        url_fetch = 'https://raw.githubusercontent.com/Vadkon07/VideoXYZ/refs/heads/master/ver.html'
-        current_version = app_version
+        try:
+            url_fetch = 'https://raw.githubusercontent.com/Vadkon07/VideoXYZ/refs/heads/master/ver.html'
+            current_version = app_version
 
-        lines_with_word = self.fetch_lines_with_word(url_fetch, current_version)
-        new_version = self.fetch_new_version(url_fetch)
+            lines_with_word = self.fetch_lines_with_word(url_fetch, current_version)
+            new_version = self.fetch_new_version(url_fetch)
 
-        if not lines_with_word:
-            self.new_update_notif(new_version)
+            if not lines_with_word:
+                self.new_update_notif(new_version)
+
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Please, check your internet connection: {e}.")
+            exit()
 
     def fetch_lines_with_word(self, url_fetch, word_fetch):
         response = requests.get(url_fetch)
@@ -270,7 +275,7 @@ class MainMenu(QMainWindow):
     def fetch_new_version(self, url_fetch):
         response = requests.get(url_fetch)
         soup = BeautifulSoup(response.text, 'html.parser')
-        print("New version found: ", soup)
+        print("The latest version found on GitHub: ", soup)
         return soup
 
     def new_update_notif(self, new_version): # If update is found, this window will be shown to user
@@ -341,13 +346,13 @@ class MainMenu(QMainWindow):
         dialog.setLayout(layout)
         dialog.exec()
 
-    def open_help(self):
+    def open_help(self): # Will open a issues page in your web browser
         webbrowser.open('https://github.com/Vadkon07/Splash/issues')
 
-    def open_documentation(self):
+    def open_documentation(self): # Will open a README page of this app on GitHub
         webbrowser.open('https://github.com/Vadkon07/Splash/blob/master/README.MD')
 
-    def new_main_menu(self):
+    def new_main_menu(self): # Allows you download multiple files in one moment, by opening new windows for downloads
         self.window_main = MainMenu()
         self.window_main.show()
 
@@ -357,7 +362,9 @@ class MainMenu(QMainWindow):
         self.window_main = MainMenu()
         self.window_main.show()
 
-    def change_theme_black(self):
+    ### CHANGE THEME SECTION ###
+
+    def change_theme_black(self): # Will change a theme to black and set it as default. Below you can find a lot of same defs but for different themes
         app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
 
         with open ('app.json', 'r') as file:
@@ -422,6 +429,8 @@ class MainMenu(QMainWindow):
         else:
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
 
+    ### CHANGE THEME SECTION END ###
+
     def progress_hook(self, d):
         if d['status'] == 'downloading':
             total_bytes = d.get('total_bytes') or d.get('total_bytes_estimate')
@@ -431,10 +440,10 @@ class MainMenu(QMainWindow):
         elif d['status'] == 'finished':
             self.progress_bar.setValue(100)
 
-    def exit_app(self):
+    def exit_app(self): # Like, it works fine on windows and some Linux, but on Ubuntu it does a log out sometimes
         exit()
 
-    def save_link(self, title):
+    def save_link(self, title): # This def will save a pasted link. The most important def in whole app at all!
         link = self.line_edit.text()
     
         if link:
@@ -514,6 +523,12 @@ class MainMenu(QMainWindow):
         self.button3 = QPushButton("MP3 + MP4", self)
         self.button4 = QPushButton("WEBM", self)
 
+        self.line_custom = QLineEdit(self)
+        self.line_custom.setPlaceholderText("Enter custom format (mp3, mp4, webm, etc)")
+        self.main_layout.addWidget(self.line_custom)
+        self.button_custom = QPushButton("Search", self)
+        self.main_layout.addWidget(self.button_custom)
+
         self.button1.setFixedSize(100,25)
         self.button1_1.setFixedSize(100,25)
         self.button1_2.setFixedSize(100,25)
@@ -539,16 +554,20 @@ class MainMenu(QMainWindow):
         self.button2.clicked.connect(lambda: self.choose_quality(link))
         self.button3.clicked.connect(lambda: self.choosed_both(link, quality_format, title))
         self.button4.clicked.connect(lambda: self.choosed_webm(link))
+        self.button_custom.clicked.connect(lambda: self.choosed_custom(link, title))
 
-    def choose_quality(self, link):
+    def choose_quality(self, link): # Window where you have to choose a quality of video which you want to download. Note that currently it works only with videos!
         self.quality_layout = QHBoxLayout()
 
         self.button1.hide()
         self.button1_1.hide()
+        self.button1_2.hide()
         self.button2.hide()
         self.button3.hide()
         self.button4.hide()
         self.widgetF.hide()
+        self.button_custom.hide()
+        self.line_custom.hide()
 
         self.widgetQ = QLabel("Choose a quality of video:")
         widget_font = self.widgetQ.font()
@@ -623,6 +642,48 @@ class MainMenu(QMainWindow):
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'bestvideo+bestaudio'
         self.choosed_mp4(quality_format, link)
+
+        self.progress_bar.hide()
+
+    def choosed_custom(self, link, title):
+        custom_format = self.line_custom.text()
+
+        print(custom_format)
+        ydl_opts = {
+            'progress_hooks': [self.progress_hook],
+            'format': 'bestaudio',
+            'outtmpl': os.path.join('Custom', '%(title)s.%(ext)s'),
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': custom_format,
+                'preferredquality': '192',
+            }],
+            'quiet': False,
+        }
+
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+
+                ydl.download([link])
+
+                self.widget = QLabel(f"Downloaded {title} in custom format!")
+                self.play_downloaded_sound()
+                font = self.widget.font()
+                font.setPointSize(12)
+                self.widget.setFont(font)
+                self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+                self.main_layout.addWidget(self.widget)
+
+        except Exception as e:
+            self.print_error(f"Failed to download the video: {e}")
 
         self.progress_bar.hide()
 
@@ -804,10 +865,11 @@ class MainMenu(QMainWindow):
 
         self.show_buttons(link)
 
-    def print_error(self, message):
+    def print_error(self, message): # Shows error message in both terminal and GUI
         print(f"Error message: {message}")
+        QMessageBox.warning(self, "Error", f"Error message: {message}")
 
-    def show_history(self):
+    def show_history(self): # Hm, it will be better to remove that 'history_0' etc in the beggining of output
         try:
             with open('history.json', 'r') as file:
                 history = json.load(file)
@@ -816,14 +878,13 @@ class MainMenu(QMainWindow):
             QMessageBox.information(self, "History", f"History:\n{formatted_history}")
 
         except Exception as e:
-            QMessageBox.information(self, "Error", f"Failed to load history: {e}")
+            QMessageBox.warning(self, "Error", f"Failed to load history: {e}")
 
-    def clean_history(self):
+    def clean_history(self): # Will clean your search history
         with open('history.json', 'w') as file:
             json.dump({}, file, indent=4)
 
-        QMessageBox.information(self, "History Cleaning", "History cleaned!")
-        
+        QMessageBox.information(self, "History Cleaning", "History cleaned!")        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
