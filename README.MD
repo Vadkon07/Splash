@@ -47,7 +47,7 @@ This app download a file from internet and then works a lot on his conversion. S
 </p>
 
 <p align="left">
-  <img src="Splash_Format_Screenshot.png"/>
+  <img src="Splash_Formats_Screenshot.png"/>
 </p>
 
 
