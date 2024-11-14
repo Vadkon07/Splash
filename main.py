@@ -17,8 +17,8 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.7.0"
-update_description = "Better debug, Added internet connection checker and notifications, Fixed bugs, Custom format search, etc." # Always edit after adding any changes
+app_version = "1.8.0"
+update_description = "Default theme set to black, Improved GUI (better color matching), Improved README, Fixed bugs, etc." # Always edit after adding any changes
 dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set back to 0!
 
 class MainMenu(QMainWindow):
@@ -265,14 +265,14 @@ class MainMenu(QMainWindow):
             QMessageBox.warning(self, "Error", f"Please, check your internet connection: {e}.")
             exit()
 
-    def fetch_lines_with_word(self, url_fetch, word_fetch):
+    def fetch_lines_with_word(self, url_fetch, word_fetch): # Checks is your version is the latest or not
         response = requests.get(url_fetch)
         soup = BeautifulSoup(response.text, 'html.parser')
         lines = soup.prettify().split('\n')
         filtered_lines = [line for line in lines if word_fetch in line]
         return filtered_lines
 
-    def fetch_new_version(self, url_fetch):
+    def fetch_new_version(self, url_fetch): # This def sends a request to github, and looking for the latest availbale version
         response = requests.get(url_fetch)
         soup = BeautifulSoup(response.text, 'html.parser')
         print("The latest version found on GitHub: ", soup)
@@ -420,11 +420,11 @@ class MainMenu(QMainWindow):
 
         if theme_choosed.get("theme_default") == "black":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_black)
-        if theme_choosed.get("theme_default") == "lime":
+        elif theme_choosed.get("theme_default") == "lime":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_lime)
-        if theme_choosed.get("theme_default") == "pink":
+        elif theme_choosed.get("theme_default") == "pink":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_pink)
-        if theme_choosed.get("theme_default") == "purple":
+        elif theme_choosed.get("theme_default") == "purple":
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_purple)
         else:
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6() + custom_stylesheet_white)
@@ -911,7 +911,8 @@ if __name__ == "__main__":
         color: black;
     }
     QPushButton:hover {
-        background-color: #cc0000;
+        background-color: #00d4ff;
+        color: black;
     }
     QMenu {
         background-color: #3C3D37;
@@ -926,7 +927,7 @@ if __name__ == "__main__":
         text-align: center;
     }
     QProgressBar::chunk {
-        background-color: red;
+        background-color: #97fff5;
     }
    """
 
@@ -959,7 +960,8 @@ if __name__ == "__main__":
         color: black;
     }
     QPushButton:hover {
-        background-color: #cc0000;
+        background-color: #00d4ff;
+        color: black;
     }
     QMenu {
         background-color: #1a1a1a;
@@ -974,7 +976,7 @@ if __name__ == "__main__":
         text-align: center;
     }
     QProgressBar::chunk {
-        background-color: red;
+        background-color: #97fff5;
     }
    """
 
@@ -1007,7 +1009,8 @@ if __name__ == "__main__":
         color: black;
     }
     QPushButton:hover {
-        background-color: #cc0000;
+        background-color: #00d4ff;
+        color: black;
     }
     QMenu {
         background-color: #1a1a1a;
@@ -1022,7 +1025,7 @@ if __name__ == "__main__":
         text-align: center;
     }
     QProgressBar::chunk {
-        background-color: red;
+        background-color: #97fff5;
     }
     """
 
@@ -1055,7 +1058,8 @@ if __name__ == "__main__":
         color: black;
     }
     QPushButton:hover {
-        background-color: #cc0000;
+        background-color: #00d4ff;
+        color: black;
     }
     QMenu {
         background-color: #1a1a1a;
@@ -1070,7 +1074,7 @@ if __name__ == "__main__":
         text-align: center;
     }
     QProgressBar::chunk {
-        background-color: red;
+        background-color: pink;
     }
     """
 
@@ -1103,7 +1107,8 @@ if __name__ == "__main__":
         color: black;
     }
     QPushButton:hover {
-        background-color: #cc0000;
+        background-color: #00d4ff;
+        color: black;
     }
     QMenu {
         background-color: #1a1a1a;
@@ -1118,7 +1123,7 @@ if __name__ == "__main__":
         text-align: center;
     }
     QProgressBar::chunk {
-        background-color: red;
+        background-color: #97fff5;
     }
     """
 

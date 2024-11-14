@@ -40,6 +40,17 @@ This app download a file from internet and then works a lot on his conversion. S
 17. **Multiple Downloads:** In **Main** you can run also another window (or even thousands of them), and by it you can download a lot of files in one time. It's useful if you want to download two or more different files in one moment, but probably it will use your CPU more and also split your internet on two tasks.
 18. **A lot of formats:** For each type of file (video, audio) we added possibility to choose one of the most popular formats. It can be useful if you, for example like to listen to music in your car, but she can't play .wav and .mp3 it's the only one format which seh can play. Here our app will help. Also in version 1.7.0 we added a feature which allows you to download a content in any format!
 
+## Screenshots
+
+<p align="left">
+  <img src="Splash_Main_Screenshot.png"/>
+</p>
+
+<p align="left">
+  <img src="Splash_Format_Screenshot.png"/>
+</p>
+
+
 > [!WARNING]
 > I develop this app only on my Linux laptop, so I can't give to you any warranties that it will work the same on Windows. Maybe it can have some weird things in GUI, so if you will notice any bugs, please - send me an email with screenshot(s).
 
@@ -127,7 +138,7 @@ Here's **recommended** PC specifications:
 - [x] **Fix exit button in menu:** App can be closed by a button of your OS GUI, but this button which is inside our app likes to log out me from Ubuntu.
 - [x] **Custom formats:** Add a line to enter a format (like "mp4" etc) and app will look for this format and download a file in this format.
 - [ ] **Optimise code and fix all the bugs:** I know that it prints history like "'history_0': title", so it will be nice to fix it all. Also it will be nice ot make code more readable and optimised.
-- [ ] **Improve README:** Just add some screenshots of app.
+- [x] **Improve README:** Just add some screenshots of app.
 
 ## FAQ
 
@@ -150,7 +161,7 @@ Here's **recommended** PC specifications:
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection and don't have a computer. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **November 13, 2024** for version **v1.7.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **November 14, 2024** for version **v1.8.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
 
 ## License
 
