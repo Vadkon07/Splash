@@ -1,6 +1,7 @@
 {
     "update_installed": true,
     "sound_enabled": true,
+    "dev_enabled": false,
     "theme_default": "black",
     "sound_setting": "Disable",
     "downloaded_sound": "./downloaded_purity.mp3"

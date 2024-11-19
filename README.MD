@@ -34,11 +34,12 @@ This app download a file from internet and then works a lot on his conversion. S
 11. **Playlists Support (YouTube):** You can download a full album of your favorite artist in one click!
 12. **Regular Updates:** This app is always up to date, so you can never care about her availability. We will notificate you about new available updates every time when you run this app.
 13. **Notifications:** We will send to you a notification if it will be available a newer version of this app. If you decided to download a 5-hour 4K video of dancing cats from YouTube, it can take pretty a lot of time. And in order to make you free from waiting and checking your screen every 3 seconds I added in this app a notification sound, which will notificate you about completed downloading in the end. Don't forget to turn on a sound on your computer and inside app's settings!
-14. **Resources Monitor:** You can always know how busy your PC is. By this monitor you can read how many percent of your RAM or CPU power are filled, and by it you can understand what caused slow conversion or download. Engine of this app I copied from another my project [EasyBench](https://github.com/Vadkon07/EasyBench).
-15. **Compatible with old computers:** It should work fine even if you have a very old computer. I own a very old laptop with AMD E-300 processor, so I always care about people which are in the same situaiton with me.
-16. **Search History (BETA):** After each search app saves your video/audio which she found inside her database, and then in **Settings** menu you can check and clean (soon) history.
-17. **Multiple Downloads:** In **Main** you can run also another window (or even thousands of them), and by it you can download a lot of files in one time. It's useful if you want to download two or more different files in one moment, but probably it will use your CPU more and also split your internet on two tasks.
-18. **A lot of formats:** For each type of file (video, audio) we added possibility to choose one of the most popular formats. It can be useful if you, for example like to listen to music in your car, but she can't play .wav and .mp3 it's the only one format which seh can play. Here our app will help. Also in version 1.7.0 we added a feature which allows you to download a content in any format!
+14. **Dev mode:** Special mode for developers, read more about it by scrooling this README down.
+15. **Resources Monitor (dev mode):** You can always know how busy your PC is. By this monitor you can read how many percent of your RAM or CPU power are filled, and by it you can understand what caused slow conversion or download. Engine of this app I copied from another my project [EasyBench](https://github.com/Vadkon07/EasyBench).
+16. **Compatible with old computers:** It should work fine even if you have a very old computer. I own a very old laptop with AMD E-300 processor, so I always care about people which are in the same situaiton with me.
+17. **Search History (BETA):** After each search app saves your video/audio which she found inside her database, and then in **Settings** menu you can check and clean (soon) history.
+18. **Multiple Downloads:** In **Main** you can run also another window (or even thousands of them), and by it you can download a lot of files in one time. It's useful if you want to download two or more different files in one moment, but probably it will use your CPU more and also split your internet on two tasks.
+19. **A lot of formats:** For each type of file (video, audio) we added possibility to choose one of the most popular formats. It can be useful if you, for example like to listen to music in your car, but she can't play .wav and .mp3 it's the only one format which seh can play. Here our app will help. Also in version 1.7.0 we added a feature which allows you to download a content in any format!
 
 ## Screenshots
 
@@ -95,7 +96,7 @@ Here's **recommended** PC specifications:
 
 ## How to use
 
-1. Run the script in your terminal or command prompt.
+1. Run the script in your terminal or command prompt. Of course you can just compile this app and run her as an app, but when you run it from terminal it shows to you all her features!
 2. Paste the link to your content when prompted.
 3. Choose your download option:
 - Enter in line your prefer format and then click on a button 'Search'. App will try to find a format which you entered in line and download your file in this format.
@@ -139,14 +140,17 @@ Here's **recommended** PC specifications:
 - [x] **Custom formats:** Add a line to enter a format (like "mp4" etc) and app will look for this format and download a file in this format.
 - [ ] **Optimise code and fix all the bugs:** I know that it prints history like "'history_0': title", so it will be nice to fix it all. Also it will be nice ot make code more readable and optimised.
 - [x] **Improve README:** Just add some screenshots of app.
+- [x] **Add 1080p and 4K option:** Very important things to add!
+- [x] **Fix thumbnail:** Sometimes it downloads them in jpg and webp formats, but if it's downloaded in jpg it will not show thumbnail. NOTE: I solved it by adding a conversion form webp to jpg, but for older computers it can be for a little difficult to convert it and take some times. If possible, it's better to find a way to download thumbnails directly in jpg.
+- [ ] **Optimise GUI:** Add some space between buttons, to prevent layering.
 
 ## FAQ
 
 **Q:** How much time it will take to install this app?
-**A:** You just clone repository and then run 'pip install -r requirements.txt', and then everything depends from your internet connection. For me it took less than 5 minutes on my pretty old laptop.
+**A:** You just clone repository and then run 'pip install -r requirements.txt', and then everything depends from your internet connection. For me it took less than 5 minutes on my old laptop.
 
 **Q:** Is there any kind of tracking of me when I use this app?
-**A:** No, we just don't need it.
+**A:** No, we just don't need it. All what you do will be stored ONLY LOCALY, and ONLY ON YOUR COMPUTER.
 
 **Q:** Is this app is free to use?
 **A:** Yes, this app is fully free and you will never need to pay to use her.
@@ -154,14 +158,32 @@ Here's **recommended** PC specifications:
 **Q:** How can I help developers of this app?
 **A:** You have a lot of different ways to do it. At first the best help for us it's just to help us with development (bug fixes, new ideas, etc), but also you can help our developers with donations (open profile of a very active developer of this app and find a donation link.)
 
+**Q:** Can I use this app without internet connection?
+**A:** Without dev mode it will show you that you're not a connected to internet and will automatically close the app, but if dev mode is enable it will bypass this requirement and you will use this app, but it will be a very limited experience and still cause a lot of errors.
+
 **Q:** What if I got some errors while using the app and can't solve it?
 **A:** Open new issue and our community will try to help you. At all at first try just to reinstall this app. Also at first try to use Google or any another search engine and paste in search error which you got. Usually it will help you to solve your problem faster.
+
+**Q:** What is 'dev mode' and how to use it?
+**A:** Hm, let's talk about it!
+
+## What is dev mode?
+
+Dev mode that's a special mode for developers of this app. You can enable him by opening a file named 'app.json' in any txt editor, and changing a seting of line 'dev_enabled' from 'false' to 'true' (and vice vera to disable him.)
+
+In this mode app will often skip errors and give you some possibilities as run app without internet connection, set all settings to default to before publishing this app, check usage of system resources etc.
+
+## Works fine with:
+
+- Soundcloud
+- YouTube
+- etc. (send your reviews!)
 
 > [!NOTE]
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection and don't have a computer. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **November 14, 2024** for version **v1.8.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **November 19, 2024** for version **v1.9.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
 
 ## License
 

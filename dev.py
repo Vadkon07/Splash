@@ -5,15 +5,26 @@ import sys
 import time
 import multiprocessing
 
-def reset_update_notif():
+def reset_app():
     with open ('app.json', 'r') as file:
         data = json.load(file)
         data['update_installed'] = True
 
+        data['dev_enabled'] = False
+
+        #data['sound_enabled'] = True
+        #data['sound_setting'] = "Disable"
+        #print("Sound enabled")
+        #self.sound_status = "Disable"
+
     with open ('app.json', 'w') as file:
         json.dump(data, file, indent=4)
 
-    print("Settings were updated. In the next time when you will run this app, it will show update notification again.")
+    with open('history.json', 'w') as file:
+        json.dump({}, file, indent=4)
+    
+    print("History cleaned!")
+    print("Settings were updated. Some settings will be applied only after the moment when you will reboot this app.")
 
 def resources_monitor():
     print("Welcome to the Resources Monitor! Choose one of these tools:\n")

@@ -17,9 +17,19 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.8.0"
-update_description = "Default theme set to black, Improved GUI (better color matching), Improved README, Fixed bugs, etc." # Always edit after adding any changes
-dev_mode = 0 # 0 - OFF, 1 - ON. Before commits always set back to 0!
+app_version = "1.9.0"
+update_description = "Improved dev mode (significantly!), Improved GUI, Splitted 1080p and 4K download options, Added back button, Improved README, Added offline 'OK' button in dev mode, Fixed bugs, etc." # Always edit after adding any changes
+dev_mode = 0
+
+with open ('app.json', 'r') as file:
+    data = json.load(file)
+
+if data.get('dev_enabled'): # Notificate user about installed updated. Shows once!
+    print("Dev mode enabled!")
+    dev_mode = 1
+
+with open('app.json', 'w') as file:
+    json.dump(data, file, indent=4)
 
 class MainMenu(QMainWindow):
     def __init__(self):
@@ -95,7 +105,7 @@ class MainMenu(QMainWindow):
         self.add_action(self.exit_menu, "Exit (Are you sure?)", self.exit_app)
 
         if dev_mode == 1:
-            self.add_action(self.dev_menu, "Reset Notifications", dev.reset_update_notif) 
+            self.add_action(self.dev_menu, "Reset App", dev.reset_app) 
             self.add_action(self.dev_menu, "Resources Monitor", self.run_resources_monitor)
 
         self.widget = QLabel()
@@ -118,6 +128,15 @@ class MainMenu(QMainWindow):
         self.ok_button.clicked.connect(self.save_link)
         self.main_layout.addWidget(self.ok_button, alignment=Qt.AlignmentFlag.AlignCenter)
         self.thumbnail_file = None
+
+        if dev_mode == 1: # OFFLINE MODE
+            title = 'OFFLINE MODE: TITLE IS NOT NOT DEFINED'
+            link = 'EMPTY LINK'
+
+            self.offline_ok_button = QPushButton("OK (offline)", self)
+            self.offline_ok_button.setFixedSize(200, 25)
+            self.offline_ok_button.clicked.connect(lambda: self.show_buttons(link, title))
+            self.main_layout.addWidget(self.offline_ok_button, alignment=Qt.AlignmentFlag.AlignCenter)
         
         self.button_layout = QHBoxLayout()
 
@@ -138,7 +157,7 @@ class MainMenu(QMainWindow):
         self.check_updates()
 
     def run_resources_monitor(self):
-        QMessageBox.information(self, "Resources Monitor", "Resources monitor was started in your command line interface. Please, run this app from CLI, otherwise you will not see resources monitor.")
+        QMessageBox.information(self, "Resources Monitor", "Resources monitor was started in your command line interface. Please, be sure that you run this app from CLI, otherwise you will not see resources monitor.")
         dev.resources_monitor()
 
     def set_sound_purity(self):
@@ -218,7 +237,7 @@ class MainMenu(QMainWindow):
             except Exception as e:
                 print(f"Error loading sound: {e}")
         else:
-            print("Sound not found, error. Please, try to solve this problem and set a sound, because it can cause errors and the app will be closed!")
+            print("ERROR. Sound not found. Please, try to solve this problem and set a sound, because it can cause errors and the app will be closed!")
 
     def sound_change(self, sound_status): # Change sound setting (turn on-off)
         with open ('app.json', 'r') as file:
@@ -262,8 +281,11 @@ class MainMenu(QMainWindow):
                 self.new_update_notif(new_version)
 
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Please, check your internet connection: {e}.")
-            exit()
+            QMessageBox.warning(self, "Error", f"Please, check your internet connection:\n\n\n {e}.")
+            if dev_mode == 0: # Close app if dev mode is disabled
+                exit()
+            else: # Don't close app if dev mode is enabled
+                print("DEV mode, skip error")
 
     def fetch_lines_with_word(self, url_fetch, word_fetch): # Checks is your version is the latest or not
         response = requests.get(url_fetch)
@@ -272,7 +294,7 @@ class MainMenu(QMainWindow):
         filtered_lines = [line for line in lines if word_fetch in line]
         return filtered_lines
 
-    def fetch_new_version(self, url_fetch): # This def sends a request to github, and looking for the latest availbale version
+    def fetch_new_version(self, url_fetch): # This def sends a request to github, and looking for the latest available version
         response = requests.get(url_fetch)
         soup = BeautifulSoup(response.text, 'html.parser')
         print("The latest version found on GitHub: ", soup)
@@ -454,14 +476,21 @@ class MainMenu(QMainWindow):
                 with yt_dlp.YoutubeDL({'quiet': False}) as ydl:
                     info_dict = ydl.extract_info(link, download=False)
                     title = info_dict.get('title', 'Unknown Title')
-                
-                # Download thumbnail
-                    ydl_opts = {
-                        'skip_download': True,
-                        'writethumbnail': True,
-                        'outtmpl': 'thumbnail.%(ext)s',
-                    }
 
+                    # Download thumbnail of content to show it later, and at all save in folder
+
+                    ydl_opts = {
+                            'skip_download': True,
+                            'writethumbnail': True,
+                            'outtmpl': 'thumbnail.%(ext)s',
+                            'postprocessors': [
+                                {
+                                    'key': 'FFmpegThumbnailsConvertor',
+                                    'format': 'jpg',
+                                    }
+                                ], 
+                            }
+           
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl_thumb:
                         info_dict_thumb = ydl_thumb.extract_info(link, download=True)
                         thumbnail_url = info_dict_thumb.get('thumbnail')
@@ -469,11 +498,10 @@ class MainMenu(QMainWindow):
 
                         if thumbnail_url:
                             ext = thumbnail_url.split('.')[-1]
-                            self.thumbnail_path = f"./thumbnail.{ext}"
+                            self.thumbnail_path = "./thumbnail.webp"
                             print(f"Thumbnail downloaded to: {self.thumbnail_path}")
-                            QMessageBox.information(self, "Content found", f"\nContent which we found: {title}")
+                            subprocess.run(['ffmpeg', '-y', '-i', self.thumbnail_path, 'thumbnail.jpg']) # Manual conversion to jpg
                         else:
-                            QMessageBox.information(self, "Content found", f"\nContent which we found: {title}")
                             self.print_error("Failed to retrieve thumbnail URL (Note that it's normal for playlists, it's not an error)")
                         with open ('history.json', 'r') as file:
                             data = json.load(file)
@@ -485,7 +513,7 @@ class MainMenu(QMainWindow):
                             json.dump(data, file, indent=4)
 
             except Exception as e:
-                self.print_error(f"Failed to retrieve information. Error description: {e}. Check your intetnet connection and be sure that you entered a valid link.")
+                self.print_error(f"Failed to retrieve information. Error description: {e}. Check your internet connection and be sure that you entered a valid link.")
                 return
                                
             self.show_buttons(link, title)
@@ -493,19 +521,53 @@ class MainMenu(QMainWindow):
             QMessageBox.warning(self, "No Link", "Please paste a link before clicking OK.")
 
     def show_buttons(self, link, title):
+        try: # Hide all buttons if they exist
+            self.label.hide()
+            self.label_title.hide()
+            self.widgetQ.hide()
+            self.button1.hide()
+            self.button1_1.hide()
+            self.button1_2.hide()
+            self.button2.hide()
+            self.button3.hide()
+            self.button4.hide()
+            self.widgetF.hide()
+            self.button_custom.hide()
+            self.line_custom.hide()
+            self.button1.hide()
+            self.button2.hide()
+            self.button3.hide()
+            self.button4.hide()
+            self.button5.hide()
+            self.button6.hide()
+            self.back_button.hide()
+            self.widgetQ.hide()
+        except Exception as e:
+            print(f"Buttons are not hidden, {e}")
+
         self.widget.hide()
         self.line_edit.hide()
         self.ok_button.hide()
 
+        if dev_mode == 1: # Will show a button which will bypass internet requirments. I personally use it to make process of development of GUI faster, without running all these downloads
+            self.offline_ok_button.hide()
+
         self.audio_buttons_layout = QHBoxLayout()
         self.video_buttons_layout = QHBoxLayout()
 
+        self.custom_buttons_layout = QHBoxLayout()
+
         self.label = QLabel()
-        pixmap = QPixmap('thumbnail.webp')
+        pixmap = QPixmap('thumbnail.jpg')
 
         pixmap = pixmap.scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)
         self.label.setPixmap(pixmap)
         self.label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+
+        self.label_title = QLabel(f"{title}")
+        self.label_title.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+
+        self.main_layout.addWidget(self.label_title)
         self.main_layout.addWidget(self.label)
         self.setLayout(self.main_layout)
 
@@ -524,10 +586,10 @@ class MainMenu(QMainWindow):
         self.button4 = QPushButton("WEBM", self)
 
         self.line_custom = QLineEdit(self)
-        self.line_custom.setPlaceholderText("Enter custom format (mp3, mp4, webm, etc)")
-        self.main_layout.addWidget(self.line_custom)
+        self.line_custom.setPlaceholderText("OR enter custom format (mp3, mp4, webm, etc)")
+        self.custom_buttons_layout.addWidget(self.line_custom)
         self.button_custom = QPushButton("Search", self)
-        self.main_layout.addWidget(self.button_custom)
+        self.custom_buttons_layout.addWidget(self.button_custom)
 
         self.button1.setFixedSize(100,25)
         self.button1_1.setFixedSize(100,25)
@@ -545,18 +607,19 @@ class MainMenu(QMainWindow):
 
         self.main_layout.addLayout(self.audio_buttons_layout)
         self.main_layout.addLayout(self.video_buttons_layout)
+        self.main_layout.addLayout(self.custom_buttons_layout)
 
         quality_format = None
 
         self.button1.clicked.connect(lambda: self.choosed_mp3(link, title))
         self.button1_1.clicked.connect(lambda: self.choosed_wav(link, title))
         self.button1_2.clicked.connect(lambda: self.choosed_aac(link, title))
-        self.button2.clicked.connect(lambda: self.choose_quality(link))
+        self.button2.clicked.connect(lambda: self.choose_quality(link, title))
         self.button3.clicked.connect(lambda: self.choosed_both(link, quality_format, title))
         self.button4.clicked.connect(lambda: self.choosed_webm(link))
         self.button_custom.clicked.connect(lambda: self.choosed_custom(link, title))
 
-    def choose_quality(self, link): # Window where you have to choose a quality of video which you want to download. Note that currently it works only with videos!
+    def choose_quality(self, link, title): # Window where you have to choose a quality of video which you want to download. Note that currently it works only with videos!
         self.quality_layout = QHBoxLayout()
 
         self.button1.hide()
@@ -579,21 +642,30 @@ class MainMenu(QMainWindow):
         self.button1 = QPushButton("Worst", self)
         self.button2 = QPushButton("480p", self)
         self.button3 = QPushButton("720p", self)
-        self.button4 = QPushButton("Best", self)
+        self.button4 = QPushButton("1080p", self)
+        self.button5 = QPushButton("4K", self)
+        self.button6 = QPushButton("Best", self)
+        self.back_button = QPushButton("Back", self)
 
         self.button1.clicked.connect(lambda: self.choosed_worst(link))
         self.button2.clicked.connect(lambda: self.choosed_480(link))
         self.button3.clicked.connect(lambda: self.choosed_720(link))
-        self.button4.clicked.connect(lambda: self.choosed_best(link))
+        self.button4.clicked.connect(lambda: self.choosed_1080(link))
+        self.button5.clicked.connect(lambda: self.choosed_4k(link))
+        self.button6.clicked.connect(lambda: self.choosed_best(link))
+        self.back_button.clicked.connect(lambda: self.show_buttons(title, link)) # Create another layout for this button, move her to the right bottom
 
         self.quality_layout.addWidget(self.button1)
         self.quality_layout.addWidget(self.button2)
         self.quality_layout.addWidget(self.button3)
         self.quality_layout.addWidget(self.button4)
+        self.quality_layout.addWidget(self.button5)
+        self.quality_layout.addWidget(self.button6)
+        self.quality_layout.addWidget(self.back_button)
 
         self.main_layout.addLayout(self.quality_layout)
 
-    def choosed_worst(self, link):
+    def choosed_worst(self, link): # Usually that's 144p
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setGeometry(30, 40, 340, 30)
         self.progress_bar.setMaximum(100)
@@ -632,7 +704,33 @@ class MainMenu(QMainWindow):
 
         self.progress_bar.hide()
 
-    def choosed_best(self, link):
+    def choosed_1080(self, link):
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+        quality_format = 'bestvideo[height<=1080]+bestaudio'
+        self.choosed_mp4(quality_format, link)
+
+        self.progress_bar.hide()
+
+    def choosed_4k(self, link):
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+        quality_format = 'bestvideo[height<=2160]+bestaudio'
+        self.choosed_mp4(quality_format, link)
+
+        self.progress_bar.hide()
+
+    def choosed_best(self, link): # Just the best quality which can be downloaded. Hm, probably even 8K
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setGeometry(30, 40, 340, 30)
         self.progress_bar.setMaximum(100)
@@ -764,7 +862,7 @@ class MainMenu(QMainWindow):
 
         self.progress_bar.hide()
 
-    def choosed_aac(self, link, title):
+    def choosed_aac(self, link, title): # Fun fact: also it's called m4a
         ydl_opts = {
             'progress_hooks': [self.progress_hook],
             'format': 'bestaudio',
@@ -824,8 +922,7 @@ class MainMenu(QMainWindow):
             print(f"Error: {e}")
             QMessageBox.warning(self, "Download failed", f"Failed to download file: {e}")
 
-
-    def choosed_both(self, link, quality_format, title):
+    def choosed_both(self, link, quality_format, title): # Will download both mp4 and mp3. I don't know is it useful of not but let it stay here, please
         self.choose_quality(link)
         self.choosed_mp4(quality_format, link)
         self.choosed_mp3(link, title)
@@ -850,7 +947,6 @@ class MainMenu(QMainWindow):
 
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
 
-
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
@@ -869,13 +965,13 @@ class MainMenu(QMainWindow):
         print(f"Error message: {message}")
         QMessageBox.warning(self, "Error", f"Error message: {message}")
 
-    def show_history(self): # Hm, it will be better to remove that 'history_0' etc in the beggining of output
+    def show_history(self): # Window with history
         try:
             with open('history.json', 'r') as file:
                 history = json.load(file)
 
-            formatted_history = "\n".join([f"{key}: {value}" for key, value in history.items()])
-            QMessageBox.information(self, "History", f"History:\n{formatted_history}")
+            formatted_history = "\n".join([f"{value}" for key, value in history.items()])
+            QMessageBox.information(self, "History", f"History (from oldest to newest):\n{formatted_history}")
 
         except Exception as e:
             QMessageBox.warning(self, "Error", f"Failed to load history: {e}")
