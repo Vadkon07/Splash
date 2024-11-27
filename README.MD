@@ -125,7 +125,7 @@ Here's **recommended** PC specifications:
 
     1: Build number (if used)—that's why you see the .NET framework using something like 2.0.4.2709
 
-## To-Do to release version 2.0
+## To-Do to release version 3.0
 
 - [ ] **Optimise GUI:** Add some space between buttons, to prevent layering.
 - [ ] **Change 'About' menu:** In the center place a logo of app, because now it looks buggy.
