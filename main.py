@@ -17,32 +17,32 @@ import requests
 import xml.etree.ElementTree as ET
 import dev
 
-app_version = "1.9.0"
-update_description = "Improved dev mode (significantly!), Improved GUI, Splitted 1080p and 4K download options, Added back button, Improved README, Added offline 'OK' button in dev mode, Fixed bugs, etc." # Always edit after adding any changes
-dev_mode = 0
+app_version = "2.0.0" # Version of app
+update_description = "Improved GUI, Improved history, Improved README, Improved system of Updates, 240p & 360p options, Fixed bugs/typos, etc." # Always edit after adding any changes
+dev_mode = 0 # By default dev mode is disabled
 
-with open ('app.json', 'r') as file:
+with open ('app.json', 'r') as file: # Checks dev mode option
     data = json.load(file)
 
-if data.get('dev_enabled'): # Notificate user about installed updated. Shows once!
+if data.get('dev_enabled'): # Check is dev mode enabled or not
     print("Dev mode enabled!")
     dev_mode = 1
 
 with open('app.json', 'w') as file:
     json.dump(data, file, indent=4)
 
-class MainMenu(QMainWindow):
+class MainMenu(QMainWindow): # Main menu of app. The first page which you see after running Splash
     def __init__(self):
         super().__init__()
 
-        self.setWindowIcon(QIcon('Splash_Icon.png'))
+        self.setWindowIcon(QIcon('Splash_Icon.png')) # Set icon of window
 
         self.load_theme() # Load saved theme from app.json
         self.load_sound() # Load saved sound theme from app.json
 
         self.sound_action = None
 
-        with open ('app.json', 'r') as file:
+        with open ('app.json', 'r') as file: # Check sound settings and set a right text in menu bar
             data = json.load(file)
 
         if data.get('sound_enabled') == False:
@@ -61,6 +61,8 @@ class MainMenu(QMainWindow):
 
         self.main_layout = QVBoxLayout(self.central_widget)
         self.main_layout.setSpacing(0)
+
+        ### MENU BAR SECTION ###
 
         self.custom_menu_bar = QMenuBar(self)
         self.setMenuBar(self.custom_menu_bar)
@@ -108,6 +110,8 @@ class MainMenu(QMainWindow):
             self.add_action(self.dev_menu, "Reset App", dev.reset_app) 
             self.add_action(self.dev_menu, "Resources Monitor", self.run_resources_monitor)
 
+        ### THE END OF MENU BAR SECTION ###
+
         self.widget = QLabel()
         pixmap = QPixmap("Splash_Logo_S.png")
         scaled_pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
@@ -130,7 +134,7 @@ class MainMenu(QMainWindow):
         self.thumbnail_file = None
 
         if dev_mode == 1: # OFFLINE MODE
-            title = 'OFFLINE MODE: TITLE IS NOT NOT DEFINED'
+            title = 'OFFLINE MODE: TITLE IS NOT DEFINED'
             link = 'EMPTY LINK'
 
             self.offline_ok_button = QPushButton("OK (offline)", self)
@@ -150,11 +154,15 @@ class MainMenu(QMainWindow):
         with open('app.json', 'w') as file:
              json.dump(data, file, indent=4)
 
+        with open ('app.json', 'r') as file:
+            data = json.load(file)
+
+        if data.get('check_updates'): # Check updates if enabled
+            self.check_updates()
+
         self.timer = QTimer()
         self.timer.timeout.connect(self.check_sound_status)
         self.timer.start(1000)
-
-        self.check_updates()
 
     def run_resources_monitor(self):
         QMessageBox.information(self, "Resources Monitor", "Resources monitor was started in your command line interface. Please, be sure that you run this app from CLI, otherwise you will not see resources monitor.")
@@ -184,7 +192,7 @@ class MainMenu(QMainWindow):
 
         self.load_sound()
 
-    def sound_check(self):
+    def sound_check(self): # Check sound settings
         with open ('app.json', 'r') as file:
             data = json.load(file)
 
@@ -269,7 +277,7 @@ class MainMenu(QMainWindow):
         self.animation.setEndValue(1)
         self.animation.start()
 
-    def check_updates(self):
+    def check_updates(self): # Check updates by reading of installed and online available version. If they are not the same - show notification
         try:
             url_fetch = 'https://raw.githubusercontent.com/Vadkon07/VideoXYZ/refs/heads/master/ver.html'
             current_version = app_version
@@ -281,11 +289,11 @@ class MainMenu(QMainWindow):
                 self.new_update_notif(new_version)
 
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Please, check your internet connection:\n\n\n {e}.")
+            QMessageBox.warning(self, "Error", f"Please, check your internet connection (or turn on dev mode if you want to force app to run in offline mode):\n\n\n {e}.")
             if dev_mode == 0: # Close app if dev mode is disabled
                 exit()
             else: # Don't close app if dev mode is enabled
-                print("DEV mode, skip error")
+                print("DEV mode, skip internet error")
 
     def fetch_lines_with_word(self, url_fetch, word_fetch): # Checks is your version is the latest or not
         response = requests.get(url_fetch)
@@ -307,18 +315,23 @@ class MainMenu(QMainWindow):
         # Create a QTextBrowser for displaying the HTML content
         text_browser = QTextBrowser(dialog)
         text_browser.setOpenExternalLinks(True)
-        text_browser.setHtml(f'<p>New update was found! Do you want to update this app (git should be installed) from version {app_version} to {new_version}? Or you can do it manually by visiting our <a href="https://github.com/Vadkon07/Splash">GitHub page</a></p>')
+        text_browser.setHtml(f'<p>A new update has been found! Do you want to update this app (git should be installed) from version {app_version} to {new_version}? Or you can do it manually by visiting our <a href="https://github.com/Vadkon07/Splash">GitHub page</a></p>')
 
         update_button = QPushButton("Update", dialog)
         update_button.clicked.connect(self.update_from_git)
 
-        close_button = QPushButton("Close", dialog)
+        close_button = QPushButton("Update later (close)", dialog)
         close_button.clicked.connect(dialog.accept)
+
+        disable_button = QPushButton("Disable Updates", dialog)
+        disable_button.clicked.connect(self.disable_update_notification)
+        disable_button.clicked.connect(dialog.accept)
 
         layout = QGridLayout(dialog)
         layout.addWidget(text_browser)
         layout.addWidget(update_button)
         layout.addWidget(close_button)
+        layout.addWidget(disable_button)
 
         dialog.setLayout(layout)
         dialog.exec()
@@ -328,6 +341,48 @@ class MainMenu(QMainWindow):
         action.triggered.connect(slot)
         menu.addAction(action)
         return action
+
+    def disable_update_notification(self): # Disable updates if you don't want to use autoupdate
+        try:
+            # Debugging print statement: Starting the function
+            print("Starting disable_update_notification function")
+
+            # Ensure the file path is correct
+            json_file_path = 'app.json'
+            if not os.path.exists(json_file_path):
+                print(f"File not found: {json_file_path}")
+                QMessageBox.critical(self, "Error", f"File not found: {json_file_path}")
+                return
+
+            # Debugging print statement: File path
+            print(f"File path: {json_file_path}")
+
+            # Read the JSON file
+            with open(json_file_path, 'r') as file:
+                data = json.load(file)
+
+            # Debugging print statement: Data before change
+            print(f"Data before change: {data}")
+
+            # Update the value
+            data['check_updates'] = False
+
+            # Write the updated data back to the JSON file
+            with open(json_file_path, 'w') as file:
+                json.dump(data, file, indent=4)
+
+            # Debugging print statement: Data after change
+            print(f"Data after change: {data}")
+
+            # Add feedback to the user
+            QMessageBox.information(self, "Updates Disabled", "Update notifications have been disabled.")
+
+            # Debugging print statement: Success
+            print("Update notifications have been disabled successfully.")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"An error occurred: {e}")
+            print(f"An error occurred: {e}")
 
     def update_from_git(self): # Clone repository from GitHub. This code can be optimised with argv to make it more flexible and universal
         try:
@@ -344,8 +399,26 @@ class MainMenu(QMainWindow):
     def maximize_window(self):
         self.showMaximized()
 
-    def about_project(self):
-        QMessageBox.information(self, "About", "Best portable app to download your favorite media content from literally any popular social media! You can download content (from YouTube, X, Soundcloud etc) in literally any popular video/audio format. This application is Open Source, you can find her code on GitHub, or also support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find her thumbnail in a folder where you ran our application.")
+    def about_project(self): # Description about our app. It's better to fix image size, because for now it looks weird
+        # Create the message box
+        messagebox = QMessageBox(self)
+        messagebox.setWindowTitle("About Splash")
+        messagebox.setText(f"Best portable app to download your favorite media content from literally any popular social media! You can download content (from YouTube, X, Soundcloud, etc.) in literally any popular video/audio format. This application is Open Source; you can find its code on GitHub or support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find its thumbnail in the folder where you ran our application.\n\nVersion of installed Splash is {app_version}")
+    
+        # Set the logo of app
+        #messagebox.setIconPixmap(QPixmap("./Splash_Logo_S.png"))
+    
+        # Set fixed size, which doesn't work
+        #messagebox.setFixedSize(50, 50)
+    
+        # Center the dialog on the screen
+        screen_geometry = QApplication.primaryScreen().availableGeometry()
+        x = (screen_geometry.width() - messagebox.width()) // 2
+        y = (screen_geometry.height() - messagebox.height()) // 2
+        messagebox.move(x, y)
+    
+        # Display all
+        messagebox.exec()
 
     def open_github(self): # Open our GitHub repository in browser
         github_link = "https://github.com/Vadkon07/Splash"
@@ -503,11 +576,15 @@ class MainMenu(QMainWindow):
                             subprocess.run(['ffmpeg', '-y', '-i', self.thumbnail_path, 'thumbnail.jpg']) # Manual conversion to jpg
                         else:
                             self.print_error("Failed to retrieve thumbnail URL (Note that it's normal for playlists, it's not an error)")
+
                         with open ('history.json', 'r') as file:
                             data = json.load(file)
                         
                         next_key = f"history_{len(data)}"
                         data[next_key] = title
+
+                        next_link = f"history_{len(data)}"
+                        data[next_link] = link
 
                         with open('history.json', 'w') as file:
                             json.dump(data, file, indent=4)
@@ -520,7 +597,7 @@ class MainMenu(QMainWindow):
         else:
             QMessageBox.warning(self, "No Link", "Please paste a link before clicking OK.")
 
-    def show_buttons(self, link, title):
+    def show_buttons(self, link, title): # Menu where you have to choose a format in which you file will be downloaded
         try: # Hide all buttons if they exist
             self.label.hide()
             self.label_title.hide()
@@ -560,7 +637,7 @@ class MainMenu(QMainWindow):
         self.label = QLabel()
         pixmap = QPixmap('thumbnail.jpg')
 
-        pixmap = pixmap.scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)
+        pixmap = pixmap.scaled(175, 175, Qt.AspectRatioMode.KeepAspectRatio)
         self.label.setPixmap(pixmap)
         self.label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
 
@@ -574,6 +651,7 @@ class MainMenu(QMainWindow):
         self.widgetF = QLabel("Choose a format:")
         widget_font = self.widget.font()
         widget_font.setPointSize(12)
+        widget_font.setBold(True)
         self.widgetF.setFont(widget_font)
         self.widgetF.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widgetF)
@@ -620,7 +698,8 @@ class MainMenu(QMainWindow):
         self.button_custom.clicked.connect(lambda: self.choosed_custom(link, title))
 
     def choose_quality(self, link, title): # Window where you have to choose a quality of video which you want to download. Note that currently it works only with videos!
-        self.quality_layout = QHBoxLayout()
+        self.quality_layout_line1 = QHBoxLayout()
+        self.quality_layout_line2 = QHBoxLayout()
 
         self.button1.hide()
         self.button1_1.hide()
@@ -635,11 +714,14 @@ class MainMenu(QMainWindow):
         self.widgetQ = QLabel("Choose a quality of video:")
         widget_font = self.widgetQ.font()
         widget_font.setPointSize(12)
+        widget_font.setBold(True)
         self.widgetQ.setFont(widget_font)
         self.widgetQ.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.main_layout.addWidget(self.widgetQ)
 
         self.button1 = QPushButton("Worst", self)
+        self.button1_2 = QPushButton("240p", self)
+        self.button1_1 = QPushButton("360p", self)
         self.button2 = QPushButton("480p", self)
         self.button3 = QPushButton("720p", self)
         self.button4 = QPushButton("1080p", self)
@@ -648,22 +730,27 @@ class MainMenu(QMainWindow):
         self.back_button = QPushButton("Back", self)
 
         self.button1.clicked.connect(lambda: self.choosed_worst(link))
+        self.button1_2.clicked.connect(lambda: self.choosed_240(link))
+        self.button1_1.clicked.connect(lambda: self.choosed_360(link))
         self.button2.clicked.connect(lambda: self.choosed_480(link))
         self.button3.clicked.connect(lambda: self.choosed_720(link))
         self.button4.clicked.connect(lambda: self.choosed_1080(link))
         self.button5.clicked.connect(lambda: self.choosed_4k(link))
         self.button6.clicked.connect(lambda: self.choosed_best(link))
-        self.back_button.clicked.connect(lambda: self.show_buttons(title, link)) # Create another layout for this button, move her to the right bottom
+        self.back_button.clicked.connect(lambda: self.show_buttons(link, title)) # Create another layout for this button, move her to the right bottom
 
-        self.quality_layout.addWidget(self.button1)
-        self.quality_layout.addWidget(self.button2)
-        self.quality_layout.addWidget(self.button3)
-        self.quality_layout.addWidget(self.button4)
-        self.quality_layout.addWidget(self.button5)
-        self.quality_layout.addWidget(self.button6)
-        self.quality_layout.addWidget(self.back_button)
+        self.quality_layout_line1.addWidget(self.button1)
+        self.quality_layout_line1.addWidget(self.button1_2)
+        self.quality_layout_line1.addWidget(self.button1_1)
+        self.quality_layout_line1.addWidget(self.button2)
+        self.quality_layout_line1.addWidget(self.button3)
+        self.quality_layout_line2.addWidget(self.button4)
+        self.quality_layout_line2.addWidget(self.button5)
+        self.quality_layout_line2.addWidget(self.button6)
+        self.quality_layout_line2.addWidget(self.back_button)
 
-        self.main_layout.addLayout(self.quality_layout)
+        self.main_layout.addLayout(self.quality_layout_line1)
+        self.main_layout.addLayout(self.quality_layout_line2)
 
     def choosed_worst(self, link): # Usually that's 144p
         self.progress_bar = QProgressBar(self)
@@ -674,6 +761,32 @@ class MainMenu(QMainWindow):
 
         QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
         quality_format = 'worstvideo+worstaudio'
+        self.choosed_mp4(quality_format, link)
+
+        self.progress_bar.hide()
+
+    def choosed_240(self, link):
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+        quality_format = 'bestvideo[height<=240]+bestaudio'
+        self.choosed_mp4(quality_format, link)
+
+        self.progress_bar.hide() 
+
+    def choosed_360(self, link): # Usually that's 144p
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(30, 40, 340, 30)
+        self.progress_bar.setMaximum(100)
+
+        self.main_layout.addWidget(self.progress_bar)
+
+        QMessageBox.information(self, "Downloading...", f"We started to download your file, now you have to wait some time. We will notificate you when we will download this file.")
+        quality_format = 'bestvideo[height<=360]+bestaudio'
         self.choosed_mp4(quality_format, link)
 
         self.progress_bar.hide()
@@ -743,7 +856,7 @@ class MainMenu(QMainWindow):
 
         self.progress_bar.hide()
 
-    def choosed_custom(self, link, title):
+    def choosed_custom(self, link, title): # Try to download content in a custom format taken from line edit
         custom_format = self.line_custom.text()
 
         print(custom_format)
@@ -775,7 +888,8 @@ class MainMenu(QMainWindow):
                 self.widget = QLabel(f"Downloaded {title} in custom format!")
                 self.play_downloaded_sound()
                 font = self.widget.font()
-                font.setPointSize(12)
+                font.setPointSize(14)
+                font.setBold(True)
                 self.widget.setFont(font)
                 self.widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
                 self.main_layout.addWidget(self.widget)
@@ -965,17 +1079,26 @@ class MainMenu(QMainWindow):
         print(f"Error message: {message}")
         QMessageBox.warning(self, "Error", f"Error message: {message}")
 
-    def show_history(self): # Window with history
+    def show_history(self):  # Window with history
         try:
             with open('history.json', 'r') as file:
                 history = json.load(file)
 
-            formatted_history = "\n".join([f"{value}" for key, value in history.items()])
-            QMessageBox.information(self, "History", f"History (from oldest to newest):\n{formatted_history}")
+            formatted_history = ""
+            for index in range(0, len(history), 2):
+                title_key = f"history_{index}"
+                link_key = f"history_{index + 1}"
+                if title_key in history and link_key in history:
+                    title = history[title_key]
+                    link = history[link_key]
+                    formatted_history += f"Title: {title}\nLink: {link}\n\n"
 
+            QMessageBox.information(self, "History", f"History (from oldest to newest):\n\n{formatted_history}")
+    
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Failed to load history: {e}")
+            QMessageBox.warning(self, "Error", f"An error occurred: {e}")
 
+    
     def clean_history(self): # Will clean your search history
         with open('history.json', 'w') as file:
             json.dump({}, file, indent=4)
@@ -1162,7 +1285,7 @@ if __name__ == "__main__":
         color: black;
     }
     QMenu::item {
-        background-color: grey;
+        background-color: pink;
         color: black;
     }
     QProgressBar {
@@ -1211,7 +1334,7 @@ if __name__ == "__main__":
         color: white;
     }
     QMenu::item {
-        background-color: grey;
+        background-color: purple;
         color: white;
     }
     QProgressBar {

@@ -6,18 +6,17 @@ import time
 import multiprocessing
 
 def reset_app():
-    with open ('app.json', 'r') as file:
-        data = json.load(file)
-        data['update_installed'] = True
+    data = {
+        "update_installed": True,
+        "sound_enabled": True,
+        "dev_enabled": False,
+        "theme_default": "black",
+        "sound_setting": "Disable",
+        "downloaded_sound": "./downloaded_purity.mp3",
+        "check_updates": True
+    }
 
-        data['dev_enabled'] = False
-
-        #data['sound_enabled'] = True
-        #data['sound_setting'] = "Disable"
-        #print("Sound enabled")
-        #self.sound_status = "Disable"
-
-    with open ('app.json', 'w') as file:
+    with open('app.json', 'w') as file:
         json.dump(data, file, indent=4)
 
     with open('history.json', 'w') as file:
@@ -105,6 +104,3 @@ def stress_cpu():
 
     monitor.terminate()
     monitor.join()
-
-if __name__ == "__main__":
-    main()

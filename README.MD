@@ -127,22 +127,8 @@ Here's **recommended** PC specifications:
 
 ## To-Do to release version 2.0
 
-- [x] **Make compatible with other popular social media:** Instagram, Twitter, etc. Add possibility just to download posts or audio from them. Make this app universal!
-- [x] **Change requirements.txt:** It doesn't include all packages which should be installed. We have to solve it!
-- [x] **Make code more readable:** It will be better to reorganise defs and add/remove spaces in code.
-- [x] **Hide custom menu:** Menu bar takes some place, and to get more free space in our app it will be nice to add an arrow which will hide/show this menu. UPDATED: Hm, it's better just to make it for a little smaller.
-- [x] **Add resources monitor:** I have a nice project named **EasyBench**, which was created to benchmark your computer. I think that I can copy from his code some things as CPU, RAM, GPU resource monitors and integrate them inside VideoXYZ. It will show usage of computer's resources while using VideoXYZ in terminal or another window, to make it easier for user to understand how busy his computer is. Also I will add possibility to turn it ON or OFF in DEV menu. NOTE: Now it has only RAM and CPU monitor, but we also have to add one monitor for GPU. Also it doens't work in background, and it also should be solver.
-- [x] **Better Thumbnail Window:** For now it just open thumbnail in a new window, but what if instead it will show small thumbnail near "Choose a format"?
-- [x] **Sound ON/OFF:** Replace it with 'Enable Sound' and 'Disable Sound'. It should read this setting from json and set a needed text. Like, it's already added, but doens't work.
-- [x] **More sounds + settings for them:** It will be nice to add something in a kind of themes for sounds, and also make it possible to change them.
-- [x] **More formats:** as AAC etc.
-- [x] **Fix exit button in menu:** App can be closed by a button of your OS GUI, but this button which is inside our app likes to log out me from Ubuntu.
-- [x] **Custom formats:** Add a line to enter a format (like "mp4" etc) and app will look for this format and download a file in this format.
-- [ ] **Optimise code and fix all the bugs:** I know that it prints history like "'history_0': title", so it will be nice to fix it all. Also it will be nice ot make code more readable and optimised.
-- [x] **Improve README:** Just add some screenshots of app.
-- [x] **Add 1080p and 4K option:** Very important things to add!
-- [x] **Fix thumbnail:** Sometimes it downloads them in jpg and webp formats, but if it's downloaded in jpg it will not show thumbnail. NOTE: I solved it by adding a conversion form webp to jpg, but for older computers it can be for a little difficult to convert it and take some times. If possible, it's better to find a way to download thumbnails directly in jpg.
 - [ ] **Optimise GUI:** Add some space between buttons, to prevent layering.
+- [ ] **Change 'About' menu:** In the center place a logo of app, because now it looks buggy.
 
 ## FAQ
 
@@ -183,7 +169,7 @@ In this mode app will often skip errors and give you some possibilities as run a
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection and don't have a computer. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **November 19, 2024** for version **v1.9.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **November 27, 2024** for version **v2.0.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
 
 ## License
 
