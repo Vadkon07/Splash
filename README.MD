@@ -129,7 +129,7 @@ Here's **recommended** PC specifications:
 
 - [ ] **Optimise GUI:** Add some space between buttons, to prevent layering.
 - [ ] **Change 'About' menu:** In the center place a logo of app, because now it looks buggy.
-
+- [ ] **Conversion Time Left:** Add in terminal output about how much time left to finish conversion of video (or also audio).
 ## FAQ
 
 **Q:** How much time it will take to install this app?
@@ -169,7 +169,7 @@ In this mode app will often skip errors and give you some possibilities as run a
 > At this moment I create this app fully alone, literally without any help. It will be nice to have a command of 2-3 people, just to work on our app faster. I go to school and have a busy schedule, so I'm not able to code all day long, especially because at home I have some problems with internet connection and don't have a computer. So, I'm always ready to start to work on this app together with you!
 
 ### Last Updated
-> This README was last updated on **November 27, 2024** for version **v2.0.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
+> This README was last updated on **December 4, 2024** for version **v2.1.0**. All new things added in app afer this date + version are **NOT** described/mentioned here.
 
 ## License
 

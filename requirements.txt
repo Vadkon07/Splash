@@ -7,6 +7,7 @@ beautifulsoup4
 requests
 lxml
 psutil
+shutil
 GPUtil
 pyamdgpuinfo
 tabulate

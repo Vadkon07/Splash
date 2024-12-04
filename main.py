@@ -1,24 +1,117 @@
-import sys
-import os
-import subprocess
-import qdarkstyle
-import markdown
-import yt_dlp
-import time
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea, QProgressBar, QGraphicsOpacityEffect
-from PyQt6.QtGui import QAction, QImage, QPixmap, QIcon
-from PyQt6.QtCore import QPropertyAnimation, Qt, QTimer
-import json
-import webbrowser
-from pygame import mixer
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import requests
-import xml.etree.ElementTree as ET
-import dev
+try:
+    print("Loading sys...")
+    import sys
+except Exception as e:
+    print(f'Sys not loaded. Error description: \n{e}\n')
 
-app_version = "2.0.0" # Version of app
-update_description = "Improved GUI, Improved history, Improved README, Improved system of Updates, 240p & 360p options, Fixed bugs/typos, etc." # Always edit after adding any changes
+try:
+    print("Loading os...")
+    import os
+except Exception as e:
+    print(f'Os not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading subprocess...")
+    import subprocess
+except Exception as e:
+    print(f'Subprocess not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading os...")
+    import qdarkstyle
+except Exception as e:
+    print(f'Qdarkstyle not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading markdown...")
+    import markdown
+except Exception as e:
+    print(f'markdown not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading yt_dlp...")
+    import yt_dlp
+except Exception as e:
+    print(f'Yt_dlp not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading time...")
+    import time
+except Exception as e:
+    print(f'Time (library) not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading PyQt6...")
+    from PyQt6.QtWidgets import QApplication, QWidget, QStatusBar, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QMainWindow, QMenuBar, QTextBrowser, QDialog, QGridLayout, QLabel, QScrollArea, QProgressBar, QGraphicsOpacityEffect
+    from PyQt6.QtGui import QAction, QImage, QPixmap, QIcon
+    from PyQt6.QtCore import QPropertyAnimation, Qt, QTimer
+except Exception as e:
+    print(f'PyQt6 not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading json...")
+    import json
+except Exception as e:
+    print(f'Json not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading webbrowser...")
+    import webbrowser
+except Exception as e:
+    print(f'Webbrowser not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading pygame...")
+    from pygame import mixer
+except Exception as e:
+    print(f'Pygame not loaded. App will work without sound. Error description: \n{e}\n')
+
+try:
+    print("Loading urllib.request...")
+    from urllib.request import urlopen
+except Exception as e:
+    print(f'Urllib not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading bs4 (BeautifulSoup)...")
+    from bs4 import BeautifulSoup
+except Exception as e:
+    print(f'Bs4 not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading requests...")
+    import requests
+except Exception as e:
+    print(f'Requests not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading xml.etree.ElementTree as ET...")
+    import xml.etree.ElementTree as ET
+except Exception as e:
+    print(f'ET not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading shutil...")
+    import shutil
+except Exception as e:
+    print(f'Shutil not loaded. Error description: \n{e}\n')
+
+try:
+    print("Loading dev file...")
+    import dev
+except Exception as e:
+    print(f'Dev not loaded. Error description: \n{e}\n')
+
+
+
+
+###               CODE STARTS HERE                ###
+
+
+
+
+app_version = "2.1.0" # Version of app
+update_description = "Improved History menu, Fixed bugs/typos, Better 'About' menu, etc." # Always edit after adding any changes
 dev_mode = 0 # By default dev mode is disabled
 
 with open ('app.json', 'r') as file: # Checks dev mode option
@@ -111,6 +204,10 @@ class MainMenu(QMainWindow): # Main menu of app. The first page which you see af
             self.add_action(self.dev_menu, "Resources Monitor", self.run_resources_monitor)
 
         ### THE END OF MENU BAR SECTION ###
+
+        if dev_mode == 1:
+            self.status_bar = self.statusBar()
+            self.status_bar.showMessage('Dev mode is enabled!', 0)
 
         self.widget = QLabel()
         pixmap = QPixmap("Splash_Logo_S.png")
@@ -399,25 +496,56 @@ class MainMenu(QMainWindow): # Main menu of app. The first page which you see af
     def maximize_window(self):
         self.showMaximized()
 
-    def about_project(self): # Description about our app. It's better to fix image size, because for now it looks weird
+    def get_directory_size(self, directory):
+        total_size = 0
+        for dirpath, dirnames, filenames in os.walk(directory):
+            for f in filenames:
+                fp = os.path.join(dirpath, f)
+                # Skip if it is symbolic link
+                if not os.path.islink(fp):
+                    total_size += os.path.getsize(fp)
+        return total_size
+
+    def format_bytes(self, size):
+        # 2**10 = 1024
+        power = 2**10
+        n = 0
+        power_labels = {0: 'Bytes', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB'}
+        while size > power:
+            size /= power
+            n += 1
+        return f"{round(size, 2)} {power_labels[n]}"
+
+    def about_project(self):  # Description of our app. It's better to fix image size, because for now it looks weird
+        path = os.path.dirname(os.path.abspath(__file__))
+        stat = shutil.disk_usage(path)
+
+        # Get current directory size
+        directory_size = self.get_directory_size(path)
+        formatted_size = self.format_bytes(directory_size)
+
+        # Function to format bytes to human-readable format
+        def format_bytes(size):
+            # 2**10 = 1024
+            power = 2**10
+            n = 0
+            power_labels = {0: 'Bytes', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB'}
+            while size > power:
+                size /= power
+                n += 1
+            return f"{round(size, 2)} {power_labels[n]}"
+
         # Create the message box
         messagebox = QMessageBox(self)
         messagebox.setWindowTitle("About Splash")
-        messagebox.setText(f"Best portable app to download your favorite media content from literally any popular social media! You can download content (from YouTube, X, Soundcloud, etc.) in literally any popular video/audio format. This application is Open Source; you can find its code on GitHub or support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find its thumbnail in the folder where you ran our application.\n\nVersion of installed Splash is {app_version}")
-    
-        # Set the logo of app
-        #messagebox.setIconPixmap(QPixmap("./Splash_Logo_S.png"))
-    
-        # Set fixed size, which doesn't work
-        #messagebox.setFixedSize(50, 50)
-    
-        # Center the dialog on the screen
+        messagebox.setText(f"Best portable app to download your favorite media content from literally any popular social media! You can download content (from YouTube, X, Soundcloud, etc.) in literally any popular video/audio format. This application is Open Source; you can find its code on GitHub or support developers with donations! You can also download playlists! Notice that if you downloaded a single video, you will also find its thumbnail in the folder where you ran our application.\n\nVersion of installed Splash is {app_version}\nDisk usage by Splash (Current directory size): {formatted_size}")
+
+        # Center the dialog
         screen_geometry = QApplication.primaryScreen().availableGeometry()
         x = (screen_geometry.width() - messagebox.width()) // 2
         y = (screen_geometry.height() - messagebox.height()) // 2
         messagebox.move(x, y)
-    
-        # Display all
+
         messagebox.exec()
 
     def open_github(self): # Open our GitHub repository in browser
@@ -1093,7 +1221,22 @@ class MainMenu(QMainWindow): # Main menu of app. The first page which you see af
                     link = history[link_key]
                     formatted_history += f"Title: {title}\nLink: {link}\n\n"
 
-            QMessageBox.information(self, "History", f"History (from oldest to newest):\n\n{formatted_history}")
+            dialog = QDialog(self)
+            dialog.setWindowTitle("History")
+            dialog.setGeometry(100, 100, 600, 300)
+
+            text_browser = QTextBrowser(dialog)
+            text_browser.setHtml(f"<p>History (from olders to newest):\n\n{formatted_history}</p>")
+            text_browser.setGeometry(0, 0, 600, 300)
+
+            #close_button = QPushButton("Close", dialog)
+            #close_button.clicked.connect(dialog.accept)
+
+            layout = QGridLayout(dialog)
+            #layout.addWidget(close_button)
+
+            dialog.setLayout(layout)
+            dialog.exec()
     
         except Exception as e:
             QMessageBox.warning(self, "Error", f"An error occurred: {e}")
